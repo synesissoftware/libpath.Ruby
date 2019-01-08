@@ -18,5 +18,8 @@ END_DESC
 	gs.files		=	Dir[ 'Rakefile', '{bin,examples,lib,man,spec,test}/**/*', 'README*', 'LICENSE*' ] & `git ls-files -z`.split("\0")
 	gs.homepage		=	'http://libpath.org/'
 	gs.license		=	'BSD-3-Clause'
+
+	gs.add_development_dependency 'xqsr3', [ '>= 0.21.1', '< 1.0' ]
+
 end
 
