@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 
 #############################################################################
-# File:         test/performance/benchmark_rindex2.rb
+# File:         test/performance/benchmark_drive_letter.rb
 #
 # Purpose:      Determines whether it's better to use String-case of regex
 #               to match Windows-drive letters
 #
 # Created:      8th January 2019
-# Updated:      8th January 2019
+# Updated:      9th January 2019
 #
 # Author:       Matthew Wilson
 #
