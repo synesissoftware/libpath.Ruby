@@ -35,7 +35,7 @@ class Test_version < Test::Unit::TestCase
 
 	def test_VERSION_greater_than
 
-		assert_operator LibPath::VERSION, :>=, '0.0.2'
+		assert_operator LibPath::VERSION, :>=, '0.0.3'
 	end
 end
 
