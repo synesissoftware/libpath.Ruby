@@ -6,6 +6,8 @@ require 'libpath/util'
 
 require 'test/unit'
 
+require 'libpath/internal_/platform'
+
 class Test_LibPath_Util_make_path_canonical_via_extend < Test::Unit::TestCase
 
 	F = ::LibPath::Util
@@ -85,7 +87,13 @@ class Test_LibPath_Util_make_path_canonical_via_extend < Test::Unit::TestCase
 
 		r	=	F.make_path_canonical 'abc/../'
 
-		assert_equal './', r
+		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
+
+			assert_equal '.\\', r
+		else
+
+			assert_equal './', r
+		end
 
 		r	=	F.make_path_canonical 'abc/../def'
 
@@ -97,7 +105,13 @@ class Test_LibPath_Util_make_path_canonical_via_extend < Test::Unit::TestCase
 
 		r	=	F.make_path_canonical 'abc/../def/../'
 
-		assert_equal './', r
+		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
+
+			assert_equal '.\\', r
+		else
+
+			assert_equal './', r
+		end
 	end
 end
 
