@@ -14,103 +14,121 @@ class Test_LibPath_Util_make_path_canonical_via_extend < Test::Unit::TestCase
 
 	def test_empty
 
-		r	=	F.make_path_canonical ''
-
-		assert_equal '', r
+		assert_equal '', F.make_path_canonical('')
 	end
 
 	def test_one_dot
 
-		r	=	F.make_path_canonical '.'
-
-		assert_equal '.', r
+		assert_equal '.', F.make_path_canonical('.')
 	end
 
 	def test_two_dots
 
-		r	=	F.make_path_canonical '..'
-
-		assert_equal '..', r
+		assert_equal '..', F.make_path_canonical('..')
 	end
 
 	def test_basenames
 
-		r	=	F.make_path_canonical 'a'
+		assert_equal 'a', F.make_path_canonical('a')
 
-		assert_equal 'a', r
+		assert_equal 'file.ext', F.make_path_canonical('file.ext')
 
-		r	=	F.make_path_canonical 'file.ext'
+		assert_equal '..', F.make_path_canonical('..')
+	end
 
-		assert_equal 'file.ext', r
+	def test_trailing_dots
 
-		r	=	F.make_path_canonical '..'
+		assert_equal 'a.', F.make_path_canonical('a.')
+		assert_equal 'a.', F.make_path_canonical('./a.')
+		assert_equal 'a.', F.make_path_canonical('././././a.')
+		assert_equal 'a.', F.make_path_canonical('abc/../a.')
 
-		assert_equal '..', r
+		assert_equal 'a..', F.make_path_canonical('a..')
+		assert_equal 'a..', F.make_path_canonical('./a..')
+		assert_equal 'a..', F.make_path_canonical('././././a..')
+		assert_equal 'a..', F.make_path_canonical('abc/../a..')
+
+		assert_equal 'a...', F.make_path_canonical('a...')
+		assert_equal 'a...', F.make_path_canonical('./a...')
+		assert_equal 'a...', F.make_path_canonical('././././a...')
+		assert_equal 'a...', F.make_path_canonical('abc/../a...')
+
+		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
+
+			assert_equal 'a.', F.make_path_canonical('a.')
+			assert_equal 'a.', F.make_path_canonical('.\\a.')
+			assert_equal 'a.', F.make_path_canonical('.\\.\\.\\.\\a.')
+			assert_equal 'a.', F.make_path_canonical('abc\\..\\a.')
+
+			assert_equal 'a..', F.make_path_canonical('a..')
+			assert_equal 'a..', F.make_path_canonical('.\\a..')
+			assert_equal 'a..', F.make_path_canonical('.\\.\\.\\.\\a..')
+			assert_equal 'a..', F.make_path_canonical('abc\\..\\a..')
+
+			assert_equal 'a...', F.make_path_canonical('a...')
+			assert_equal 'a...', F.make_path_canonical('.\\a...')
+			assert_equal 'a...', F.make_path_canonical('.\\.\\.\\.\\a...')
+			assert_equal 'a...', F.make_path_canonical('abc\\..\\a...')
+		end
 	end
 
 	def test_one_dots_directories
 
-		r	=	F.make_path_canonical './abc'
+		assert_equal 'abc', F.make_path_canonical('./abc')
 
-		assert_equal 'abc', r
+		assert_equal 'abc', F.make_path_canonical('././abc')
 
-		r	=	F.make_path_canonical '././abc'
+		assert_equal 'abc', F.make_path_canonical('./././././././././abc')
 
-		assert_equal 'abc', r
+		assert_equal 'abc/', F.make_path_canonical('abc/./')
 
-		r	=	F.make_path_canonical './././././././././abc'
+		assert_equal 'abc/', F.make_path_canonical('./abc/./')
 
-		assert_equal 'abc', r
+		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
 
-		r	=	F.make_path_canonical 'abc/./'
+			assert_equal 'abc', F.make_path_canonical('.\\abc')
 
-		assert_equal 'abc/', r
+			assert_equal 'abc', F.make_path_canonical('.\\.\\abc')
 
-		r	=	F.make_path_canonical './abc/./'
+			assert_equal 'abc', F.make_path_canonical('.\\.\\.\\.\\.\\.\\.\\.\\.\\abc')
 
-		assert_equal 'abc/', r
+			assert_equal 'abc\\', F.make_path_canonical('abc\\.\\')
+
+			assert_equal 'abc\\', F.make_path_canonical('.\\abc\\.\\')
+		end
 	end
 
 	def test_two_dots_directories
 
-		r	=	F.make_path_canonical '../'
+		assert_equal '../', F.make_path_canonical('../')
 
-		assert_equal '../', r
+		assert_equal '../abc', F.make_path_canonical('../abc')
 
-		r	=	F.make_path_canonical '../abc'
+		assert_equal '.', F.make_path_canonical('abc/..')
 
-		assert_equal '../abc', r
+		assert_equal './', F.make_path_canonical('abc/../')
 
-		r	=	F.make_path_canonical 'abc/..'
+		assert_equal 'def', F.make_path_canonical('abc/../def')
 
-		assert_equal '.', r
+		assert_equal '.', F.make_path_canonical('abc/../def/..')
 
-		r	=	F.make_path_canonical 'abc/../'
-
-		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
-
-			assert_equal '.\\', r
-		else
-
-			assert_equal './', r
-		end
-
-		r	=	F.make_path_canonical 'abc/../def'
-
-		assert_equal 'def', r
-
-		r	=	F.make_path_canonical 'abc/../def/..'
-
-		assert_equal '.', r
-
-		r	=	F.make_path_canonical 'abc/../def/../'
+		assert_equal './', F.make_path_canonical('abc/../def/../')
 
 		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
 
-			assert_equal '.\\', r
-		else
+			assert_equal '..\\', F.make_path_canonical('..\\')
 
-			assert_equal './', r
+			assert_equal '..\\abc', F.make_path_canonical('..\\abc')
+
+			assert_equal '.', F.make_path_canonical('abc\\..')
+
+			assert_equal '.\\', F.make_path_canonical('abc\\..\\')
+
+			assert_equal 'def', F.make_path_canonical('abc\\..\\def')
+
+			assert_equal '.', F.make_path_canonical('abc\\..\\def\\..')
+
+			assert_equal '.\\', F.make_path_canonical('abc\\..\\def\\..\\')
 		end
 	end
 end
