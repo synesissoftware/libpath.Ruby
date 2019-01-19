@@ -8,14 +8,14 @@ module Windows
 
 module Form
 
-	def self.char_is_path_name_separator c
+	def self.char_is_path_name_separator? c
 
 		'/' == c || '\\' == c
 	end
 
 	def self.append_trailing_slash s
 
-		return s if self.char_is_path_name_separator(s[-1])
+		return s if self.char_is_path_name_separator?(s[-1])
 
 		s + '\\'
 	end
@@ -24,17 +24,17 @@ module Form
 
 		last = s[-1]
 
-		self.char_is_path_name_separator(last) ? last : nil
+		self.char_is_path_name_separator?(last) ? last : nil
 	end
 
 	def self.has_trailing_slash? s
 
-		self.char_is_path_name_separator(s[-1])
+		self.char_is_path_name_separator?(s[-1])
 	end
 
 	def self.trim_trailing_slash s
 
-		return s unless self.char_is_path_name_separator(s[-1])
+		return s unless self.char_is_path_name_separator?(s[-1])
 
 		s.chop
 	end
