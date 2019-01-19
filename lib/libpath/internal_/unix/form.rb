@@ -5,7 +5,7 @@ module Unix
 
 module Form
 
-	def self.char_is_path_name_separator c
+	def self.char_is_path_name_separator? c
 
 		'/' == c
 	end

@@ -12,13 +12,13 @@ class Test_Internal_Unix_Form_slash_functions < Test::Unit::TestCase
 
 	F = ::LibPath::Internal_::Unix::Form
 
-	def test_char_is_path_name_separator
+	def test_char_is_path_name_separator?
 
-		assert_false F.char_is_path_name_separator('')
-		assert_false F.char_is_path_name_separator('a')
-		assert_false F.char_is_path_name_separator('\\')
+		assert_false F.char_is_path_name_separator?('')
+		assert_false F.char_is_path_name_separator?('a')
+		assert_false F.char_is_path_name_separator?('\\')
 
-		assert F.char_is_path_name_separator('/')
+		assert F.char_is_path_name_separator?('/')
 	end
 
 	def test_append_trailing_slash
