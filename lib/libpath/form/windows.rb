@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Form::Windows module
 #
 # Created:      8th January 2019
-# Updated:      19th January 2018
+# Updated:      20th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -83,9 +83,12 @@ module LibPath_Form_Windows_Methods
 
 		return true if path_is_homed? path
 
-		return true if path_is_UNC? path
+		vol, rem, _ = Internal_::Windows::Form.get_windows_volume(path)
 
-		false
+		return false unless vol
+		return false unless rem
+
+		Internal_::Windows::Form.char_is_path_name_separator? rem[0]
 	end
 
 	# Evaluates whether the given path is "drived", which means that it
@@ -181,7 +184,17 @@ module LibPath_Form_Windows_Methods
 			case path[1]
 			when '\\'
 
-				path_is_UNC? path
+				vol, rem, _ = Internal_::Windows::Form.get_windows_volume(path)
+
+				return false unless vol
+
+				if rem && Internal_::Windows::Form.char_is_path_name_separator?(rem[0])
+
+					true
+				else
+
+					false
+				end
 			else
 
 				true
@@ -207,7 +220,19 @@ module LibPath_Form_Windows_Methods
 
 		Diagnostics.check_string_parameter(path, "path") if $DEBUG
 
-		/^\\\\[^\\]+\\[^\\]+\\/ =~ path ? true : false
+		return false unless '\\' == path[0]
+		return false unless '\\' == path[1]
+
+		_, _, frm = Internal_::Windows::Form.get_windows_volume(path)
+
+		case frm
+		when :form_2, :form_3, :form_4, :form_5, :form_6
+
+			true
+		else
+
+			false
+		end
 	end
 
 end # module LibPath_Form_Windows_Methods

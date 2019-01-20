@@ -46,27 +46,87 @@ class Test_path_is_absolute_Windows < Test::Unit::TestCase
 	def test_absolute_paths_from_UNC
 
 		assert_false path_is_absolute?('\\\\')
+
 		assert_false path_is_absolute?('\\\\server')
 		assert_false path_is_absolute?('\\\\server\\')
-		assert_false path_is_absolute?('\\\\server\\share')
 
+		# form 2
+
+		assert_false path_is_absolute?('\\\\server\\share')
+		assert path_is_absolute?('\\\\server\\share\\')
+		assert path_is_absolute?('\\\\server\\share/')
+
+		assert_false path_is_absolute?('\\\\server\\the-share_name')
+		assert path_is_absolute?('\\\\server\\the-share_name/')
 		assert path_is_absolute?('\\\\server\\the-share_name\\')
 		assert path_is_absolute?('\\\\server\\the-share_name\\\\')
 		assert path_is_absolute?('\\\\server\\the-share_name\\dir')
 		assert path_is_absolute?('\\\\server\\the-share_name\\dir\\')
 
+		assert_false path_is_absolute?('\\\\101.2.303.4\\the-share_name')
+		assert path_is_absolute?('\\\\101.2.303.4\\the-share_name/')
 		assert path_is_absolute?('\\\\101.2.303.4\\the-share_name\\')
 		assert path_is_absolute?('\\\\101.2.303.4\\the-share_name\\\\')
 		assert path_is_absolute?('\\\\101.2.303.4\\the-share_name\\dir')
 		assert path_is_absolute?('\\\\101.2.303.4\\the-share_name\\dir\\')
 
+		assert_false path_is_absolute?('\\\\::1/128\\the-share_name')
+		assert path_is_absolute?('\\\\::1/128\\the-share_name/')
 		assert path_is_absolute?('\\\\::1/128\\the-share_name\\')
 		assert path_is_absolute?('\\\\::1/128\\the-share_name\\\\')
 		assert path_is_absolute?('\\\\::1/128\\the-share_name\\dir')
 		assert path_is_absolute?('\\\\::1/128\\the-share_name\\dir\\')
+
+		# form 4
+
+		assert_false path_is_absolute?('\\\\?\\server\\the-share_name')
+		assert path_is_absolute?('\\\\?\\server\\the-share_name/')
+		assert path_is_absolute?('\\\\?\\server\\the-share_name\\')
+		assert path_is_absolute?('\\\\?\\server\\the-share_name\\\\')
+		assert path_is_absolute?('\\\\?\\server\\the-share_name\\dir')
+		assert path_is_absolute?('\\\\?\\server\\the-share_name\\dir\\')
+
+		assert_false path_is_absolute?('\\\\?\\101.2.303.4\\the-share_name')
+		assert path_is_absolute?('\\\\?\\101.2.303.4\\the-share_name/')
+		assert path_is_absolute?('\\\\?\\101.2.303.4\\the-share_name\\')
+		assert path_is_absolute?('\\\\?\\101.2.303.4\\the-share_name\\\\')
+		assert path_is_absolute?('\\\\?\\101.2.303.4\\the-share_name\\dir')
+		assert path_is_absolute?('\\\\?\\101.2.303.4\\the-share_name\\dir\\')
+
+		assert_false path_is_absolute?('\\\\?\\::1/128\\the-share_name')
+		assert path_is_absolute?('\\\\?\\::1/128\\the-share_name/')
+		assert path_is_absolute?('\\\\?\\::1/128\\the-share_name\\')
+		assert path_is_absolute?('\\\\?\\::1/128\\the-share_name\\\\')
+		assert path_is_absolute?('\\\\?\\::1/128\\the-share_name\\dir')
+		assert path_is_absolute?('\\\\?\\::1/128\\the-share_name\\dir\\')
+
+		# form 5
+
+		assert_false path_is_absolute?('\\\\?\\UNC\\server\\the-share_name')
+		assert path_is_absolute?('\\\\?\\UNC\\server\\the-share_name/')
+		assert path_is_absolute?('\\\\?\\UNC\\server\\the-share_name\\')
+		assert path_is_absolute?('\\\\?\\UNC\\server\\the-share_name\\\\')
+		assert path_is_absolute?('\\\\?\\UNC\\server\\the-share_name\\dir')
+		assert path_is_absolute?('\\\\?\\UNC\\server\\the-share_name\\dir\\')
+
+		assert_false path_is_absolute?('\\\\?\\UNC\\101.2.303.4\\the-share_name')
+		assert path_is_absolute?('\\\\?\\UNC\\101.2.303.4\\the-share_name/')
+		assert path_is_absolute?('\\\\?\\UNC\\101.2.303.4\\the-share_name\\')
+		assert path_is_absolute?('\\\\?\\UNC\\101.2.303.4\\the-share_name\\\\')
+		assert path_is_absolute?('\\\\?\\UNC\\101.2.303.4\\the-share_name\\dir')
+		assert path_is_absolute?('\\\\?\\UNC\\101.2.303.4\\the-share_name\\dir\\')
+
+		assert_false path_is_absolute?('\\\\?\\UNC\\::1/128\\the-share_name')
+		assert path_is_absolute?('\\\\?\\UNC\\::1/128\\the-share_name/')
+		assert path_is_absolute?('\\\\?\\UNC\\::1/128\\the-share_name\\')
+		assert path_is_absolute?('\\\\?\\UNC\\::1/128\\the-share_name\\\\')
+		assert path_is_absolute?('\\\\?\\UNC\\::1/128\\the-share_name\\dir')
+		assert path_is_absolute?('\\\\?\\UNC\\::1/128\\the-share_name\\dir\\')
 	end
 
 	def test_absolute_paths_from_drive
+
+		# form 1
 
 		assert path_is_absolute?('C:\\')
 		assert path_is_absolute?('C:\\abc')
@@ -75,6 +135,29 @@ class Test_path_is_absolute_Windows < Test::Unit::TestCase
 		assert_false path_is_absolute?('C:')
 		assert_false path_is_absolute?('C:abc')
 		assert_false path_is_absolute?('C:abc\\')
+
+		# form 3
+
+		assert path_is_absolute?('\\\\?\\C:\\')
+		assert path_is_absolute?('\\\\?\\C:\\abc')
+		assert path_is_absolute?('\\\\?\\C:\\abc\\')
+
+		assert_false path_is_absolute?('\\\\?\\C:')
+		assert_false path_is_absolute?('\\\\?\\C:abc')
+		assert_false path_is_absolute?('\\\\?\\C:abc\\')
+	end
+
+	def test_absolute_paths_from_device
+
+		# form 6
+
+		assert_false path_is_absolute?('\\\\.\\')
+		assert_false path_is_absolute?('\\\\.\\{device-id}')
+		assert_false path_is_absolute?('\\\\.\\{device-id}/')
+		assert path_is_absolute?('\\\\.\\{device-id}\\')
+		assert path_is_absolute?('\\\\.\\{device-id}\\\\')
+		assert path_is_absolute?('\\\\.\\{device-id}\\dir')
+		assert path_is_absolute?('\\\\.\\{device-id}\\dir\\')
 	end
 
 	def test_absolute_paths_from_root
@@ -200,27 +283,87 @@ class Test_path_is_rooted_Windows < Test::Unit::TestCase
 	def test_absolute_paths_from_UNC
 
 		assert_false path_is_rooted?('\\\\')
+
 		assert_false path_is_rooted?('\\\\server')
 		assert_false path_is_rooted?('\\\\server\\')
-		assert_false path_is_rooted?('\\\\server\\share')
 
+		# form 2
+
+		assert_false path_is_rooted?('\\\\server\\share')
+		assert path_is_rooted?('\\\\server\\share\\')
+		assert path_is_rooted?('\\\\server\\share/')
+
+		assert_false path_is_rooted?('\\\\server\\the-share_name')
+		assert path_is_rooted?('\\\\server\\the-share_name/')
 		assert path_is_rooted?('\\\\server\\the-share_name\\')
 		assert path_is_rooted?('\\\\server\\the-share_name\\\\')
 		assert path_is_rooted?('\\\\server\\the-share_name\\dir')
 		assert path_is_rooted?('\\\\server\\the-share_name\\dir\\')
 
+		assert_false path_is_rooted?('\\\\101.2.303.4\\the-share_name')
+		assert path_is_rooted?('\\\\101.2.303.4\\the-share_name/')
 		assert path_is_rooted?('\\\\101.2.303.4\\the-share_name\\')
 		assert path_is_rooted?('\\\\101.2.303.4\\the-share_name\\\\')
 		assert path_is_rooted?('\\\\101.2.303.4\\the-share_name\\dir')
 		assert path_is_rooted?('\\\\101.2.303.4\\the-share_name\\dir\\')
 
+		assert_false path_is_rooted?('\\\\::1/128\\the-share_name')
+		assert path_is_rooted?('\\\\::1/128\\the-share_name/')
 		assert path_is_rooted?('\\\\::1/128\\the-share_name\\')
 		assert path_is_rooted?('\\\\::1/128\\the-share_name\\\\')
 		assert path_is_rooted?('\\\\::1/128\\the-share_name\\dir')
 		assert path_is_rooted?('\\\\::1/128\\the-share_name\\dir\\')
+
+		# form 4
+
+		assert_false path_is_rooted?('\\\\?\\server\\the-share_name')
+		assert path_is_rooted?('\\\\?\\server\\the-share_name/')
+		assert path_is_rooted?('\\\\?\\server\\the-share_name\\')
+		assert path_is_rooted?('\\\\?\\server\\the-share_name\\\\')
+		assert path_is_rooted?('\\\\?\\server\\the-share_name\\dir')
+		assert path_is_rooted?('\\\\?\\server\\the-share_name\\dir\\')
+
+		assert_false path_is_rooted?('\\\\?\\101.2.303.4\\the-share_name')
+		assert path_is_rooted?('\\\\?\\101.2.303.4\\the-share_name/')
+		assert path_is_rooted?('\\\\?\\101.2.303.4\\the-share_name\\')
+		assert path_is_rooted?('\\\\?\\101.2.303.4\\the-share_name\\\\')
+		assert path_is_rooted?('\\\\?\\101.2.303.4\\the-share_name\\dir')
+		assert path_is_rooted?('\\\\?\\101.2.303.4\\the-share_name\\dir\\')
+
+		assert_false path_is_rooted?('\\\\?\\::1/128\\the-share_name')
+		assert path_is_rooted?('\\\\?\\::1/128\\the-share_name/')
+		assert path_is_rooted?('\\\\?\\::1/128\\the-share_name\\')
+		assert path_is_rooted?('\\\\?\\::1/128\\the-share_name\\\\')
+		assert path_is_rooted?('\\\\?\\::1/128\\the-share_name\\dir')
+		assert path_is_rooted?('\\\\?\\::1/128\\the-share_name\\dir\\')
+
+		# form 5
+
+		assert_false path_is_rooted?('\\\\?\\UNC\\server\\the-share_name')
+		assert path_is_rooted?('\\\\?\\UNC\\server\\the-share_name/')
+		assert path_is_rooted?('\\\\?\\UNC\\server\\the-share_name\\')
+		assert path_is_rooted?('\\\\?\\UNC\\server\\the-share_name\\\\')
+		assert path_is_rooted?('\\\\?\\UNC\\server\\the-share_name\\dir')
+		assert path_is_rooted?('\\\\?\\UNC\\server\\the-share_name\\dir\\')
+
+		assert_false path_is_rooted?('\\\\?\\UNC\\101.2.303.4\\the-share_name')
+		assert path_is_rooted?('\\\\?\\UNC\\101.2.303.4\\the-share_name/')
+		assert path_is_rooted?('\\\\?\\UNC\\101.2.303.4\\the-share_name\\')
+		assert path_is_rooted?('\\\\?\\UNC\\101.2.303.4\\the-share_name\\\\')
+		assert path_is_rooted?('\\\\?\\UNC\\101.2.303.4\\the-share_name\\dir')
+		assert path_is_rooted?('\\\\?\\UNC\\101.2.303.4\\the-share_name\\dir\\')
+
+		assert_false path_is_rooted?('\\\\?\\UNC\\::1/128\\the-share_name')
+		assert path_is_rooted?('\\\\?\\UNC\\::1/128\\the-share_name/')
+		assert path_is_rooted?('\\\\?\\UNC\\::1/128\\the-share_name\\')
+		assert path_is_rooted?('\\\\?\\UNC\\::1/128\\the-share_name\\\\')
+		assert path_is_rooted?('\\\\?\\UNC\\::1/128\\the-share_name\\dir')
+		assert path_is_rooted?('\\\\?\\UNC\\::1/128\\the-share_name\\dir\\')
 	end
 
 	def test_absolute_paths_from_drive
+
+		# form 1
 
 		assert path_is_rooted?('C:\\')
 		assert path_is_rooted?('C:\\abc')
@@ -229,6 +372,29 @@ class Test_path_is_rooted_Windows < Test::Unit::TestCase
 		assert_false path_is_rooted?('C:')
 		assert_false path_is_rooted?('C:abc')
 		assert_false path_is_rooted?('C:abc\\')
+
+		# form 3
+
+		assert path_is_rooted?('\\\\?\\C:\\')
+		assert path_is_rooted?('\\\\?\\C:\\abc')
+		assert path_is_rooted?('\\\\?\\C:\\abc\\')
+
+		assert_false path_is_rooted?('\\\\?\\C:')
+		assert_false path_is_rooted?('\\\\?\\C:abc')
+		assert_false path_is_rooted?('\\\\?\\C:abc\\')
+	end
+
+	def test_absolute_paths_from_device
+
+		# form 6
+
+		assert_false path_is_rooted?('\\\\.\\')
+		assert_false path_is_rooted?('\\\\.\\{device-id}')
+		assert_false path_is_rooted?('\\\\.\\{device-id}/')
+		assert path_is_rooted?('\\\\.\\{device-id}\\')
+		assert path_is_rooted?('\\\\.\\{device-id}\\\\')
+		assert path_is_rooted?('\\\\.\\{device-id}\\dir')
+		assert path_is_rooted?('\\\\.\\{device-id}\\dir\\')
 	end
 
 	def test_absolute_paths_from_root
@@ -286,24 +452,108 @@ class Test_path_is_UNC_Windows < Test::Unit::TestCase
 	def test_absolute_paths_from_UNC
 
 		assert_false path_is_UNC?('\\\\')
+
+		# form 3
+
+		assert_false path_is_UNC?('\\\\?\\C')
+		assert path_is_UNC?('\\\\?\\C:')
+		assert path_is_UNC?('\\\\?\\C:\\')
+		assert path_is_UNC?('\\\\?\\C:\\\\')
+		assert path_is_UNC?('\\\\?\\C:\\abc\\')
+		assert path_is_UNC?('\\\\?\\C:\\abc/')
+
+		# form 2
+
 		assert_false path_is_UNC?('\\\\server')
 		assert_false path_is_UNC?('\\\\server\\')
-		assert_false path_is_UNC?('\\\\server\\share')
 
+		assert path_is_UNC?('\\\\server\\share')
+
+		assert path_is_UNC?('\\\\server\\the-share_name')
+		assert path_is_UNC?('\\\\server\\the-share_name/')
 		assert path_is_UNC?('\\\\server\\the-share_name\\')
 		assert path_is_UNC?('\\\\server\\the-share_name\\\\')
 		assert path_is_UNC?('\\\\server\\the-share_name\\dir')
 		assert path_is_UNC?('\\\\server\\the-share_name\\dir\\')
 
+		assert path_is_UNC?('\\\\101.2.303.4\\the-share_name')
+		assert path_is_UNC?('\\\\101.2.303.4\\the-share_name/')
 		assert path_is_UNC?('\\\\101.2.303.4\\the-share_name\\')
 		assert path_is_UNC?('\\\\101.2.303.4\\the-share_name\\\\')
 		assert path_is_UNC?('\\\\101.2.303.4\\the-share_name\\dir')
 		assert path_is_UNC?('\\\\101.2.303.4\\the-share_name\\dir\\')
 
+		assert path_is_UNC?('\\\\::1/128\\the-share_name')
+		assert path_is_UNC?('\\\\::1/128\\the-share_name/')
 		assert path_is_UNC?('\\\\::1/128\\the-share_name\\')
 		assert path_is_UNC?('\\\\::1/128\\the-share_name\\\\')
 		assert path_is_UNC?('\\\\::1/128\\the-share_name\\dir')
 		assert path_is_UNC?('\\\\::1/128\\the-share_name\\dir\\')
+
+		# form 4
+
+		assert_false path_is_UNC?('\\\\?\\server')
+		assert_false path_is_UNC?('\\\\?\\server\\')
+
+		assert path_is_UNC?('\\\\?\\server\\share')
+
+		assert path_is_UNC?('\\\\?\\server\\the-share_name')
+		assert path_is_UNC?('\\\\?\\server\\the-share_name/')
+		assert path_is_UNC?('\\\\?\\server\\the-share_name\\')
+		assert path_is_UNC?('\\\\?\\server\\the-share_name\\\\')
+		assert path_is_UNC?('\\\\?\\server\\the-share_name\\dir')
+		assert path_is_UNC?('\\\\?\\server\\the-share_name\\dir\\')
+
+		assert path_is_UNC?('\\\\?\\101.2.303.4\\the-share_name')
+		assert path_is_UNC?('\\\\?\\101.2.303.4\\the-share_name/')
+		assert path_is_UNC?('\\\\?\\101.2.303.4\\the-share_name\\')
+		assert path_is_UNC?('\\\\?\\101.2.303.4\\the-share_name\\\\')
+		assert path_is_UNC?('\\\\?\\101.2.303.4\\the-share_name\\dir')
+		assert path_is_UNC?('\\\\?\\101.2.303.4\\the-share_name\\dir\\')
+
+		assert path_is_UNC?('\\\\?\\::1/128\\the-share_name')
+		assert path_is_UNC?('\\\\?\\::1/128\\the-share_name/')
+		assert path_is_UNC?('\\\\?\\::1/128\\the-share_name\\')
+		assert path_is_UNC?('\\\\?\\::1/128\\the-share_name\\\\')
+		assert path_is_UNC?('\\\\?\\::1/128\\the-share_name\\dir')
+		assert path_is_UNC?('\\\\?\\::1/128\\the-share_name\\dir\\')
+
+		# form 5
+
+		assert_false path_is_UNC?('\\\\?\\UNC\\server')
+		assert_false path_is_UNC?('\\\\?\\UNC\\server\\')
+
+		assert path_is_UNC?('\\\\?\\UNC\\server\\share')
+
+		assert path_is_UNC?('\\\\?\\UNC\\server\\the-share_name')
+		assert path_is_UNC?('\\\\?\\UNC\\server\\the-share_name/')
+		assert path_is_UNC?('\\\\?\\UNC\\server\\the-share_name\\')
+		assert path_is_UNC?('\\\\?\\UNC\\server\\the-share_name\\\\')
+		assert path_is_UNC?('\\\\?\\UNC\\server\\the-share_name\\dir')
+		assert path_is_UNC?('\\\\?\\UNC\\server\\the-share_name\\dir\\')
+
+		assert path_is_UNC?('\\\\?\\UNC\\101.2.303.4\\the-share_name')
+		assert path_is_UNC?('\\\\?\\UNC\\101.2.303.4\\the-share_name/')
+		assert path_is_UNC?('\\\\?\\UNC\\101.2.303.4\\the-share_name\\')
+		assert path_is_UNC?('\\\\?\\UNC\\101.2.303.4\\the-share_name\\\\')
+		assert path_is_UNC?('\\\\?\\UNC\\101.2.303.4\\the-share_name\\dir')
+		assert path_is_UNC?('\\\\?\\UNC\\101.2.303.4\\the-share_name\\dir\\')
+
+		assert path_is_UNC?('\\\\?\\UNC\\::1/128\\the-share_name')
+		assert path_is_UNC?('\\\\?\\UNC\\::1/128\\the-share_name/')
+		assert path_is_UNC?('\\\\?\\UNC\\::1/128\\the-share_name\\')
+		assert path_is_UNC?('\\\\?\\UNC\\::1/128\\the-share_name\\\\')
+		assert path_is_UNC?('\\\\?\\UNC\\::1/128\\the-share_name\\dir')
+		assert path_is_UNC?('\\\\?\\UNC\\::1/128\\the-share_name\\dir\\')
+
+		# form 6
+
+		assert_false path_is_UNC?('\\\\.\\')
+
+		assert path_is_UNC?('\\\\.\\{device-id}\\')
+		assert path_is_UNC?('\\\\.\\{device-id}\\\\')
+		assert path_is_UNC?('\\\\.\\{device-id}\\dir')
+		assert path_is_UNC?('\\\\.\\{device-id}\\dir\\')
 	end
 
 	def test_absolute_paths_from_root

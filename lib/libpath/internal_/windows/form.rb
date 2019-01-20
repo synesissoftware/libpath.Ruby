@@ -68,12 +68,22 @@ module Form
 							return [ s[0..5], s[6..-1], :form_3 ]
 						end
 
-						if s =~ /^\\\\\?\\(UNC\\|)[^\\]+\\[^\\]+/
+						if 'U' == s[4] && 'N' == s[5] && 'C' == s[6]
 
-							# 4. \\?\server\share
 							# 5. \\?\UNC\server\share
 
-							return [ $&, $', $1.empty? ? :form_4 : :form_5 ]
+							if s =~ /^\\\\\?\\UNC\\[^\\]+\\[^\\\/]+/
+
+								return [ $&, $', :form_5 ]
+							end
+						else
+
+							if s =~ /^\\\\\?\\[^\\]+\\[^\\\/]+/
+
+								# 4. \\?\server\share
+
+								return [ $&, $', :form_4 ]
+							end
 						end
 					end
 				when '.'
@@ -86,7 +96,7 @@ module Form
 					end
 				else
 
-						if s =~ /^\\\\[^\\]+\\[^\\]+/
+						if s =~ /^\\\\[^\\]+\\[^\\\/]+/
 
 							# 2. \\server\share
 
