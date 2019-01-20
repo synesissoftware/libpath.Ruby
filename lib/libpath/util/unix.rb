@@ -50,6 +50,7 @@
 
 
 require 'libpath/diagnostics'
+require 'libpath/form/unix'
 require 'libpath/internal_/unix/form'
 
 module LibPath
@@ -59,6 +60,96 @@ module Unix
 # Module defining instance functions that will be included and extended into
 # any class or module including/extending module LibPath::Util::Unix
 module LibPath_Util_Unix_Methods
+
+	def combine_paths *args, **options
+
+		_Form_Unix			=	Form::Unix
+		_Internal_Unix_Form	=	Internal_::Unix::Form
+
+		args.each_with_index { |arg, index| Diagnostics.check_string_parameter(arg, "arg#{index}", allow_nil: true) } if $DEBUG
+
+		args	=	args.reject { |arg| arg.nil? || arg.empty? }
+
+		case args.size
+		when 0
+
+			''
+		when 1
+
+			args[0]
+		else
+
+			rix	=	args.rindex { |arg| arg && _Form_Unix.path_is_absolute?(arg) }
+			rix	||=	0
+
+			els	=	args[rix..-1]
+
+			File.join *els
+		end
+	end
+
+
+	#
+	# === Signature
+	#
+	# * *Parameters:*
+	#   - +path+:: (String) The path to be evaluated. May not be +nil+
+	#   - +options+:: (Hash) Options that moderate the behaviour of the
+	#       function
+	#
+	# * *Options:*
+	#   - +:home+:: (String) A specific home to assume, which means that the
+	#       +locator+'s +home+ method will not be invoked
+	#   - +:locator+:: (object) An object that provides the methods
+	#       +pwd+ and +home+, as needed. This allows for mocking. If not
+	#       given, then the functions +Dir::pwd+ and +Dir::home+ are used
+	#   - +:make_canonical+:: (boolean) Determines whether canonicalisation
+	#       is conducted on the result
+	#   - +:pwd+:: (String) A specific directory to assume, which means that
+	#       the +locator+'s +pwd+ method will not be invoked
+	def make_path_absolute path, **options
+
+		Diagnostics.check_string_parameter(path, "path") if $DEBUG
+		Diagnostics.check_options(options, known: %i{ home locator make_canonical pwd }) if $DEBUG
+
+		return path if path.nil? || path.empty?
+
+		r	=	nil
+
+		case path[0]
+		when '/'
+
+			r = path
+		when '~'
+
+			case path[1]
+			when nil, '/'
+
+				home	=	nil
+				home	||=	options[:home]
+				home	||=	options[:locator].home if options.has_key?(:locator)
+				home	||=	Dir.home
+
+				r = File.join(home, path[2..-1])
+			end
+		end
+
+		unless r
+
+			pwd	=	nil
+			pwd	||=	options[:pwd]
+			pwd	||=	options[:locator].pwd if options.has_key?(:locator)
+			pwd	||=	Dir.pwd
+
+			r = File.join(pwd, path)
+		end
+
+		r	||=	path
+
+		r	=	make_path_canonical r if options[:make_canonical]
+
+		return r
+	end
 
 	# Converts a path into canonical form, which is to say that all possible
 	# dots directory parts are removed:

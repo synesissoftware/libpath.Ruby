@@ -1,6 +1,6 @@
 
 require 'libpath/internal_/string'
-#require 'libpath/internal_/windows'
+require 'libpath/internal_/windows/drive'
 
 module LibPath
 module Internal_

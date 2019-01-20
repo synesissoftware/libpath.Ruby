@@ -24,6 +24,18 @@ module Diagnostics
 			end
 		end
 	end
+
+	def self.check_options h, *args, **options
+
+		if known = options[:known] then
+
+			h.each_key do |k|
+
+				raise ::ArgumentError, "unknown key '#{k}'" unless known.include?(k)
+			end
+		end
+
+	end
 end # module Diagnostics
 end # module LibPath
 

@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Util::Windows module
 #
 # Created:      10th January 2019
-# Updated:      19th January 2018
+# Updated:      20th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -50,6 +50,7 @@
 
 
 require 'libpath/diagnostics'
+require 'libpath/form/windows'
 require 'libpath/internal_/array'
 require 'libpath/internal_/windows/form'
 
@@ -60,6 +61,180 @@ module Windows
 # Module defining instance functions that will be included and extended into
 # any class or module including/extending module LibPath::Util::Windows
 module LibPath_Util_Windows_Methods
+
+	def combine_paths *args, **options
+
+		_Form_Windows			=	Form::Windows
+		_Internal_Windows_Form	=	Internal_::Windows::Form
+
+		args.each_with_index { |arg, index| Diagnostics.check_string_parameter(arg, "arg#{index}", allow_nil: true) } if $DEBUG
+
+		first	=	[]
+		dirs	=	[]
+		last	=	[]
+
+		args	=	args.reject { |arg| arg.nil? || arg.empty? }
+
+		rix_abs	=	args.rindex { |arg| _Form_Windows.path_is_absolute?(arg) }
+
+		rix_drv	=	args.rindex { |arg| _Form_Windows.path_is_drived?(arg) }
+		rix_drv	=	nil if (rix_drv || -1) <= (rix_abs || -1)
+
+		rix_dir	=	args.rindex { |arg| _Form_Windows.path_is_rooted?(arg) }
+		rix_dir	=	nil if (rix_dir || -1) <= (rix_abs || -1)
+
+		if rix_drv && rix_dir && rix_abs
+
+			if rix_abs < rix_drv && rix_abs < rix_dir
+
+				rix_abs	+=	1
+				args	=	args[rix_abs..-1]
+				rix_drv	-=	rix_abs
+				rix_dir	-=	rix_abs
+				rix_abs	=	nil
+			end
+		end
+
+		if rix_drv.nil? && rix_dir.nil?
+
+			if rix_abs
+
+				args	=	args[rix_abs..-1]
+			end
+
+			dirs	=	args
+			last	<<	args.pop unless args.empty?
+		else
+
+			if false
+
+				;
+			elsif rix_drv
+
+				if rix_dir
+
+					drv		=	args.delete_at rix_drv
+					rix_dir	-=	1 if rix_drv < rix_dir
+					dir		=	args.delete_at rix_dir
+
+					args	=	args[rix_dir..-1]
+
+					root	=	_Internal_Windows_Form.append_trailing_slash("#{drv}#{dir}")
+
+					first	<<	root
+					last	<<	args.pop unless args.empty?
+					dirs	=	args
+				elsif rix_abs
+
+					drv		=	args.delete_at rix_drv
+					rix_abs	-=	1 if rix_drv < rix_abs
+					abs		=	args.delete_at rix_abs
+
+					_, _, dir, bas, _, _, _, _	=	_Internal_Windows_Form.split_path abs
+
+					args	=	args[rix_abs..-1]
+
+					root	=	_Internal_Windows_Form.append_trailing_slash("#{drv}#{dir}#{bas}")
+
+					first	<<	root
+					last	<<	args.pop unless args.empty?
+					dirs	=	args
+				else
+
+					first	<<	args.delete_at(rix_drv)
+					last	<<	args.pop unless args.empty?
+					dirs	=	args
+				end
+			elsif rix_dir
+
+				if rix_abs
+
+					abs		=	args.delete_at rix_abs
+					rix_dir	-=	1 if rix_abs < rix_dir
+					dir		=	args.delete_at rix_dir
+
+					_, vol, _, _, _, _, _, _	=	_Internal_Windows_Form.split_path abs
+
+					args	=	args[rix_dir..-1]
+
+					root	=	_Internal_Windows_Form.append_trailing_slash("#{vol}#{dir}")
+
+					first	<<	root
+					last	<<	args.pop unless args.empty?
+					dirs	=	args
+				else
+
+					args	=	args[rix_dir..-1]
+					last	<<	args.pop unless args.empty?
+					dirs	=	args
+				end
+			else
+
+				;
+			end
+		end
+
+		dirs	=	dirs.map { |el| _Internal_Windows_Form.append_trailing_slash el }
+
+		(first + dirs + last).join('')
+	end
+
+	def make_path_absolute path, **options
+
+		_Form_Windows			=	Form::Windows
+		_Internal_Windows_Form	=	Internal_::Windows::Form
+
+		Diagnostics.check_string_parameter(path, "path") if $DEBUG
+		Diagnostics.check_options(options, known: %i{ home locator make_canonical pwd }) if $DEBUG
+
+		return path if path.nil? || path.empty?
+
+		r	=	nil
+
+		if false
+
+			;
+		elsif _Form_Windows.path_is_homed? path
+
+			home	=	nil
+			home	||=	options[:home]
+			home	||=	options[:locator].home if options.has_key?(:locator)
+			home	||=	Dir.home
+
+			unless _Internal_Windows_Form.has_trailing_slash? home
+
+				home = home + path[1].to_s
+			end
+
+			r = combine_paths(home, path[2..-1])
+		elsif _Form_Windows.path_is_UNC? path
+
+			r	=	path
+		elsif _Form_Windows.path_is_absolute? path
+
+			r	=	path
+		elsif _Form_Windows.path_is_rooted? path
+
+			pwd	=	nil
+			pwd	||=	options[:pwd]
+			pwd	||=	options[:locator].pwd if options.has_key?(:locator)
+			pwd	||=	Dir.pwd
+
+			r = pwd[0..1] + path
+		else
+
+			pwd	=	nil
+			pwd	||=	options[:pwd]
+			pwd	||=	options[:locator].pwd if options.has_key?(:locator)
+			pwd	||=	Dir.pwd
+
+			r = combine_paths(pwd, path)
+		end
+
+		r	=	make_path_canonical r if options[:make_canonical]
+
+		return r
+	end
 
 	# Converts a path into canonical form, which is to say that all possible
 	# dots directory parts are removed:

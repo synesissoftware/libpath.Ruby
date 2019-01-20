@@ -334,3 +334,86 @@ class Test_path_is_UNC_Windows < Test::Unit::TestCase
 	end
 end
 
+class Test_path_is_drived_Windows < Test::Unit::TestCase
+
+	include ::LibPath::Form::Windows
+
+	if $DEBUG
+
+		def test_with_nil
+
+			assert_raise(::ArgumentError) { path_is_drived?(nil) }
+		end
+	end
+
+	def test_empty
+
+		assert_nil path_is_drived?('')
+	end
+
+	def test_absolute_paths_from_drive
+
+		assert_equal 2, path_is_drived?('C:')
+		assert_equal 3, path_is_drived?('C:\\')
+		assert_equal 3, path_is_drived?('C:/')
+		assert_equal 3, path_is_drived?('C:\\\\')
+		assert_equal 3, path_is_drived?('C:\\abc\\')
+
+		assert_equal 6, path_is_drived?('\\\\?\\C:')
+		assert_equal 7, path_is_drived?('\\\\?\\C:\\')
+		assert_equal 7, path_is_drived?('\\\\?\\C:/')
+		assert_equal 7, path_is_drived?('\\\\?\\C:\\\\')
+		assert_equal 7, path_is_drived?('\\\\?\\C:\\abc\\')
+	end
+
+	def test_absolute_paths_from_other_UNC
+
+		assert_nil path_is_drived?('\\\\')
+		assert_nil path_is_drived?('\\\\server')
+		assert_nil path_is_drived?('\\\\server\\')
+		assert_nil path_is_drived?('\\\\server\\share')
+
+		assert_nil path_is_drived?('\\\\server\\the-share_name\\')
+		assert_nil path_is_drived?('\\\\server\\the-share_name\\\\')
+		assert_nil path_is_drived?('\\\\server\\the-share_name\\dir')
+		assert_nil path_is_drived?('\\\\server\\the-share_name\\dir\\')
+
+		assert_nil path_is_drived?('\\\\101.2.303.4\\the-share_name\\')
+		assert_nil path_is_drived?('\\\\101.2.303.4\\the-share_name\\\\')
+		assert_nil path_is_drived?('\\\\101.2.303.4\\the-share_name\\dir')
+		assert_nil path_is_drived?('\\\\101.2.303.4\\the-share_name\\dir\\')
+
+		assert_nil path_is_drived?('\\\\::1/128\\the-share_name\\')
+		assert_nil path_is_drived?('\\\\::1/128\\the-share_name\\\\')
+		assert_nil path_is_drived?('\\\\::1/128\\the-share_name\\dir')
+		assert_nil path_is_drived?('\\\\::1/128\\the-share_name\\dir\\')
+	end
+
+	def test_absolute_paths_from_root
+
+		assert_nil path_is_drived?('\\')
+		assert_nil path_is_drived?('\\\\')
+		assert_nil path_is_drived?('\\abc')
+
+		assert_nil path_is_drived?('/')
+		assert_nil path_is_drived?('//')
+		assert_nil path_is_drived?('/abc')
+	end
+
+	def test_absolute_paths_from_home
+
+		assert_nil path_is_drived?('~')
+		assert_nil path_is_drived?('~/')
+		assert_nil path_is_drived?('~/abc')
+	end
+
+	def test_relative_paths
+
+		assert_nil path_is_drived?('abc')
+		assert_nil path_is_drived?('abc/')
+		assert_nil path_is_drived?('a/')
+
+		assert_nil path_is_drived?('~abc')
+	end
+end
+

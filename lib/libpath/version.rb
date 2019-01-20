@@ -5,7 +5,7 @@
 # Purpose:      Version for libpath.Ruby library
 #
 # Created:      8th January 2019
-# Updated:      19th January 2018
+# Updated:      20th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -51,7 +51,7 @@
 module LibPath
 
 	# Current version of the libpath.Ruby library
-	VERSION				=	'0.0.7'
+	VERSION				=	'0.0.8'
 
 	private
 	VERSION_PARTS_		=	VERSION.split(/[.]/).collect { |n| n.to_i } # :nodoc:
