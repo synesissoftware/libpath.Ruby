@@ -62,15 +62,15 @@ module Form
 
 							# 3. \\?\X:
 
-							return [ s[0..5], s[6..-1] ]
+							return [ s[0..5], s[6..-1], :form_3 ]
 						end
 
-						if s =~ /^\\\\\?\\(?:UNC\\|)[^\\]+\\[^\\]+/
+						if s =~ /^\\\\\?\\(UNC\\|)[^\\]+\\[^\\]+/
 
 							# 4. \\?\server\share
 							# 5. \\?\UNC\server\share
 
-							return [ $&, $' ]
+							return [ $&, $', $1.empty? ? :form_4 : :form_5 ]
 						end
 					end
 				when '.'
@@ -79,7 +79,7 @@ module Form
 
 						# 6. \\.\device
 
-						return [ $&, $' ]
+						return [ $&, $', :form_6 ]
 					end
 				else
 
@@ -87,7 +87,7 @@ module Form
 
 							# 2. \\server\share
 
-							return [ $&, $' ]
+							return [ $&, $', :form_2 ]
 						end
 				end
 			else
@@ -97,12 +97,12 @@ module Form
 
 			# 1. X:
 
-			return [ s[0..1], s[2..-1] ]
+			return [ s[0..1], s[2..-1], :form_1 ]
 		end
 
 		# 0. not matched
 
-		[ nil, s ]
+		[ nil, s, :form_0 ]
 	end
 
 	# Returns tuple of:
@@ -125,8 +125,7 @@ module Form
 		f6_dir_parts	=	[]
 		f7_all_parts	=	[]
 
-		f1_volume, rem	=	self.get_windows_volume s
-
+		f1_volume, rem, _	=	self.get_windows_volume s
 
 
 		unless rem.empty?

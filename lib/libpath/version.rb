@@ -51,7 +51,7 @@
 module LibPath
 
 	# Current version of the libpath.Ruby library
-	VERSION				=	'0.0.8'
+	VERSION				=	'0.0.9'
 
 	private
 	VERSION_PARTS_		=	VERSION.split(/[.]/).collect { |n| n.to_i } # :nodoc:
