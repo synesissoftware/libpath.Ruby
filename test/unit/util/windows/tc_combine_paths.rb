@@ -59,6 +59,11 @@ class Test_LibPath_Util_Windows_combine_paths < Test::Unit::TestCase
 		assert_equal 'Z:\\', F.combine_paths('a', 'X:/', '\\', 'Z:')
 
 		assert_equal '\\\\?\\Z:\\', F.combine_paths('a', '\\\\?\\X:/', '\\', '\\\\?\\Z:')
+
+		assert_equal '\\\\?\\UNC\\server\\share/abc', F.combine_paths('a', '\\\\?\\X:/', '/abc', '\\\\?\\UNC\\server\\share')
+
+		assert_equal '\\\\.\\{1234-abcd}/abc', F.combine_paths('a', '\\\\?\\X:/', '/abc', '\\\\.\\{1234-abcd}')
+		assert_equal '\\\\.\\{1234-abcd}/abc', F.combine_paths('a', '\\\\?\\X:/', '\\\\.\\{1234-abcd}', '/abc')
 	end
 
 	def test_tail_absolute_cases_5

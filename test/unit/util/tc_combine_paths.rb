@@ -86,6 +86,8 @@ class Test_LibPath_Util_combine_paths < Test::Unit::TestCase
 			assert_equal 'Z:\\', F.combine_paths('a', 'X:/', '\\', 'Z:')
 
 			assert_equal '\\\\?\\Z:\\', F.combine_paths('a', '\\\\?\\X:/', '\\', '\\\\?\\Z:')
+
+			assert_equal '\\\\?\\UNC\\server\\share/abc', F.combine_paths('a', '\\\\?\\X:/', '/abc', '\\\\?\\UNC\\server\\share')
 		end
 
 		def test_tail_absolute_cases_5

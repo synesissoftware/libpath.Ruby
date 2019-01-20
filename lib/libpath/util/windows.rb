@@ -75,12 +75,32 @@ module LibPath_Util_Windows_Methods
 
 		args	=	args.reject { |arg| arg.nil? || arg.empty? }
 
-		rix_abs	=	args.rindex { |arg| _Form_Windows.path_is_absolute?(arg) }
+		rix_abs	=	nil
+		rix_drv	=	nil
+		rix_dir	=	nil
 
-		rix_drv	=	args.rindex { |arg| _Form_Windows.path_is_drived?(arg) }
+		args.each_with_index do |arg, index|
+
+			vol, rem, frm = _Internal_Windows_Form.get_windows_volume arg
+
+			rem = nil unless rem && _Internal_Windows_Form.char_is_path_name_separator?(rem[0])
+
+			if vol
+
+				if rem
+
+					rix_abs	=	index
+				else
+
+					rix_drv	=	index
+				end
+			elsif rem
+
+				rix_dir	=	index
+			end
+		end
+
 		rix_drv	=	nil if (rix_drv || -1) <= (rix_abs || -1)
-
-		rix_dir	=	args.rindex { |arg| _Form_Windows.path_is_rooted?(arg) }
 		rix_dir	=	nil if (rix_dir || -1) <= (rix_abs || -1)
 
 		if rix_drv && rix_dir && rix_abs
@@ -119,6 +139,12 @@ module LibPath_Util_Windows_Methods
 
 					args	=	args[rix_dir..-1]
 
+					if dir.size > 1
+
+						args.unshift dir[1..-1]
+						dir	=	dir[0]
+					end
+
 					root	=	_Internal_Windows_Form.append_trailing_slash("#{drv}#{dir}")
 
 					first	<<	root
@@ -133,6 +159,12 @@ module LibPath_Util_Windows_Methods
 					_, _, dir, bas, _, _, _, _	=	_Internal_Windows_Form.split_path abs
 
 					args	=	args[rix_abs..-1]
+
+					if dir.size > 1
+
+						args.unshift dir[1..-1]
+						dir	=	dir[0]
+					end
 
 					root	=	_Internal_Windows_Form.append_trailing_slash("#{drv}#{dir}#{bas}")
 

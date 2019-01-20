@@ -39,6 +39,9 @@ module Form
 		s.chop
 	end
 
+	#
+	# === Return
+	# A 3-element array, consisting of [ volume, remainder, form ]
 	def self.get_windows_volume s
 
 		# 0. not matched
