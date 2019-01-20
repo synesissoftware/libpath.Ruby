@@ -319,7 +319,7 @@ if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
 			assert_false path_is_UNC?('\\\\')
 			assert_false path_is_UNC?('\\\\server')
 			assert_false path_is_UNC?('\\\\server\\')
-			assert_false path_is_UNC?('\\\\server\\share')
+			assert path_is_UNC?('\\\\server\\share')
 
 			assert path_is_UNC?('\\\\server\\the-share_name\\')
 			assert path_is_UNC?('\\\\server\\the-share_name\\\\')
