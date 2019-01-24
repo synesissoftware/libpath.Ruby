@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Form::Windows module
 #
 # Created:      8th January 2019
-# Updated:      20th January 2018
+# Updated:      25th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -58,6 +58,30 @@ module Form
 module Windows
 
 module LibPath_Form_Windows_Methods
+
+	# Classifies a path
+	#
+	# === Return
+	#
+	# One of +:absolute+, +:drived+, +:homed+, +:relative+, +:rooted+, for
+	# any paths that match precisely those classifications, or +nil+ if the
+	# path is empty
+	def classify_path path
+
+		Diagnostics.check_string_parameter(path, "path") if $DEBUG
+
+		return nil if path.nil? || path.empty?
+
+		return :homed if path_is_homed? path
+
+		return :absolute if path_is_absolute? path
+
+		return :drived if path_is_drived? path
+
+		return :rooted if path_is_rooted? path
+
+		:relative
+	end
 
 	# Evaluates whether the given path is absolute, which means it is either
 	# rooted (begins with '/') or is homed (is '~' or begins with '~/')

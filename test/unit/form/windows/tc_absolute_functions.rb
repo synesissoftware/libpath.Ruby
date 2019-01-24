@@ -26,6 +26,102 @@ class Test_existence_of_namespace_LibPath_Form_Windows < Test::Unit::TestCase
 	end
 end
 
+class Test_path_classify_path_Windows < Test::Unit::TestCase
+
+	include ::LibPath::Form::Windows
+
+	def test_with_nil
+
+		if $DEBUG
+
+			assert_raise(::ArgumentError) { classify_path(nil) }
+		else
+
+			assert_nil classify_path(nil)
+		end
+	end
+
+	def test_empty
+
+		assert_nil classify_path('')
+	end
+
+	def test_drived
+
+		assert_equal :drived, classify_path('C:abc')
+		assert_equal :drived, classify_path('C:abc/')
+		assert_equal :drived, classify_path('C:abc\\')
+
+		assert_equal :drived, classify_path('\\\\?\\C:abc')
+		assert_equal :drived, classify_path('\\\\?\\C:abc/')
+		assert_equal :drived, classify_path('\\\\?\\C:abc\\')
+	end
+
+	def test_absolute
+
+		assert_equal :absolute, classify_path('C:/')
+		assert_equal :absolute, classify_path('C:\\')
+
+		assert_equal :absolute, classify_path('C:/abc')
+		assert_equal :absolute, classify_path('C:\\abc')
+
+
+		assert_equal :absolute, classify_path('\\\\server\\share/')
+		assert_equal :absolute, classify_path('\\\\server\\share\\')
+
+		assert_equal :absolute, classify_path('\\\\server\\share/abc')
+		assert_equal :absolute, classify_path('\\\\server\\share\\abc')
+
+
+		assert_equal :absolute, classify_path('\\\\?\\C:/')
+		assert_equal :absolute, classify_path('\\\\?\\C:\\')
+
+		assert_equal :absolute, classify_path('\\\\?\\C:/abc')
+		assert_equal :absolute, classify_path('\\\\?\\C:\\abc')
+
+
+		assert_equal :absolute, classify_path('\\\\?\\server\\share/')
+		assert_equal :absolute, classify_path('\\\\?\\server\\share\\')
+
+		assert_equal :absolute, classify_path('\\\\?\\server\\share/abc')
+		assert_equal :absolute, classify_path('\\\\?\\server\\share\\abc')
+
+
+		assert_equal :absolute, classify_path('\\\\?\\UNC\\server\\share/')
+		assert_equal :absolute, classify_path('\\\\?\\UNC\\server\\share\\')
+
+		assert_equal :absolute, classify_path('\\\\?\\UNC\\server\\share/abc')
+		assert_equal :absolute, classify_path('\\\\?\\UNC\\server\\share\\abc')
+	end
+
+	def test_rooted
+
+		assert_equal :rooted, classify_path('/')
+		assert_equal :rooted, classify_path('\\')
+
+		assert_equal :rooted, classify_path('/abc')
+		assert_equal :rooted, classify_path('\\abc')
+	end
+
+	def test_homed
+
+		assert_equal :homed, classify_path('~')
+
+		assert_equal :homed, classify_path('~/')
+		assert_equal :homed, classify_path('~\\')
+
+		assert_equal :homed, classify_path('~/abc')
+		assert_equal :homed, classify_path('~\\abc')
+	end
+
+	def test_relative
+
+		assert_equal :relative, classify_path('abc')
+
+		assert_equal :relative, classify_path('~~')
+	end
+end
+
 class Test_path_is_absolute_Windows < Test::Unit::TestCase
 
 	include ::LibPath::Form::Windows
