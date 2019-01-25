@@ -55,6 +55,10 @@ class Test_path_classify_path_Windows < Test::Unit::TestCase
 		assert_equal :drived, classify_path('\\\\?\\C:abc')
 		assert_equal :drived, classify_path('\\\\?\\C:abc/')
 		assert_equal :drived, classify_path('\\\\?\\C:abc\\')
+
+		assert_equal :drived, classify_path('\\\\server\\share')
+
+		assert_equal :drived, classify_path('\\\\?\\server\\share')
 	end
 
 	def test_absolute
@@ -680,7 +684,7 @@ class Test_path_is_UNC_Windows < Test::Unit::TestCase
 	end
 end
 
-class Test_path_is_drived_Windows < Test::Unit::TestCase
+class Test_path_is_letter_drived_Windows < Test::Unit::TestCase
 
 	include ::LibPath::Form::Windows
 
@@ -688,78 +692,78 @@ class Test_path_is_drived_Windows < Test::Unit::TestCase
 
 		def test_with_nil
 
-			assert_raise(::ArgumentError) { path_is_drived?(nil) }
+			assert_raise(::ArgumentError) { path_is_letter_drived?(nil) }
 		end
 	end
 
 	def test_empty
 
-		assert_nil path_is_drived?('')
+		assert_nil path_is_letter_drived?('')
 	end
 
 	def test_absolute_paths_from_drive
 
-		assert_equal 2, path_is_drived?('C:')
-		assert_equal 3, path_is_drived?('C:\\')
-		assert_equal 3, path_is_drived?('C:/')
-		assert_equal 3, path_is_drived?('C:\\\\')
-		assert_equal 3, path_is_drived?('C:\\abc\\')
+		assert_equal 2, path_is_letter_drived?('C:')
+		assert_equal 3, path_is_letter_drived?('C:\\')
+		assert_equal 3, path_is_letter_drived?('C:/')
+		assert_equal 3, path_is_letter_drived?('C:\\\\')
+		assert_equal 3, path_is_letter_drived?('C:\\abc\\')
 
-		assert_equal 6, path_is_drived?('\\\\?\\C:')
-		assert_equal 7, path_is_drived?('\\\\?\\C:\\')
-		assert_equal 7, path_is_drived?('\\\\?\\C:/')
-		assert_equal 7, path_is_drived?('\\\\?\\C:\\\\')
-		assert_equal 7, path_is_drived?('\\\\?\\C:\\abc\\')
+		assert_equal 6, path_is_letter_drived?('\\\\?\\C:')
+		assert_equal 7, path_is_letter_drived?('\\\\?\\C:\\')
+		assert_equal 7, path_is_letter_drived?('\\\\?\\C:/')
+		assert_equal 7, path_is_letter_drived?('\\\\?\\C:\\\\')
+		assert_equal 7, path_is_letter_drived?('\\\\?\\C:\\abc\\')
 	end
 
 	def test_absolute_paths_from_other_UNC
 
-		assert_nil path_is_drived?('\\\\')
-		assert_nil path_is_drived?('\\\\server')
-		assert_nil path_is_drived?('\\\\server\\')
-		assert_nil path_is_drived?('\\\\server\\share')
+		assert_nil path_is_letter_drived?('\\\\')
+		assert_nil path_is_letter_drived?('\\\\server')
+		assert_nil path_is_letter_drived?('\\\\server\\')
+		assert_nil path_is_letter_drived?('\\\\server\\share')
 
-		assert_nil path_is_drived?('\\\\server\\the-share_name\\')
-		assert_nil path_is_drived?('\\\\server\\the-share_name\\\\')
-		assert_nil path_is_drived?('\\\\server\\the-share_name\\dir')
-		assert_nil path_is_drived?('\\\\server\\the-share_name\\dir\\')
+		assert_nil path_is_letter_drived?('\\\\server\\the-share_name\\')
+		assert_nil path_is_letter_drived?('\\\\server\\the-share_name\\\\')
+		assert_nil path_is_letter_drived?('\\\\server\\the-share_name\\dir')
+		assert_nil path_is_letter_drived?('\\\\server\\the-share_name\\dir\\')
 
-		assert_nil path_is_drived?('\\\\101.2.303.4\\the-share_name\\')
-		assert_nil path_is_drived?('\\\\101.2.303.4\\the-share_name\\\\')
-		assert_nil path_is_drived?('\\\\101.2.303.4\\the-share_name\\dir')
-		assert_nil path_is_drived?('\\\\101.2.303.4\\the-share_name\\dir\\')
+		assert_nil path_is_letter_drived?('\\\\101.2.303.4\\the-share_name\\')
+		assert_nil path_is_letter_drived?('\\\\101.2.303.4\\the-share_name\\\\')
+		assert_nil path_is_letter_drived?('\\\\101.2.303.4\\the-share_name\\dir')
+		assert_nil path_is_letter_drived?('\\\\101.2.303.4\\the-share_name\\dir\\')
 
-		assert_nil path_is_drived?('\\\\::1/128\\the-share_name\\')
-		assert_nil path_is_drived?('\\\\::1/128\\the-share_name\\\\')
-		assert_nil path_is_drived?('\\\\::1/128\\the-share_name\\dir')
-		assert_nil path_is_drived?('\\\\::1/128\\the-share_name\\dir\\')
+		assert_nil path_is_letter_drived?('\\\\::1/128\\the-share_name\\')
+		assert_nil path_is_letter_drived?('\\\\::1/128\\the-share_name\\\\')
+		assert_nil path_is_letter_drived?('\\\\::1/128\\the-share_name\\dir')
+		assert_nil path_is_letter_drived?('\\\\::1/128\\the-share_name\\dir\\')
 	end
 
 	def test_absolute_paths_from_root
 
-		assert_nil path_is_drived?('\\')
-		assert_nil path_is_drived?('\\\\')
-		assert_nil path_is_drived?('\\abc')
+		assert_nil path_is_letter_drived?('\\')
+		assert_nil path_is_letter_drived?('\\\\')
+		assert_nil path_is_letter_drived?('\\abc')
 
-		assert_nil path_is_drived?('/')
-		assert_nil path_is_drived?('//')
-		assert_nil path_is_drived?('/abc')
+		assert_nil path_is_letter_drived?('/')
+		assert_nil path_is_letter_drived?('//')
+		assert_nil path_is_letter_drived?('/abc')
 	end
 
 	def test_absolute_paths_from_home
 
-		assert_nil path_is_drived?('~')
-		assert_nil path_is_drived?('~/')
-		assert_nil path_is_drived?('~/abc')
+		assert_nil path_is_letter_drived?('~')
+		assert_nil path_is_letter_drived?('~/')
+		assert_nil path_is_letter_drived?('~/abc')
 	end
 
 	def test_relative_paths
 
-		assert_nil path_is_drived?('abc')
-		assert_nil path_is_drived?('abc/')
-		assert_nil path_is_drived?('a/')
+		assert_nil path_is_letter_drived?('abc')
+		assert_nil path_is_letter_drived?('abc/')
+		assert_nil path_is_letter_drived?('a/')
 
-		assert_nil path_is_drived?('~abc')
+		assert_nil path_is_letter_drived?('~abc')
 	end
 end
 

@@ -74,13 +74,30 @@ module LibPath_Form_Windows_Methods
 
 		return :homed if path_is_homed? path
 
-		return :absolute if path_is_absolute? path
+		vol, rem, frm = Internal_::Windows::Form.get_windows_volume(path)
 
-		return :drived if path_is_drived? path
+		rooted	=	Internal_::Windows::Form.char_is_path_name_separator? rem[0]
 
-		return :rooted if path_is_rooted? path
+		if rooted
 
-		:relative
+			if vol
+
+				return :absolute
+			else
+
+				return :rooted
+			end
+		else
+
+			if vol
+
+				return :drived
+			else
+
+				return :relative
+			end
+		end
+
 	end
 
 	# Evaluates whether the given path is absolute, which means it is either
@@ -94,17 +111,6 @@ module LibPath_Form_Windows_Methods
 
 		Diagnostics.check_string_parameter(path, "path") if $DEBUG
 
-		if path.size > 2
-
-			if ':' == path[1]
-
-				if Internal_::Windows::Drive.character_is_drive_letter? path[0]
-
-					return '/' == path[2] || '\\' == path[2]
-				end
-			end
-		end
-
 		return true if path_is_homed? path
 
 		vol, rem, _ = Internal_::Windows::Form.get_windows_volume(path)
@@ -115,8 +121,8 @@ module LibPath_Form_Windows_Methods
 		Internal_::Windows::Form.char_is_path_name_separator? rem[0]
 	end
 
-	# Evaluates whether the given path is "drived", which means that it
-	# contains a drive specification. Given the two letter sequence 'X:'
+	# Evaluates whether the given path is "letter drived", which means that
+	# it contains a drive specification. Given the two letter sequence 'X:'
 	# representing any ASCII letter (a-zA-Z) and a colon, this function
 	# recognises six sequences: +'X:'+, +'X:\'+, +'X:/'+, +'\\?\X:'+,
 	# +'\\?\X:\'+, +'\\?\X:/'+
@@ -127,7 +133,7 @@ module LibPath_Form_Windows_Methods
 	#  - 3:: it begins with the form +'X:\'+ or +'X:/'+
 	#  - 6:: it begins with the form +'\\?\X:'+
 	#  - 7:: it begins with the form +'\\?\X:\'+ or +'\\?\X:/'+
-	def path_is_drived? path
+	def path_is_letter_drived? path
 
 		Diagnostics.check_string_parameter(path, "path") if $DEBUG
 
@@ -168,7 +174,7 @@ module LibPath_Form_Windows_Methods
 	end
 
 	# Evaluates whether the given path is homed, which means it is '~' or
-	# begins with '~/'
+	# begins with '~/' or '~\'
 	#
 	# === Signature
 	#
@@ -182,7 +188,7 @@ module LibPath_Form_Windows_Methods
 
 		if path.size > 1
 
-			return '/' == path[1] || '\\' == path[1]
+			return Internal_::Windows::Form.char_is_path_name_separator? path[1]
 		end
 
 		true
@@ -231,7 +237,7 @@ module LibPath_Form_Windows_Methods
 
 					if Internal_::Windows::Drive.character_is_drive_letter? path[0]
 
-						return '/' == path[2] || '\\' == path[2]
+						return Internal_::Windows::Form.char_is_path_name_separator? path[2]
 					end
 				end
 			end
