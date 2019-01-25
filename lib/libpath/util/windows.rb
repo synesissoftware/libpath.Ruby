@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Util::Windows module
 #
 # Created:      10th January 2019
-# Updated:      20th January 2018
+# Updated:      25th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -211,6 +211,141 @@ module LibPath_Util_Windows_Methods
 		(first + dirs + last).join('')
 	end
 
+	#
+	# === Signature
+	#
+	# * *Options:*
+	#  +:make_path_canonical+:: (boolean)
+	def derive_relative_path origin, path, **options
+
+		return path if origin.nil? || origin.empty?
+		return path if path.nil? || path.empty?
+
+		_Form_Windows			=	Form::Windows
+		_Util_Windows			=	Util::Windows
+		_Internal_Windows_Form	=	Internal_::Windows::Form
+
+		_MPA_COMMON_OPTIONS	=	%i{ home locator pwd }
+
+		# Possibly naive home-correction
+
+		return derive_relative_path(absolute_path(origin), path, **options) if _Form_Windows.path_is_homed?(origin)
+		return derive_relative_path(origin, absolute_path(path), **options) if _Form_Windows.path_is_homed?(path)
+
+
+		o_vol, o_rem, o_frm = _Internal_Windows_Form.get_windows_volume origin
+		p_vol, p_rem, p_frm = _Internal_Windows_Form.get_windows_volume path
+
+		if o_vol && p_vol
+
+			# always give absolute answer when 'volume's are different
+
+			if o_vol != p_vol
+
+				path	=	_Util_Windows.make_path_canonical(path) if options[:make_path_canonical]
+
+				path	=	path.gsub(/\//, '\\')
+
+				return path
+			end
+		end
+
+
+		o_is_rooted	=	o_rem && _Internal_Windows_Form.char_is_path_name_separator?(o_rem[0])
+		p_is_rooted	=	p_rem && _Internal_Windows_Form.char_is_path_name_separator?(p_rem[0])
+
+		o_is_abs	=	o_vol && o_is_rooted
+		p_is_abs	=	p_vol && p_is_rooted
+
+		mpa_opts	=	options.select { |k| _MPA_COMMON_OPTIONS.include?(k) }
+
+		if o_is_abs != p_is_abs || o_is_rooted != p_is_rooted
+
+			origin	=	_Util_Windows.make_path_absolute(origin, **mpa_opts) unless o_is_abs
+			path	=	_Util_Windows.make_path_absolute(path, **mpa_opts) unless p_is_abs
+
+			return derive_relative_path(origin, path, **options)
+		end
+
+		origin	=	_Util_Windows.make_path_canonical(origin, make_slashes_canonical: true)
+		path	=	_Util_Windows.make_path_canonical(path, make_slashes_canonical: true)
+
+		return '.' if origin == path
+		return path if '.' == origin
+
+		origin		=	origin.gsub(/\//, '\\')
+		path		=	path.gsub(/\//, '\\')
+
+		if o_is_abs != p_is_abs || '.' == path
+
+			origin	=	_Util_Windows.make_path_absolute(origin, make_canonical: true, **options.select { |k| _MPA_COMMON_OPTIONS.include?(k) })
+			path	=	_Util_Windows.make_path_absolute(path, make_canonical: true, **options.select { |k| _MPA_COMMON_OPTIONS.include?(k) })
+		end
+
+		trailing_slash	=	_Internal_Windows_Form.get_trailing_slash(path)
+
+		origin	=	_Internal_Windows_Form.trim_trailing_slash(origin) unless origin.size < 2
+		path	=	_Internal_Windows_Form.trim_trailing_slash(path) unless path.size < 2
+
+
+		_, _, o2_dir, o3_basename, _, _, o6_parts, _	=	_Internal_Windows_Form.split_path(origin)
+		_, _, p2_dir, p3_basename, _, _, p6_parts, _	=	_Internal_Windows_Form.split_path(path)
+
+		o_parts	=	o6_parts
+		o_parts	<<	o3_basename if o3_basename && '.' != o3_basename
+
+		p_parts	=	p6_parts
+		p_parts	<<	p3_basename if p3_basename
+
+
+		while true
+
+			break if o_parts.empty?
+			break if p_parts.empty?
+
+			o_part	=	o_parts[0]
+			p_part	=	p_parts[0]
+
+			if 1 == o_parts.size || 1 == p_parts.size
+
+				o_part	=	_Internal_Windows_Form.append_trailing_slash o_part
+				p_part	=	_Internal_Windows_Form.append_trailing_slash p_part
+			end
+
+			parts_equal = false
+
+			if o_part.size == p_part.size
+
+				o_part	=	o_part.gsub(/\//, '\\') if o_part.include? '/'
+				p_part	=	p_part.gsub(/\//, '\\') if p_part.include? '/'
+
+				parts_equal = o_part == p_part
+			end
+
+
+			if parts_equal
+
+				o_parts.shift
+				p_parts.shift
+			else
+
+				break
+			end
+		end
+
+
+		return '.' if 0 == (o_parts.size + p_parts.size)
+
+		return o_parts.map { |rp| '..' }.join('\\') if p_parts.empty?
+
+
+		ar		=	[ '..' ] * o_parts.size + p_parts
+		last	=	ar.pop
+		ar		=	ar.map { |el| _Internal_Windows_Form.append_trailing_slash(el) }
+
+		ar.join + last.to_s
+	end
+
 	def make_path_absolute path, **options
 
 		_Form_Windows			=	Form::Windows
@@ -279,7 +414,7 @@ module LibPath_Util_Windows_Methods
 	#
 	# * *Parameters:*
 	#   - +path+:: (String) The path to be evaluated. May not be +nil+
-	def make_path_canonical path
+	def make_path_canonical path, **options
 
 		Diagnostics.check_string_parameter(path, "path") if $DEBUG
 

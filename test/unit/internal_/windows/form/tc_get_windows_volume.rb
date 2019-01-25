@@ -32,6 +32,17 @@ class Test_Internal_Windows_Form_get_windows_volume < Test::Unit::TestCase
 		assert_equal :form_0, r[2]
 	end
 
+	def test_homed
+
+		r = F.get_windows_volume('~')
+
+		assert_kind_of ::Array, r
+		assert_equal 3, r.size
+		assert_nil r[0]
+		assert_equal '~', r[1]
+		assert_equal :form_0, r[2]
+	end
+
 	def test_rooted
 
 		r = F.get_windows_volume('\\abc')

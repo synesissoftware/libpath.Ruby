@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Util::Unix module
 #
 # Created:      14th January 2019
-# Updated:      19th January 2018
+# Updated:      21st January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -86,6 +86,89 @@ module LibPath_Util_Unix_Methods
 
 			File.join *els
 		end
+	end
+
+	#
+	# === Signature
+	#
+	#
+	def derive_relative_path origin, path, **options
+
+		return path if origin.nil? || origin.empty?
+		return path if path.nil? || path.empty?
+
+		_Form_Unix			=	Form::Unix
+		_Util_Unix			=	Util::Unix
+		_Internal_Unix_Form	=	Internal_::Unix::Form
+
+		_MPA_COMMON_OPTIONS	=	%i{ home locator pwd }
+
+		origin	=	_Util_Unix.make_path_canonical(origin)
+		path	=	_Util_Unix.make_path_canonical(path)
+
+		return '.' if origin == path
+		return path if '.' == origin
+
+		o_is_abs	=	_Form_Unix.path_is_absolute?(origin)
+		p_is_abs	=	_Form_Unix.path_is_absolute?(path)
+
+		if o_is_abs != p_is_abs || '.' == path
+
+			origin	=	_Util_Unix.make_path_absolute(origin, make_canonical: true, **options.select { |k| _MPA_COMMON_OPTIONS.include?(k) })
+			path	=	_Util_Unix.make_path_absolute(path, make_canonical: true, **options.select { |k| _MPA_COMMON_OPTIONS.include?(k) })
+		end
+
+		trailing_slash	=	_Internal_Unix_Form.get_trailing_slash(path)
+
+		origin	=	_Internal_Unix_Form.trim_trailing_slash(origin) unless origin.size < 2
+		path	=	_Internal_Unix_Form.trim_trailing_slash(path) unless path.size < 2
+
+
+		_, _, o2_dir, o3_basename, _, _, o6_parts, _	=	_Internal_Unix_Form.split_path(origin)
+		_, _, p2_dir, p3_basename, _, _, p6_parts, _	=	_Internal_Unix_Form.split_path(path)
+
+		o_parts	=	o6_parts
+		o_parts	<<	o3_basename if o3_basename && '.' != o3_basename
+
+		p_parts	=	p6_parts
+		p_parts	<<	p3_basename if p3_basename
+
+
+		while true
+
+			break if o_parts.empty?
+			break if p_parts.empty?
+
+			o_part	=	o_parts[0]
+			p_part	=	p_parts[0]
+
+			if 1 == o_parts.size || 1 == p_parts.size
+
+				o_part	=	_Internal_Unix_Form.append_trailing_slash o_part
+				p_part	=	_Internal_Unix_Form.append_trailing_slash p_part
+			end
+
+			if o_part == p_part
+
+				o_parts.shift
+				p_parts.shift
+			else
+
+				break
+			end
+		end
+
+
+		return '.' if 0 == (o_parts.size + p_parts.size)
+
+		return o_parts.map { |rp| '..' }.join('/') if p_parts.empty?
+
+
+		ar		=	[ '..' ] * o_parts.size + p_parts
+		last	=	ar.pop
+		ar		=	ar.map { |el| _Internal_Unix_Form.append_trailing_slash(el) }
+
+		ar.join + last.to_s
 	end
 
 
