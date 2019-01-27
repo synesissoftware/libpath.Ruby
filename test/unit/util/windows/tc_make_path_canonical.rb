@@ -25,6 +25,14 @@ class Test_LibPath_Util_Windows_make_path_canonical < Test::Unit::TestCase
 		assert_equal '.', F.make_path_canonical('././.')
 		assert_equal './', F.make_path_canonical('./././')
 
+		assert_equal '.', F.make_path_canonical('.', make_slashes_canonical: true)
+		assert_equal '.\\', F.make_path_canonical('./', make_slashes_canonical: true)
+		assert_equal '.', F.make_path_canonical('./.', make_slashes_canonical: true)
+		assert_equal '.', F.make_path_canonical('./.', make_slashes_canonical: true)
+		assert_equal '.\\', F.make_path_canonical('././', make_slashes_canonical: true)
+		assert_equal '.', F.make_path_canonical('././.', make_slashes_canonical: true)
+		assert_equal '.\\', F.make_path_canonical('./././', make_slashes_canonical: true)
+
 		assert_equal '.', F.make_path_canonical('.')
 		assert_equal '.\\', F.make_path_canonical('.\\')
 		assert_equal '.', F.make_path_canonical('.\\.')
@@ -43,6 +51,18 @@ class Test_LibPath_Util_Windows_make_path_canonical < Test::Unit::TestCase
 		assert_equal '../', F.make_path_canonical('../.')
 		assert_equal '../', F.make_path_canonical('.././')
 		assert_equal '../', F.make_path_canonical('.././.')
+
+		assert_equal '..', F.make_path_canonical('..', make_slashes_canonical: true)
+		assert_equal '..\\', F.make_path_canonical('../', make_slashes_canonical: true)
+		assert_equal '..\\', F.make_path_canonical('../.', make_slashes_canonical: true)
+		assert_equal '..\\', F.make_path_canonical('.././', make_slashes_canonical: true)
+		assert_equal '..\\', F.make_path_canonical('.././.', make_slashes_canonical: true)
+
+		assert_equal '..', F.make_path_canonical('..')
+		assert_equal '..\\', F.make_path_canonical('..\\')
+		assert_equal '..\\', F.make_path_canonical('..\\.')
+		assert_equal '..\\', F.make_path_canonical('..\\.\\')
+		assert_equal '..\\', F.make_path_canonical('..\\.\\.')
 
 		assert_equal 'C:..', F.make_path_canonical('C:..')
 	end
@@ -105,6 +125,10 @@ class Test_LibPath_Util_Windows_make_path_canonical < Test::Unit::TestCase
 		assert_equal '/', F.make_path_canonical('/abc/../def/../')
 		assert_equal '/', F.make_path_canonical('/abc\\../def/..\\')
 		assert_equal '/', F.make_path_canonical('/abc\\../def/../')
+
+		assert_equal '\\', F.make_path_canonical('/abc/../def/../', make_slashes_canonical: true)
+		assert_equal '\\', F.make_path_canonical('/abc\\../def/..\\', make_slashes_canonical: true)
+		assert_equal '\\', F.make_path_canonical('/abc\\../def/../', make_slashes_canonical: true)
 
 		assert_equal '\\', F.make_path_canonical('\\abc/../def/../')
 		assert_equal '\\', F.make_path_canonical('\\abc\\../def/..\\')

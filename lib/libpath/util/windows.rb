@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Util::Windows module
 #
 # Created:      10th January 2019
-# Updated:      25th January 2018
+# Updated:      27th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -242,9 +242,13 @@ module LibPath_Util_Windows_Methods
 
 			if o_vol != p_vol
 
-				path	=	_Util_Windows.make_path_canonical(path) if options[:make_path_canonical]
+				if options[:make_path_canonical]
 
-				path	=	path.gsub(/\//, '\\')
+					path	=	_Util_Windows.make_path_canonical(path, make_slashes_canonical: true)
+				else
+
+					path	=	path.tr('/', '\\')
+				end
 
 				return path
 			end
@@ -272,9 +276,6 @@ module LibPath_Util_Windows_Methods
 
 		return '.' if origin == path
 		return path if '.' == origin
-
-		origin		=	origin.gsub(/\//, '\\')
-		path		=	path.gsub(/\//, '\\')
 
 		if o_is_abs != p_is_abs || '.' == path
 
@@ -316,8 +317,8 @@ module LibPath_Util_Windows_Methods
 
 			if o_part.size == p_part.size
 
-				o_part	=	o_part.gsub(/\//, '\\') if o_part.include? '/'
-				p_part	=	p_part.gsub(/\//, '\\') if p_part.include? '/'
+				o_part	=	o_part.tr('/', '\\') if o_part.include? '/'
+				p_part	=	p_part.tr('/', '\\') if p_part.include? '/'
 
 				parts_equal = o_part == p_part
 			end
@@ -417,6 +418,11 @@ module LibPath_Util_Windows_Methods
 	def make_path_canonical path, **options
 
 		Diagnostics.check_string_parameter(path, "path") if $DEBUG
+
+		if path.include?('/') && options[:make_slashes_canonical]
+
+			path.tr! '/', '\\'
+		end
 
 		return path unless '.' == path[-1] || path.include?('./') || path.include?('.\\')
 
