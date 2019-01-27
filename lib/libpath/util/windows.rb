@@ -215,7 +215,10 @@ module LibPath_Util_Windows_Methods
 	# === Signature
 	#
 	# * *Options:*
-	#  +:make_path_canonical+:: (boolean)
+	#  +:home+:: (String)
+	#  +:locator+:: (boolean)
+	#  +:make_canonical+:: (boolean)
+	#  +:pw`+:: (String)
 	def derive_relative_path origin, path, **options
 
 		return path if origin.nil? || origin.empty?
@@ -283,11 +286,6 @@ module LibPath_Util_Windows_Methods
 			path	=	_Util_Windows.make_path_absolute(path, make_canonical: true, **options.select { |k| _MPA_COMMON_OPTIONS.include?(k) })
 		end
 
-		trailing_slash	=	_Internal_Windows_Form.get_trailing_slash(path)
-
-		origin	=	_Internal_Windows_Form.trim_trailing_slash(origin) unless origin.size < 2
-		path	=	_Internal_Windows_Form.trim_trailing_slash(path) unless path.size < 2
-
 
 		_, _, o2_dir, o3_basename, _, _, o6_parts, _	=	_Internal_Windows_Form.split_path(origin)
 		_, _, p2_dir, p3_basename, _, _, p6_parts, _	=	_Internal_Windows_Form.split_path(path)
@@ -296,7 +294,7 @@ module LibPath_Util_Windows_Methods
 		o_parts	<<	o3_basename if o3_basename && '.' != o3_basename
 
 		p_parts	=	p6_parts
-		p_parts	<<	p3_basename if p3_basename
+		p_parts	<<	p3_basename if p3_basename && '.' != p3_basename
 
 
 		while true
@@ -343,6 +341,8 @@ module LibPath_Util_Windows_Methods
 		ar		=	[ '..' ] * o_parts.size + p_parts
 		last	=	ar.pop
 		ar		=	ar.map { |el| _Internal_Windows_Form.append_trailing_slash(el) }
+
+		last[-1] = '\\' if '/' == last[-1]
 
 		ar.join + last.to_s
 	end
@@ -425,6 +425,10 @@ module LibPath_Util_Windows_Methods
 	#
 	# * *Parameters:*
 	#   - +path+:: (String) The path to be evaluated. May not be +nil+
+	#
+	# * *Options:*
+	#   - +:make_slashes_canonical+:: (boolean) Determines whether to
+	#      additionally convert all forward slashes to backslashes
 	def make_path_canonical path, **options
 
 		Diagnostics.check_string_parameter(path, "path") if $DEBUG
