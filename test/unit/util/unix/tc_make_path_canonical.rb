@@ -22,6 +22,8 @@ class Test_LibPath_Util_Unix_make_path_canonical < Test::Unit::TestCase
 		assert_equal '.', F.make_path_canonical('./.')
 		assert_equal '.', F.make_path_canonical('./.')
 		assert_equal './', F.make_path_canonical('././')
+		assert_equal './', F.make_path_canonical('.//./')
+		assert_equal './', F.make_path_canonical('.////./')
 		assert_equal '.', F.make_path_canonical('././.')
 		assert_equal './', F.make_path_canonical('./././')
 	end
@@ -32,6 +34,8 @@ class Test_LibPath_Util_Unix_make_path_canonical < Test::Unit::TestCase
 		assert_equal '../', F.make_path_canonical('../')
 		assert_equal '../', F.make_path_canonical('../.')
 		assert_equal '../', F.make_path_canonical('.././')
+		assert_equal '../', F.make_path_canonical('..//./')
+		assert_equal '../', F.make_path_canonical('..////./')
 		assert_equal '../', F.make_path_canonical('.././.')
 	end
 
@@ -42,6 +46,13 @@ class Test_LibPath_Util_Unix_make_path_canonical < Test::Unit::TestCase
 		assert_equal 'file.ext', F.make_path_canonical('file.ext')
 
 		assert_equal '..', F.make_path_canonical('..')
+	end
+
+	def test_no_dots
+
+		assert_equal 'abc/def', F.make_path_canonical('abc/def')
+		assert_equal 'abc/def', F.make_path_canonical('abc//def')
+		assert_equal 'abc/def', F.make_path_canonical('abc///def')
 	end
 
 	def test_one_dots_directories

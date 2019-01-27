@@ -399,7 +399,17 @@ module LibPath_Util_Windows_Methods
 			r = combine_paths(pwd, path)
 		end
 
-		r	=	make_path_canonical r if options[:make_canonical]
+		if options[:make_canonical]
+
+			r	=	make_path_canonical r
+		else
+
+			vol, rem, _	=	_Internal_Windows_Form.get_windows_volume r
+
+			_Internal_Windows_Form.elide_redundant_path_name_separators! rem
+
+			r			=	"#{vol}#{rem}"
+		end
 
 		return r
 	end
@@ -424,7 +434,7 @@ module LibPath_Util_Windows_Methods
 			path.tr! '/', '\\'
 		end
 
-		return path unless '.' == path[-1] || path.include?('./') || path.include?('.\\')
+		return path unless '.' == path[-1] || path =~ /[.\\\/][\\\/]/
 
 		_Form	=	::LibPath::Internal_::Windows::Form
 		_Array	=	::LibPath::Internal_::Array

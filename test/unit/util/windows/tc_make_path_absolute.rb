@@ -37,6 +37,10 @@ class Test_LibPath_Util_Windows_make_path_absolute < Test::Unit::TestCase
 		assert_equal 'C:/.', F.make_path_absolute('/.', pwd: 'C:/Users/libpath-tester')
 		assert_equal 'C:/a', F.make_path_absolute('/a', pwd: 'C:/Users/libpath-tester')
 		assert_equal 'C:/a/.', F.make_path_absolute('/a/.', pwd: 'C:/Users/libpath-tester')
+
+		assert_equal 'G:\\abc\\', F.make_path_absolute('G:\\abc\\')
+		assert_equal 'G:\\abc\\', F.make_path_absolute('G:\\\\abc\\\\')
+		assert_equal 'G:\\abc\\', F.make_path_absolute('G:\\\\abc\\\\', pwd: 'C:/Users/libpath-tester')
 	end
 
 	def test_absolute_paths_with_canonicalisation
@@ -53,7 +57,7 @@ class Test_LibPath_Util_Windows_make_path_absolute < Test::Unit::TestCase
 
 	def test_relative_path_with_fixed_pwd
 
-		pwd = 'X:\\some-path\\or-other'
+		pwd = 'X:\\some-path\\\\or-other'
 
 		assert_equal 'X:\\some-path\\or-other\\.', F.make_path_absolute('.', pwd: pwd)
 		assert_equal 'X:\\some-path\\or-other\\', F.make_path_absolute('.', pwd: pwd, make_canonical: true)

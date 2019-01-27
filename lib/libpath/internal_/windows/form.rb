@@ -8,11 +8,15 @@ module Windows
 
 module Form
 
+	# [INTERNAL] This function is undocumented, and subject to change at any
+	# time
 	def self.char_is_path_name_separator? c
 
 		'/' == c || '\\' == c
 	end
 
+	# [INTERNAL] This function is undocumented, and subject to change at any
+	# time
 	def self.append_trailing_slash s
 
 		return s if self.char_is_path_name_separator?(s[-1])
@@ -20,6 +24,8 @@ module Form
 		s + '\\'
 	end
 
+	# [INTERNAL] This function is undocumented, and subject to change at any
+	# time
 	def self.get_trailing_slash s
 
 		last = s[-1]
@@ -27,11 +33,15 @@ module Form
 		self.char_is_path_name_separator?(last) ? last : nil
 	end
 
+	# [INTERNAL] This function is undocumented, and subject to change at any
+	# time
 	def self.has_trailing_slash? s
 
 		self.char_is_path_name_separator?(s[-1])
 	end
 
+	# [INTERNAL] This function is undocumented, and subject to change at any
+	# time
 	def self.trim_trailing_slash s
 
 		return s unless self.char_is_path_name_separator?(s[-1])
@@ -39,6 +49,29 @@ module Form
 		s.chop
 	end
 
+	# [INTERNAL] This function is undocumented, and subject to change at any
+	# time
+	def self.elide_redundant_path_name_separators s
+
+		s.gsub /[\\\/]{2,}/, '\\'
+	end
+
+	# [INTERNAL] This function is undocumented, and subject to change at any
+	# time
+	def self.elide_redundant_path_name_separators! s
+
+		s.gsub! /[\\\/]{2,}/, '\\'
+
+		s
+	end
+
+	# [INTERNAL] This function is undocumented, and subject to change at any
+	# time
+	#
+	# === Signature
+	#
+	# * *Parameters:*
+	#  - +s+ (String)
 	#
 	# === Return
 	# A 3-element array, consisting of [ volume, remainder, form ]
@@ -118,9 +151,12 @@ module Form
 		[ nil, s, :form_0 ]
 	end
 
+	# [INTERNAL] This function is undocumented, and subject to change at any
+	# time
+	#
 	# Returns tuple of:
 	#
-	# 0. source path
+	# 0. source path (with redundant path name separators elided)
 	# 1. Windows volume (which is always nil)
 	# 2. Directory
 	# 3. Basename
@@ -140,7 +176,7 @@ module Form
 
 		f1_volume, rem, _	=	self.get_windows_volume s
 
-		rem				=	rem.gsub(/[\\\/]{2,}/, '\\')
+		self.elide_redundant_path_name_separators! rem
 
 
 		unless rem.empty?

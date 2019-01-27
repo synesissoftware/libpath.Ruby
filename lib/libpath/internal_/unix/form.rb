@@ -5,11 +5,15 @@ module Unix
 
 module Form
 
+	# [INTERNAL] This function is undocumented, and subject to change at any
+	# time
 	def self.char_is_path_name_separator? c
 
 		'/' == c
 	end
 
+	# [INTERNAL] This function is undocumented, and subject to change at any
+	# time
 	def self.append_trailing_slash s
 
 		return s if '/' == s[-1]
@@ -17,16 +21,22 @@ module Form
 		s + '/'
 	end
 
+	# [INTERNAL] This function is undocumented, and subject to change at any
+	# time
 	def self.get_trailing_slash s
 
 		'/' == s[-1] ? '/' : nil
 	end
 
+	# [INTERNAL] This function is undocumented, and subject to change at any
+	# time
 	def self.has_trailing_slash? s
 
 		'/' == s[-1]
 	end
 
+	# [INTERNAL] This function is undocumented, and subject to change at any
+	# time
 	def self.trim_trailing_slash s
 
 		return s unless '/' == s[-1]
@@ -34,9 +44,29 @@ module Form
 		s.chop
 	end
 
+	# [INTERNAL] This function is undocumented, and subject to change at any
+	# time
+	def self.elide_redundant_path_name_separators s
+
+		s.gsub /\/\/+/, '/'
+	end
+
+	# [INTERNAL] This function is undocumented, and subject to change at any
+	# time
+	def self.elide_redundant_path_name_separators! s
+
+		s.gsub! /\/\/+/, '/'
+
+		s
+	end
+
+
+	# [INTERNAL] This function is undocumented, and subject to change at any
+	# time
+	#
 	# Returns tuple of:
 	#
-	# 0. source path
+	# 0. source path (with redundant path name separators elided)
 	# 1. Windows volume (which is always nil)
 	# 2. Directory
 	# 3. Basename
@@ -52,7 +82,7 @@ module Form
 		f5_extension	=	nil
 		f6_dir_parts	=	[]
 
-		s				=	s.gsub(/\/\/+/, '/')
+		s				=	self.elide_redundant_path_name_separators s
 
 		ri_slash		=	s.rindex('/')
 

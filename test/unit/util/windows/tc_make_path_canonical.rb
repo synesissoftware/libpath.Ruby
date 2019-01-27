@@ -80,6 +80,13 @@ class Test_LibPath_Util_Windows_make_path_canonical < Test::Unit::TestCase
 		assert_equal '..', F.make_path_canonical('..')
 	end
 
+	def test_no_dots
+
+		assert_equal 'abc/def', F.make_path_canonical('abc/def')
+		assert_equal 'abc\\def', F.make_path_canonical('abc/def', make_slashes_canonical: true)
+		assert_equal 'abc\\def', F.make_path_canonical('abc//def')
+	end
+
 	def test_one_dots_directories
 
 		assert_equal 'abc', F.make_path_canonical('./abc')
