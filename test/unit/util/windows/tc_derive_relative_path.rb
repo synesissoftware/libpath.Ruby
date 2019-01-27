@@ -139,5 +139,13 @@ class Test_LibPath_Util_Windows_derive_relative_path < Test::Unit::TestCase
 		assert_equal '.', M.derive_relative_path('A:\\abc', 'A:\\abc')
 		assert_equal '.', M.derive_relative_path('A:\\.\abc', 'A:\\abc')
 	end
+
+	def test_cases_from_Path
+
+		srd		=	'C:\\dir-1\\dir-2\\dir-C\\dir-D'
+		target	=	'C:/dir-1/dir-2/dir-3/dir-4/./dir-5/dir-6/../file.ext'
+
+		assert_equal '..\\..\\dir-3\\dir-4\\dir-5\\file.ext', M.derive_relative_path(srd, target)
+	end
 end
 

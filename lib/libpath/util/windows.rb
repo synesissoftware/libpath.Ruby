@@ -435,7 +435,7 @@ module LibPath_Util_Windows_Methods
 
 		if path.include?('/') && options[:make_slashes_canonical]
 
-			path.tr! '/', '\\'
+			path = path.tr '/', '\\'
 		end
 
 		return path unless '.' == path[-1] || path =~ /[.\\\/][\\\/]/

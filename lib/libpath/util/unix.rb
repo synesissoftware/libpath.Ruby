@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Util::Unix module
 #
 # Created:      14th January 2019
-# Updated:      21st January 2018
+# Updated:      26th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -91,7 +91,10 @@ module LibPath_Util_Unix_Methods
 	#
 	# === Signature
 	#
-	#
+	# * *Options:*
+	#  +:home+:: (String)
+	#  +:locator+:: (boolean)
+	#  +:pw`+:: (String)
 	def derive_relative_path origin, path, **options
 
 		return path if origin.nil? || origin.empty?
@@ -117,8 +120,6 @@ module LibPath_Util_Unix_Methods
 			origin	=	_Util_Unix.make_path_absolute(origin, make_canonical: true, **options.select { |k| _MPA_COMMON_OPTIONS.include?(k) })
 			path	=	_Util_Unix.make_path_absolute(path, make_canonical: true, **options.select { |k| _MPA_COMMON_OPTIONS.include?(k) })
 		end
-
-		trailing_slash	=	_Internal_Unix_Form.get_trailing_slash(path)
 
 		origin	=	_Internal_Unix_Form.trim_trailing_slash(origin) unless origin.size < 2
 		path	=	_Internal_Unix_Form.trim_trailing_slash(path) unless path.size < 2
