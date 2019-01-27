@@ -26,6 +26,7 @@ class Test_LibPath_Util_Unix_combine_paths < Test::Unit::TestCase
 	def test_relative_cases
 
 		assert_equal 'a/b/c/d', F.combine_paths('a', 'b', 'c/d')
+		assert_equal 'a/b/c/d', F.combine_paths('a', 'b/', 'c/d')
 
 		assert_equal 'a/b', F.combine_paths('', 'a', '', '', 'b')
 

@@ -41,6 +41,10 @@ class Test_LibPath_Util_Windows_make_path_canonical < Test::Unit::TestCase
 		assert_equal '.', F.make_path_canonical('.\\.\\.')
 		assert_equal '.\\', F.make_path_canonical('.\\.\\.\\')
 
+		assert_equal '.', F.make_path_canonical('.///./.')
+		assert_equal '.', F.make_path_canonical('.\\\\\\.\\.')
+		assert_equal '.', F.make_path_canonical('./\\/./.')
+
 		assert_equal 'C:.', F.make_path_canonical('C:.')
 	end
 

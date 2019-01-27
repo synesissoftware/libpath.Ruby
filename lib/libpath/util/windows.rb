@@ -429,9 +429,9 @@ module LibPath_Util_Windows_Methods
 		_Form	=	::LibPath::Internal_::Windows::Form
 		_Array	=	::LibPath::Internal_::Array
 
-		_, f1_volume, f2_directory, f3_basename, _, _, f6_dir_parts, _ = _Form.split_path path
+		f0_path, f1_volume, f2_directory, f3_basename, _, _, f6_dir_parts, _ = _Form.split_path path
 
-		return path if f6_dir_parts.empty?
+		return f0_path if f6_dir_parts.empty?
 
 		last_slash = nil
 
@@ -451,7 +451,7 @@ module LibPath_Util_Windows_Methods
 		new_parts	=	f6_dir_parts.reject { |p| './' == p }.reject { |p| '.\\' == p }
 		ix_2dots	=	_Array.index2(new_parts, '../', '..\\')
 
-		return path unless new_parts.size != f6_dir_parts.size || ix_2dots
+		return f0_path unless new_parts.size != f6_dir_parts.size || ix_2dots
 
 		while (ix_2dots || 0) > 0
 

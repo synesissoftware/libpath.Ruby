@@ -249,13 +249,13 @@ module LibPath_Util_Unix_Methods
 
 		Diagnostics.check_string_parameter(path, "path") if $DEBUG
 
-		return path unless '.' == path[-1] || path.include?('./')
+		return path unless '.' == path[-1] || path.include?('./') || path.include?('//')
 
 		_Form	=	::LibPath::Internal_::Unix::Form
 
-		_, _, _, f3_basename, _, _, f6_dir_parts, _ = _Form.split_path path
+		f0_path, _, _f2_dir, f3_basename, _, _, f6_dir_parts, _ = _Form.split_path path
 
-		return path if f6_dir_parts.empty?
+		return f0_path if f6_dir_parts.empty?
 
 		case f3_basename
 		when '.', '..'
@@ -270,7 +270,7 @@ module LibPath_Util_Unix_Methods
 		new_parts	=	f6_dir_parts.reject { |p| './' == p }
 		ix_2dots	=	new_parts.index('../')
 
-		return path unless new_parts.size != f6_dir_parts.size || ix_2dots
+		return f0_path unless new_parts.size != f6_dir_parts.size || ix_2dots
 
 		while (ix_2dots || 0) > 0
 

@@ -140,6 +140,8 @@ module Form
 
 		f1_volume, rem, _	=	self.get_windows_volume s
 
+		rem				=	rem.gsub(/[\\\/]{2,}/, '\\')
+
 
 		unless rem.empty?
 
@@ -206,7 +208,7 @@ module Form
 		end
 
 
-		[ s, f1_volume, f2_directory, f3_basename, f4_stem, f5_extension, f6_dir_parts, f7_all_parts ].map { |v| ::String === v && v.empty? ? nil : v }
+		[ "#{f1_volume}#{rem}", f1_volume, f2_directory, f3_basename, f4_stem, f5_extension, f6_dir_parts, f7_all_parts ].map { |v| ::String === v && v.empty? ? nil : v }
 	end
 end # module Form
 

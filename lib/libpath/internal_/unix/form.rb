@@ -52,6 +52,8 @@ module Form
 		f5_extension	=	nil
 		f6_dir_parts	=	[]
 
+		s				=	s.gsub(/\/\/+/, '/')
+
 		ri_slash		=	s.rindex('/')
 
 		if ri_slash
@@ -92,10 +94,11 @@ module Form
 				;
 			when '/'
 
-				f6_dir_parts		=	[ '/' ]
+				f6_dir_parts	=	[ '/' ]
 			else
 
-				f6_dir_parts		=	f2_directory.split('/').map { |v| v + '/' }
+				f6_dir_parts	=	f2_directory.split('/').reject { |v| v.empty? }.map { |v| v + '/' }
+				f6_dir_parts.unshift('/') if '/' == f2_directory[0]
 			end
 		end
 
