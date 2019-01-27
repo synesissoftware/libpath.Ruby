@@ -20,21 +20,42 @@ class Test_LibPath_Util_make_path_canonical_via_extend < Test::Unit::TestCase
 	def test_root
 
 		assert_equal '/', F.make_path_canonical('/')
-		assert_equal '/', F.make_path_canonical('//')
+
+		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
+
+			assert_equal '\\', F.make_path_canonical('//')
+		else
+
+			assert_equal '/', F.make_path_canonical('//')
+		end
 	end
 
 	def test_one_dot
 
 		assert_equal '.', F.make_path_canonical('.')
 		assert_equal './', F.make_path_canonical('./')
-		assert_equal './', F.make_path_canonical('.//')
+
+		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
+
+			assert_equal '.\\', F.make_path_canonical('.//')
+		else
+
+			assert_equal './', F.make_path_canonical('.//')
+		end
 	end
 
 	def test_two_dots
 
 		assert_equal '..', F.make_path_canonical('..')
 		assert_equal '../', F.make_path_canonical('../')
-		assert_equal '../', F.make_path_canonical('..//')
+
+		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
+
+			assert_equal '..\\', F.make_path_canonical('..//')
+		else
+
+			assert_equal '../', F.make_path_canonical('..//')
+		end
 	end
 
 	def test_basenames
