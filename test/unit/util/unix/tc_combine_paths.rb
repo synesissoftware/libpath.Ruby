@@ -42,6 +42,16 @@ class Test_LibPath_Util_Unix_combine_paths < Test::Unit::TestCase
 		assert_equal '/', F.combine_paths('a', 'b', '/')
 	end
 
+	def test_dots
+
+		assert_equal 'a/.', F.combine_paths('a', '.')
+		assert_equal 'a', F.combine_paths('a', '.', elide_single_dots: true)
+
+		assert_equal 'a/b', F.combine_paths('a', '.', 'b', elide_single_dots: true)
+		assert_equal 'a/b', F.combine_paths('a', './', 'b', elide_single_dots: true)
+		assert_equal '/./b', F.combine_paths('a', '/.', 'b', elide_single_dots: true)
+	end
+
 	def test_embedded_absolute_cases
 
 		assert_equal '/a/b/c/d', F.combine_paths('x/y/z', 'z', '/a', 'b', 'c/d')

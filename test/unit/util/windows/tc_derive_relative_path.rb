@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-$:.unshift File.join(File.dirname(__FILE__), *(['..'] * 3), 'lib')
+$:.unshift File.join(File.dirname(__FILE__), *(['..'] * 4), 'lib')
 
-require 'libpath/util/unix'
+require 'libpath/util/windows'
 
 require 'test/unit'
 
@@ -33,19 +33,19 @@ class Test_LibPath_Util_Windows_derive_relative_path < Test::Unit::TestCase
 		assert_equal '.', M.derive_relative_path('..', '..')
 
 		assert_equal '.', M.derive_relative_path('abc', 'abc')
-		assert_equal '.', M.derive_relative_path('abc/', 'abc/')
-		assert_equal '.', M.derive_relative_path('abc', 'abc/')
+		assert_equal './', M.derive_relative_path('abc/', 'abc/')
+		assert_equal './', M.derive_relative_path('abc', 'abc/')
 
-		assert_equal '.', M.derive_relative_path('/', '/')
+		assert_equal './', M.derive_relative_path('/', '/')
 
 		assert_equal '.', M.derive_relative_path('./abc', 'abc')
 		assert_equal '.', M.derive_relative_path('./abc/', 'abc')
-		assert_equal '.', M.derive_relative_path('./abc', 'abc/')
-		assert_equal '.', M.derive_relative_path('./abc/', 'abc/')
+		assert_equal './', M.derive_relative_path('./abc', 'abc/')
+		assert_equal './', M.derive_relative_path('./abc/', 'abc/')
 
 		assert_equal '.', M.derive_relative_path('/abc', '/abc')
 		assert_equal '.', M.derive_relative_path('/abc/', '/abc')
-		assert_equal '.', M.derive_relative_path('/abc/', '/abc/')
+		assert_equal './', M.derive_relative_path('/abc/', '/abc/')
 	end
 
 	def test_from_here
@@ -55,30 +55,31 @@ class Test_LibPath_Util_Windows_derive_relative_path < Test::Unit::TestCase
 
 	def test_ones_above
 
-		assert_equal '..', M.derive_relative_path('.', '..')
+		assert_equal '..\\', M.derive_relative_path('.', '..')
 
-		assert_equal '..', M.derive_relative_path('/abc/', '/')
+		assert_equal '../', M.derive_relative_path('/abc/', '/')
 
-		assert_equal '..', M.derive_relative_path('abc/def', 'abc')
+		assert_equal '..\\', M.derive_relative_path('abc/def', 'abc')
 
-		assert_equal '..', M.derive_relative_path('abc/def/ghi', 'abc/def')
-		assert_equal '..', M.derive_relative_path('abc/def/ghi', 'abc/def/')
+		assert_equal '..\\', M.derive_relative_path('abc/def/ghi', 'abc/def')
+		assert_equal '../', M.derive_relative_path('abc/def/ghi', 'abc/def/')
 
-		assert_equal '..', M.derive_relative_path('abc/def/./ghi', 'abc/def')
-		assert_equal '..', M.derive_relative_path('abc/def/ghi/jkl/..', 'abc/def')
+		assert_equal '..\\', M.derive_relative_path('abc/def/./ghi', 'abc/def')
+		assert_equal '..\\', M.derive_relative_path('abc/def/ghi/jkl/..', 'abc/def')
 
-		assert_equal '..\\..', M.derive_relative_path('/abc/def/', '/')
+		assert_equal '..\\../', M.derive_relative_path('/abc/def/', '/')
+		#assert_equal '..\\../', M.derive_relative_path('/abc/def/', '/', make_path_canonical: true)
 
-		assert_equal '..\\..', M.derive_relative_path('abc/def/ghi/jkl/', 'abc/def')
+		assert_equal '..\\..\\', M.derive_relative_path('abc/def/ghi/jkl/', 'abc/def')
 
-		assert_equal '..\\..', M.derive_relative_path('C:\\dir-1\\dir-2\\', 'C:\\')
+		assert_equal '..\\..\\', M.derive_relative_path('C:\\dir-1\\dir-2\\', 'C:\\')
 	end
 
 	def test_ones_below
 
 		assert_equal 'dir-1\\', M.derive_relative_path('..', '.', pwd: '/dir-1/')
 
-		assert_equal '..', M.derive_relative_path('.', '..', pwd: '/dir-1/')
+		assert_equal '..\\', M.derive_relative_path('.', '..', pwd: '/dir-1/')
 
 		assert_equal 'def', M.derive_relative_path('abc', 'abc/def')
 		assert_equal 'def\\', M.derive_relative_path('abc', 'abc/def/')

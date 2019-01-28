@@ -32,7 +32,14 @@ class Test_LibPath_Util_make_path_canonical_via_extend < Test::Unit::TestCase
 
 	def test_one_dot
 
-		assert_equal '.', F.make_path_canonical('.')
+		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
+
+			assert_equal '.\\', F.make_path_canonical('.')
+		else
+
+			assert_equal './', F.make_path_canonical('.')
+		end
+
 		assert_equal './', F.make_path_canonical('./')
 
 		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
@@ -46,7 +53,14 @@ class Test_LibPath_Util_make_path_canonical_via_extend < Test::Unit::TestCase
 
 	def test_two_dots
 
-		assert_equal '..', F.make_path_canonical('..')
+		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
+
+			assert_equal '..\\', F.make_path_canonical('..')
+		else
+
+			assert_equal '../', F.make_path_canonical('..')
+		end
+
 		assert_equal '../', F.make_path_canonical('../')
 
 		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
@@ -136,13 +150,25 @@ class Test_LibPath_Util_make_path_canonical_via_extend < Test::Unit::TestCase
 
 		assert_equal '../abc', F.make_path_canonical('../abc')
 
-		assert_equal '.', F.make_path_canonical('abc/..')
+		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
+
+			assert_equal '.\\', F.make_path_canonical('abc/..')
+		else
+
+			assert_equal './', F.make_path_canonical('abc/..')
+		end
 
 		assert_equal './', F.make_path_canonical('abc/../')
 
 		assert_equal 'def', F.make_path_canonical('abc/../def')
 
-		assert_equal '.', F.make_path_canonical('abc/../def/..')
+		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
+
+			assert_equal '.\\', F.make_path_canonical('abc/../def/..')
+		else
+
+			assert_equal './', F.make_path_canonical('abc/../def/..')
+		end
 
 		assert_equal './', F.make_path_canonical('abc/../def/../')
 

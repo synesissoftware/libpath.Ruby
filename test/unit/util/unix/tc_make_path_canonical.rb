@@ -17,20 +17,20 @@ class Test_LibPath_Util_Unix_make_path_canonical < Test::Unit::TestCase
 
 	def test_one_dot
 
-		assert_equal '.', F.make_path_canonical('.')
+		assert_equal './', F.make_path_canonical('.')
 		assert_equal './', F.make_path_canonical('./')
-		assert_equal '.', F.make_path_canonical('./.')
-		assert_equal '.', F.make_path_canonical('./.')
+		assert_equal './', F.make_path_canonical('./.')
+		assert_equal './', F.make_path_canonical('./.')
 		assert_equal './', F.make_path_canonical('././')
 		assert_equal './', F.make_path_canonical('.//./')
 		assert_equal './', F.make_path_canonical('.////./')
-		assert_equal '.', F.make_path_canonical('././.')
+		assert_equal './', F.make_path_canonical('././.')
 		assert_equal './', F.make_path_canonical('./././')
 	end
 
 	def test_two_dots
 
-		assert_equal '..', F.make_path_canonical('..')
+		assert_equal '../', F.make_path_canonical('..')
 		assert_equal '../', F.make_path_canonical('../')
 		assert_equal '../', F.make_path_canonical('../.')
 		assert_equal '../', F.make_path_canonical('.././')
@@ -45,7 +45,7 @@ class Test_LibPath_Util_Unix_make_path_canonical < Test::Unit::TestCase
 
 		assert_equal 'file.ext', F.make_path_canonical('file.ext')
 
-		assert_equal '..', F.make_path_canonical('..')
+		assert_equal '../', F.make_path_canonical('..')
 	end
 
 	def test_no_dots
@@ -75,19 +75,19 @@ class Test_LibPath_Util_Unix_make_path_canonical < Test::Unit::TestCase
 
 	def test_two_dots_directories
 
-		assert_equal '..', F.make_path_canonical('..')
+		assert_equal '../', F.make_path_canonical('..')
 		assert_equal '../', F.make_path_canonical('../')
 
 		assert_equal '../abc', F.make_path_canonical('../abc')
 		assert_equal '../abc/', F.make_path_canonical('../abc/')
 
-		assert_equal '.', F.make_path_canonical('abc/..')
+		assert_equal './', F.make_path_canonical('abc/..')
 		assert_equal './', F.make_path_canonical('abc/../')
 
 		assert_equal 'def', F.make_path_canonical('abc/../def')
 		assert_equal 'def/', F.make_path_canonical('abc/../def/')
 
-		assert_equal '.', F.make_path_canonical('abc/../def/..')
+		assert_equal './', F.make_path_canonical('abc/../def/..')
 		assert_equal './', F.make_path_canonical('abc/../def/../')
 
 		assert_equal '../dir-2/', F.make_path_canonical('../dir-1/../dir-2/')

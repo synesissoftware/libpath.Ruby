@@ -73,6 +73,21 @@ module LibPath_Util_Windows_Methods
 		dirs	=	[]
 		last	=	[]
 
+		if options[:elide_single_dots]
+
+			args	=	args.map do |arg|
+
+				case arg
+				when '.', './'
+
+					nil
+				else
+
+					arg
+				end
+			end
+		end
+
 		args	=	args.reject { |arg| arg.nil? || arg.empty? }
 
 		rix_abs	=	nil
@@ -230,6 +245,8 @@ module LibPath_Util_Windows_Methods
 
 		_MPA_COMMON_OPTIONS	=	%i{ home locator pwd }
 
+		tr_sl					=	_Internal_Windows_Form.get_trailing_slash(path)
+
 		# Possibly naive home-correction
 
 		return derive_relative_path(absolute_path(origin), path, **options) if _Form_Windows.path_is_homed?(origin)
@@ -277,10 +294,10 @@ module LibPath_Util_Windows_Methods
 		origin	=	_Util_Windows.make_path_canonical(origin, make_slashes_canonical: true)
 		path	=	_Util_Windows.make_path_canonical(path, make_slashes_canonical: true)
 
-		return '.' if origin == path
-		return path if '.' == origin
+		return '.' + tr_sl.to_s if origin == path
+		return path if '.\\' == origin
 
-		if o_is_abs != p_is_abs || '.' == path
+		if o_is_abs != p_is_abs || '.\\' == path
 
 			origin	=	_Util_Windows.make_path_absolute(origin, make_canonical: true, **options.select { |k| _MPA_COMMON_OPTIONS.include?(k) })
 			path	=	_Util_Windows.make_path_absolute(path, make_canonical: true, **options.select { |k| _MPA_COMMON_OPTIONS.include?(k) })
@@ -333,9 +350,9 @@ module LibPath_Util_Windows_Methods
 		end
 
 
-		return '.' if 0 == (o_parts.size + p_parts.size)
+		return '.' + tr_sl.to_s if 0 == (o_parts.size + p_parts.size)
 
-		return o_parts.map { |rp| '..' }.join('\\') if p_parts.empty?
+		return o_parts.map { |rp| '..' }.join('\\') + (tr_sl || (o_parts.size > 0 ? '\\' : nil)).to_s if p_parts.empty?
 
 
 		ar		=	[ '..' ] * o_parts.size + p_parts
@@ -396,7 +413,7 @@ module LibPath_Util_Windows_Methods
 			pwd	||=	options[:locator].pwd if options.has_key?(:locator)
 			pwd	||=	Dir.pwd
 
-			r = combine_paths(pwd, path)
+			r = combine_paths(pwd, path, elide_single_dots: false)
 		end
 
 		if options[:make_canonical]
@@ -443,9 +460,25 @@ module LibPath_Util_Windows_Methods
 		_Form	=	::LibPath::Internal_::Windows::Form
 		_Array	=	::LibPath::Internal_::Array
 
+		path	=	path[0...-1] if '.' == path[-1] && _Form.char_is_path_name_separator?(path[-2])
+
+
 		f0_path, f1_volume, f2_directory, f3_basename, _, _, f6_dir_parts, _ = _Form.split_path path
 
-		return f0_path if f6_dir_parts.empty?
+		if f6_dir_parts.empty?
+
+			case f3_basename
+			when '.'
+
+				return "#{f1_volume}.\\"
+			when '..'
+
+				return "#{f1_volume}..\\"
+			else
+
+				return f0_path
+			end
+		end
 
 		last_slash = nil
 
@@ -480,6 +513,14 @@ module LibPath_Util_Windows_Methods
 
 		if new_parts.empty? && (basename || '').empty?
 
+			case f3_basename
+			when nil, '.', '..'
+
+				return '.' + (last_slash || '\\').to_s
+			else
+
+				return '.'
+			end
 			return '.' + last_slash.to_s
 		end
 

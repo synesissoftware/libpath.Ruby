@@ -69,6 +69,21 @@ module LibPath_Util_Unix_Methods
 
 		args.each_with_index { |arg, index| Diagnostics.check_string_parameter(arg, "arg#{index}", allow_nil: true) } if $DEBUG
 
+		if options[:elide_single_dots]
+
+			args	=	args.map do |arg|
+
+				case arg
+				when '.', './'
+
+					nil
+				else
+
+					arg
+				end
+			end
+		end
+
 		args	=	args.reject { |arg| arg.nil? || arg.empty? }
 
 		case args.size
@@ -107,23 +122,25 @@ module LibPath_Util_Unix_Methods
 
 		_MPA_COMMON_OPTIONS	=	%i{ home locator pwd }
 
+		tr_sl	=	_Internal_Unix_Form.get_trailing_slash(path)
+
 		origin	=	_Util_Unix.make_path_canonical(origin)
 		path	=	_Util_Unix.make_path_canonical(path)
 
-		return '.' if origin == path
-		return path if '.' == origin
+		return '.' + tr_sl.to_s if origin == path
+		return path if '.' == origin || './' == origin
 
 		o_is_abs	=	_Form_Unix.path_is_absolute?(origin)
 		p_is_abs	=	_Form_Unix.path_is_absolute?(path)
 
-		if o_is_abs != p_is_abs || '.' == path
+		if o_is_abs != p_is_abs || './' == path
 
 			origin	=	_Util_Unix.make_path_absolute(origin, make_canonical: true, **options.select { |k| _MPA_COMMON_OPTIONS.include?(k) })
 			path	=	_Util_Unix.make_path_absolute(path, make_canonical: true, **options.select { |k| _MPA_COMMON_OPTIONS.include?(k) })
 		end
 
 		origin	=	_Internal_Unix_Form.trim_trailing_slash(origin) unless origin.size < 2
-		path	=	_Internal_Unix_Form.trim_trailing_slash(path) unless path.size < 2
+		path	=	_Internal_Unix_Form.trim_trailing_slash(path) if tr_sl && path.size > 1
 
 
 		_, _, o2_dir, o3_basename, _, _, o6_parts, _	=	_Internal_Unix_Form.split_path(origin)
@@ -133,7 +150,7 @@ module LibPath_Util_Unix_Methods
 		o_parts	<<	o3_basename if o3_basename && '.' != o3_basename
 
 		p_parts	=	p6_parts
-		p_parts	<<	p3_basename if p3_basename
+		p_parts	<<	p3_basename if p3_basename && '.' != p3_basename
 
 
 		while true
@@ -161,16 +178,16 @@ module LibPath_Util_Unix_Methods
 		end
 
 
-		return '.' if 0 == (o_parts.size + p_parts.size)
+		return '.' + tr_sl.to_s if 0 == (o_parts.size + p_parts.size)
 
-		return o_parts.map { |rp| '..' }.join('/') if p_parts.empty?
+		return o_parts.map { |rp| '..' }.join('/') + tr_sl.to_s if p_parts.empty?
 
 
 		ar		=	[ '..' ] * o_parts.size + p_parts
 		last	=	ar.pop
 		ar		=	ar.map { |el| _Internal_Unix_Form.append_trailing_slash(el) }
 
-		ar.join + last.to_s
+		ar.join + last.to_s + tr_sl.to_s
 	end
 
 
@@ -239,6 +256,8 @@ module LibPath_Util_Unix_Methods
 	# Converts a path into canonical form, which is to say that all possible
 	# dots directory parts are removed:
 	#
+	# - single-dot (trailing) parts - '???/.' are converted to '???/' (where
+	#    ??? represents 0+ other characters);
 	# - single-dot parts - './' - are all removed
 	# - double-dot parts - '../' - are removed where they follow a non-dots
 	#    directory part, or where they follow the root
@@ -256,9 +275,25 @@ module LibPath_Util_Unix_Methods
 		_Form	=	::LibPath::Internal_::Unix::Form
 		_Array	=	::LibPath::Internal_::Array
 
+		path	=	path[0...-1] if '.' == path[-1] && '/' == path[-2]
+
+
 		f0_path, _, f2_dir, f3_basename, _, _, f6_dir_parts, _ = _Form.split_path path
 
-		return f0_path if f6_dir_parts.empty?
+		if f6_dir_parts.empty?
+
+			case f3_basename
+			when '.'
+
+				return './'
+			when '..'
+
+				return '../'
+			else
+
+				return f0_path
+			end
+		end
 
 		case f3_basename
 		when '.', '..'
@@ -288,7 +323,14 @@ module LibPath_Util_Unix_Methods
 
 		if new_parts.empty? && (basename || '').empty?
 
-			return f3_basename ? '.' : './'
+			case f3_basename
+			when nil, '.', '..'
+
+				return './'
+			else
+
+				return '.'
+			end
 		end
 
 		return new_parts.join('') + basename.to_s
