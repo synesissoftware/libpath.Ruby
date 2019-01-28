@@ -419,7 +419,7 @@ module LibPath_Util_Windows_Methods
 	#
 	# - single-dot parts - './' or '.\\' - are all removed
 	# - double-dot parts - '../' or '..\\' - are removed where they follow a
-	#    non-dots directory part
+	#    non-dots directory part, or where they follow the root
 	#
 	# === Signature
 	#
@@ -462,17 +462,20 @@ module LibPath_Util_Windows_Methods
 			basename		=	f3_basename
 		end
 
-		new_parts	=	f6_dir_parts.reject { |p| './' == p }.reject { |p| '.\\' == p }
-		ix_2dots	=	_Array.index2(new_parts, '../', '..\\')
+		is_rooted	=	_Form.char_is_path_name_separator?(f2_directory[0])
+
+		new_parts	=	f6_dir_parts.dup
+		new_parts.reject! { |p| '.\\' == p || './' == p }
+		ix_2dots	=	_Array.index2(new_parts, '../', '..\\', 1)
 
 		return f0_path unless new_parts.size != f6_dir_parts.size || ix_2dots
 
 		while (ix_2dots || 0) > 0
 
 			new_parts.delete_at(ix_2dots - 0)
-			new_parts.delete_at(ix_2dots - 1)
+			new_parts.delete_at(ix_2dots - 1) if ix_2dots != 1 || !is_rooted
 
-			ix_2dots = _Array.index2(new_parts, '../', '..\\')
+			ix_2dots = _Array.index2(new_parts, '../', '..\\', 1)
 		end
 
 		if new_parts.empty? && (basename || '').empty?

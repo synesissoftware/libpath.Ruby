@@ -133,6 +133,13 @@ class Test_LibPath_Util_Windows_make_path_canonical < Test::Unit::TestCase
 		assert_equal '.\\', F.make_path_canonical('abc\\../def/..\\')
 		assert_equal './', F.make_path_canonical('abc\\../def/../')
 
+		assert_equal '../dir-2/', F.make_path_canonical('../dir-1/../dir-2/')
+		assert_equal '..\\dir-2/', F.make_path_canonical('..\\dir-1\\../dir-2/')
+		assert_equal '../dir-2/', F.make_path_canonical('../dir-1\\..\\dir-2/')
+		assert_equal '../dir-2\\', F.make_path_canonical('../dir-1/../dir-2\\')
+		assert_equal '..\\dir-2\\', F.make_path_canonical('..\\dir-1/../dir-2\\')
+		assert_equal '..\\dir-2\\', F.make_path_canonical('..\\dir-1\\..\\dir-2\\')
+
 		assert_equal '/', F.make_path_canonical('/abc/../def/../')
 		assert_equal '/', F.make_path_canonical('/abc\\../def/..\\')
 		assert_equal '/', F.make_path_canonical('/abc\\../def/../')
@@ -144,6 +151,16 @@ class Test_LibPath_Util_Windows_make_path_canonical < Test::Unit::TestCase
 		assert_equal '\\', F.make_path_canonical('\\abc/../def/../')
 		assert_equal '\\', F.make_path_canonical('\\abc\\../def/..\\')
 		assert_equal '\\', F.make_path_canonical('\\abc\\../def/../')
+
+		assert_equal '../dir-2/', F.make_path_canonical('../dir-1/../dir-2/')
+		assert_equal '../dir-2', F.make_path_canonical('../dir-1/../dir-2')
+		assert_equal '/dir-2', F.make_path_canonical('/../dir-1/../dir-2')
+		assert_equal '/', F.make_path_canonical('/..')
+		assert_equal 'C:../dir-2/', F.make_path_canonical('C:../dir-1/../dir-2/')
+		assert_equal 'C:../dir-2', F.make_path_canonical('C:../dir-1/../dir-2')
+		assert_equal 'C:/dir-2', F.make_path_canonical('C:/../dir-1/../dir-2')
+		assert_equal 'C:/', F.make_path_canonical('C:/../')
+		assert_equal 'C:/', F.make_path_canonical('C:/..')
 	end
 end
 

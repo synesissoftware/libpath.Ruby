@@ -30,12 +30,18 @@ class Test_version < Test::Unit::TestCase
 
 	def test_VERSION_has_consistent_format
 
-		assert_equal LibPath::VERSION, "#{LibPath::VERSION_MAJOR}.#{LibPath::VERSION_MINOR}.#{LibPath::VERSION_REVISION}"
+		if LibPath::VERSION_SUBPATCH
+
+			assert_equal LibPath::VERSION, "#{LibPath::VERSION_MAJOR}.#{LibPath::VERSION_MINOR}.#{LibPath::VERSION_PATCH}.#{LibPath::VERSION_SUBPATCH}"
+		else
+
+			assert_equal LibPath::VERSION, "#{LibPath::VERSION_MAJOR}.#{LibPath::VERSION_MINOR}.#{LibPath::VERSION_PATCH}"
+		end
 	end
 
 	def test_VERSION_greater_than
 
-		assert_operator LibPath::VERSION, :>=, '0.0.10'
+		assert_operator LibPath::VERSION, :>=, '0.1.0'
 	end
 end
 

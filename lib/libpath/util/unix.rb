@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Util::Unix module
 #
 # Created:      14th January 2019
-# Updated:      26th January 2018
+# Updated:      28th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -51,6 +51,7 @@
 
 require 'libpath/diagnostics'
 require 'libpath/form/unix'
+require 'libpath/internal_/array'
 require 'libpath/internal_/unix/form'
 
 module LibPath
@@ -240,7 +241,7 @@ module LibPath_Util_Unix_Methods
 	#
 	# - single-dot parts - './' - are all removed
 	# - double-dot parts - '../' - are removed where they follow a non-dots
-	#    directory part
+	#    directory part, or where they follow the root
 	#
 	# === Signature
 	#
@@ -253,8 +254,9 @@ module LibPath_Util_Unix_Methods
 		return path unless '.' == path[-1] || path.include?('./') || path.include?('//')
 
 		_Form	=	::LibPath::Internal_::Unix::Form
+		_Array	=	::LibPath::Internal_::Array
 
-		f0_path, _, _f2_dir, f3_basename, _, _, f6_dir_parts, _ = _Form.split_path path
+		f0_path, _, f2_dir, f3_basename, _, _, f6_dir_parts, _ = _Form.split_path path
 
 		return f0_path if f6_dir_parts.empty?
 
@@ -268,17 +270,20 @@ module LibPath_Util_Unix_Methods
 			basename		=	f3_basename
 		end
 
-		new_parts	=	f6_dir_parts.reject { |p| './' == p }
-		ix_2dots	=	new_parts.index('../')
+		is_rooted	=	'/' == f2_dir[0]
+
+		new_parts	=	f6_dir_parts.dup
+		new_parts.reject! { |p| './' == p }
+		ix_2dots	=	_Array.index(new_parts, '../', 1)
 
 		return f0_path unless new_parts.size != f6_dir_parts.size || ix_2dots
 
 		while (ix_2dots || 0) > 0
 
 			new_parts.delete_at(ix_2dots - 0)
-			new_parts.delete_at(ix_2dots - 1)
+			new_parts.delete_at(ix_2dots - 1) if ix_2dots != 1 || !is_rooted
 
-			ix_2dots = new_parts.index('../')
+			ix_2dots = _Array.index(new_parts, '../', 1)
 		end
 
 		if new_parts.empty? && (basename || '').empty?
