@@ -4,22 +4,22 @@ $:.unshift File.join(File.dirname(__FILE__), 'lib')
 
 require 'libpath'
 
-Gem::Specification.new do |gs|
+Gem::Specification.new do |spec|
 
-	gs.name			=	'libpath-ruby'
-	gs.version		=	LibPath::VERSION
-	gs.date			=	Date.today.to_s
-	gs.summary		=	'libpath.Ruby'
-	gs.description	=	<<END_DESC
+	spec.name			=	'libpath-ruby'
+	spec.version		=	LibPath::VERSION
+	spec.date			=	Date.today.to_s
+	spec.summary		=	'libpath.Ruby'
+	spec.description	=	<<END_DESC
 LibPath for Ruby
 END_DESC
-	gs.authors		=	[ 'Matt Wilson' ]
-	gs.email		=	'matthew@libpath.org'
-	gs.files		=	Dir[ 'Rakefile', '{bin,examples,lib,man,spec,test}/**/*', 'README*', 'LICENSE*' ] & `git ls-files -z`.split("\0")
-	gs.homepage		=	'http://libpath.org/'
-	gs.license		=	'BSD-3-Clause'
+	spec.authors		=	[ 'Matt Wilson' ]
+	spec.email			=	'matthew@synesis.com.au'
+	spec.homepage		=	'http://libpath.org/'
+	spec.license		=	'BSD-3-Clause'
 
-	gs.add_development_dependency 'xqsr3', [ '>= 0.21.1', '< 1.0' ]
+	spec.add_development_dependency 'xqsr3', [ '>= 0.21.1', '< 1.0' ]
 
+	spec.files		=	Dir[ 'Rakefile', '{bin,examples,lib,man,spec,test}/**/*', 'README*', 'LICENSE*' ] & `git ls-files -z`.split("\0")
 end
 

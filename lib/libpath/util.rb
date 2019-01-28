@@ -22,6 +22,16 @@ module Util
 		include ::LibPath::Util::Unix
 	end
 
+	def self.extended receiver
+
+		$stderr.puts "#{receiver} extended by #{self}" if $DEBUG
+	end
+
+	def self.included receiver
+
+		$stderr.puts "#{receiver} included #{self}" if $DEBUG
+	end
+
 end # module Util
 end # module LibPath
 

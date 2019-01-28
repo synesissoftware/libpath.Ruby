@@ -178,14 +178,14 @@ class Test_LibPath_Util_make_path_canonical_via_extend < Test::Unit::TestCase
 
 			assert_equal '..\\abc', F.make_path_canonical('..\\abc')
 
-			assert_equal '.', F.make_path_canonical('abc\\..')
+			assert_equal '.\\', F.make_path_canonical('abc\\..')
 
 			assert_equal '.\\', F.make_path_canonical('abc\\..\\')
 
 			assert_equal 'def', F.make_path_canonical('abc\\..\\def')
 			assert_equal 'def', F.make_path_canonical('abc\\\\..\\def')
 
-			assert_equal '.', F.make_path_canonical('abc\\..\\def\\..')
+			assert_equal '.\\', F.make_path_canonical('abc\\..\\def\\..')
 
 			assert_equal '.\\', F.make_path_canonical('abc\\..\\def\\..\\')
 			assert_equal '.\\', F.make_path_canonical('abc\\\\..\\def\\..\\')

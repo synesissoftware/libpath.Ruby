@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Path::Unix module
 #
 # Created:      21st January 2019
-# Updated:      27th January 2018
+# Updated:      29th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -94,9 +94,10 @@ module Unix
 
 			if search_directory
 
-				search_directory					=	_Internal_Form.append_trailing_slash search_directory
-
 				drp_options							=	options.select { |k| _C::INIT_DRP_COMMON_OPTIONS.include?(k) }
+
+				search_directory					=	_Internal_Form.append_trailing_slash search_directory
+				search_directory					=	_Util.make_path_absolute(search_directory, make_canonical: true, **options.select { |k| _C::INIT_MPA_COMMON_OPTIONS.include?(k) })
 
 				@search_directory					=	search_directory
 				@search_relative_path				=	_Util.derive_relative_path(search_directory, abs_path, **drp_options)

@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Util::Unix module
 #
 # Created:      14th January 2019
-# Updated:      28th January 2018
+# Updated:      29th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -232,7 +232,7 @@ module LibPath_Util_Unix_Methods
 				home	||=	options[:locator].home if options.has_key?(:locator)
 				home	||=	Dir.home
 
-				r = File.join(home, path[2..-1])
+				r = File.join(home, path[2..-1].to_s)
 			end
 		end
 

@@ -481,5 +481,85 @@ class Test_LibPath_Path_Unix_ParsedPath < Test::Unit::TestCase
 		assert_equal pp.directory, pp.directory_parts.join
 		assert_equal pp.absolute_path, "#{pp.directory_parts.join}#{pp.basename}"
 	end
+
+	def test_recls_stat_case_1
+
+		pwd	=	'/Users/matthewwilson/dev/freelibs/recls/100/recls.Ruby/trunk/'
+		srd	=	'.'
+
+		pp	=	ParsedPath.new('.', srd, pwd: pwd)
+
+		assert_equal '.', pp.given_path
+		assert_equal pwd, pp.absolute_path
+		assert_equal pwd, pp.compare_path
+		assert_equal pwd, pp.directory
+		assert_equal pwd, pp.directory_path
+		assert_equal pwd, pp.dirname
+		assert_equal [ '/', 'Users/', 'matthewwilson/', 'dev/', 'freelibs/', 'recls/', '100/', 'recls.Ruby/', 'trunk/' ], pp.directory_parts
+		assert_nil pp.file_full_name
+		assert_nil pp.basename
+		assert_nil pp.file_name_only
+		assert_nil pp.stem
+		assert_nil pp.file_extension
+		assert_nil pp.extension
+		assert_equal pwd, pp.search_directory
+		assert_equal './', pp.search_relative_path
+		assert_equal './', pp.search_relative_directory_path
+		assert_equal [ './' ], pp.search_relative_directory_parts
+	end
+
+	def test_recls_stat_case_2
+
+		pwd		=	'/Users/matthewwilson/dev/freelibs/recls/100/recls.Ruby/trunk/'
+		home	=	'/Users/matthewwilson'
+		srd		=	'~'
+
+		pp	=	ParsedPath.new('.', srd, home: home, pwd: pwd)
+
+		assert_equal '.', pp.given_path
+		assert_equal pwd, pp.absolute_path
+		assert_equal pwd, pp.compare_path
+		assert_equal pwd, pp.directory
+		assert_equal pwd, pp.directory_path
+		assert_equal pwd, pp.dirname
+		assert_equal [ '/', 'Users/', 'matthewwilson/', 'dev/', 'freelibs/', 'recls/', '100/', 'recls.Ruby/', 'trunk/' ], pp.directory_parts
+		assert_nil pp.file_full_name
+		assert_nil pp.basename
+		assert_nil pp.file_name_only
+		assert_nil pp.stem
+		assert_nil pp.file_extension
+		assert_nil pp.extension
+		assert_equal '/Users/matthewwilson/', pp.search_directory
+		assert_equal 'dev/freelibs/recls/100/recls.Ruby/trunk/', pp.search_relative_path
+		assert_equal 'dev/freelibs/recls/100/recls.Ruby/trunk/', pp.search_relative_directory_path
+		assert_equal [ 'dev/', 'freelibs/', 'recls/', '100/', 'recls.Ruby/', 'trunk/' ], pp.search_relative_directory_parts
+	end
+
+	def test_recls_stat_case_3
+
+		pwd		=	'/Users/matthewwilson/dev/freelibs/recls/100/recls.Ruby/trunk/'
+		home	=	'/Users/matthewwilson'
+		srd		=	'.'
+
+		pp	=	ParsedPath.new('~', srd, home: home, pwd: pwd)
+
+		assert_equal '~', pp.given_path
+		assert_equal '/Users/matthewwilson/', pp.absolute_path
+		assert_equal '/Users/matthewwilson/', pp.compare_path
+		assert_equal '/Users/matthewwilson/', pp.directory
+		assert_equal '/Users/matthewwilson/', pp.directory_path
+		assert_equal '/Users/matthewwilson/', pp.dirname
+		assert_equal [ '/', 'Users/', 'matthewwilson/' ], pp.directory_parts
+		assert_nil pp.file_full_name
+		assert_nil pp.basename
+		assert_nil pp.file_name_only
+		assert_nil pp.stem
+		assert_nil pp.file_extension
+		assert_nil pp.extension
+		assert_equal pwd, pp.search_directory
+		assert_equal '../../../../../../', pp.search_relative_path
+		assert_equal '../../../../../../', pp.search_relative_directory_path
+		assert_equal [ '../', '../', '../', '../', '../', '../' ], pp.search_relative_directory_parts
+	end
 end
 
