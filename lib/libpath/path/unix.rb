@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Path::Unix module
 #
 # Created:      21st January 2019
-# Updated:      29th January 2018
+# Updated:      30th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -83,7 +83,7 @@ module Unix
 
 			@given_path			=	path
 			@absolute_path		=	abs_path
-			@compare_path		=	abs_path
+			@compare_path		=	_Util.make_compare_path abs_path
 			@directory			=	f2_dir
 			@directory_path		=	f2_dir
 			@directory_parts	=	f6_dir_parts

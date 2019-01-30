@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Util::Unix module
 #
 # Created:      14th January 2019
-# Updated:      29th January 2018
+# Updated:      30th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -190,6 +190,29 @@ module LibPath_Util_Unix_Methods
 		ar.join + last.to_s + tr_sl.to_s
 	end
 
+	# Returns a "compare path" for the given absolute path
+	#
+	# A compare path is one that would refer definitely to a given entry,
+	# regardless of such operating system-specific issues such as
+	# case-insensitivity
+	#
+	# NOTE: the function does not make +path+ absolute. That is up to the
+	# caller if required
+	#
+	# === Signature
+	#
+	# * *Parameters:*
+	#  - +path+:: (String) The path whose definitive equivalent is to be
+	#     obtained
+	#  - +options+:: (Hash) options
+	#
+	# * *Options:*
+	#  For reasons of compatibility (with the Windows version) no options
+	#  are currently supported; none are proscribed.
+	def make_compare_path path, **options
+
+		path
+	end
 
 	#
 	# === Signature

@@ -641,6 +641,7 @@ class Test_LibPath_Internal_Windows_Form_split_path < Test::Unit::TestCase
 		assert_equal 8, r.size
 		assert_equal 'C:/abc/file.ext', r[0]
 		assert_equal 'C:', r[1]
+		assert_equal :form_1, r[1].form
 		assert_equal '/abc/', r[2]
 		assert_equal 'file.ext', r[3]
 		assert_equal 'file', r[4]
@@ -656,6 +657,7 @@ class Test_LibPath_Internal_Windows_Form_split_path < Test::Unit::TestCase
 		assert_equal 8, r.size
 		assert_equal 'C:\\abc\\file.ext', r[0]
 		assert_equal 'C:', r[1]
+		assert_equal :form_1, r[1].form
 		assert_equal '\\abc\\', r[2]
 		assert_equal 'file.ext', r[3]
 		assert_equal 'file', r[4]
@@ -674,6 +676,7 @@ class Test_LibPath_Internal_Windows_Form_split_path < Test::Unit::TestCase
 		assert_equal 8, r.size
 		assert_equal '\\\\?\\d:/abc/file.ext', r[0]
 		assert_equal '\\\\?\\d:', r[1]
+		assert_equal :form_3, r[1].form
 		assert_equal '/abc/', r[2]
 		assert_equal 'file.ext', r[3]
 		assert_equal 'file', r[4]
@@ -689,6 +692,7 @@ class Test_LibPath_Internal_Windows_Form_split_path < Test::Unit::TestCase
 		assert_equal 8, r.size
 		assert_equal '\\\\?\\d:\\abc\\file.ext', r[0]
 		assert_equal '\\\\?\\d:', r[1]
+		assert_equal :form_3, r[1].form
 		assert_equal '\\abc\\', r[2]
 		assert_equal 'file.ext', r[3]
 		assert_equal 'file', r[4]
@@ -707,6 +711,7 @@ class Test_LibPath_Internal_Windows_Form_split_path < Test::Unit::TestCase
 		assert_equal 8, r.size
 		assert_equal '\\\\101.202.303.404:1234\\some-share-or-other\\abc\\file.ext', r[0]
 		assert_equal '\\\\101.202.303.404:1234\\some-share-or-other', r[1]
+		assert_equal :form_2, r[1].form
 		assert_equal '\\abc\\', r[2]
 		assert_equal 'file.ext', r[3]
 		assert_equal 'file', r[4]
@@ -722,6 +727,7 @@ class Test_LibPath_Internal_Windows_Form_split_path < Test::Unit::TestCase
 		assert_equal 8, r.size
 		assert_equal '\\\\101.202.303.404:1234\\some-share-or-other\\abc/file.ext', r[0]
 		assert_equal '\\\\101.202.303.404:1234\\some-share-or-other', r[1]
+		assert_equal :form_2, r[1].form
 		assert_equal '\\abc/', r[2]
 		assert_equal 'file.ext', r[3]
 		assert_equal 'file', r[4]
@@ -740,6 +746,7 @@ class Test_LibPath_Internal_Windows_Form_split_path < Test::Unit::TestCase
 		assert_equal 8, r.size
 		assert_equal '\\\\?\\101.202.303.404:1234\\some-share-or-other\\abc\\file.ext', r[0]
 		assert_equal '\\\\?\\101.202.303.404:1234\\some-share-or-other', r[1]
+		assert_equal :form_4, r[1].form
 		assert_equal '\\abc\\', r[2]
 		assert_equal 'file.ext', r[3]
 		assert_equal 'file', r[4]
@@ -755,6 +762,7 @@ class Test_LibPath_Internal_Windows_Form_split_path < Test::Unit::TestCase
 		assert_equal 8, r.size
 		assert_equal '\\\\?\\101.202.303.404:1234\\some-share-or-other\\abc/file.ext', r[0]
 		assert_equal '\\\\?\\101.202.303.404:1234\\some-share-or-other', r[1]
+		assert_equal :form_4, r[1].form
 		assert_equal '\\abc/', r[2]
 		assert_equal 'file.ext', r[3]
 		assert_equal 'file', r[4]
@@ -773,6 +781,7 @@ class Test_LibPath_Internal_Windows_Form_split_path < Test::Unit::TestCase
 		assert_equal 8, r.size
 		assert_equal '\\\\?\\UNC\\101.202.303.404:1234\\some-share-or-other\\abc\\file.ext', r[0]
 		assert_equal '\\\\?\\UNC\\101.202.303.404:1234\\some-share-or-other', r[1]
+		assert_equal :form_5, r[1].form
 		assert_equal '\\abc\\', r[2]
 		assert_equal 'file.ext', r[3]
 		assert_equal 'file', r[4]
@@ -788,6 +797,7 @@ class Test_LibPath_Internal_Windows_Form_split_path < Test::Unit::TestCase
 		assert_equal 8, r.size
 		assert_equal '\\\\?\\UNC\\101.202.303.404:1234\\some-share-or-other\\abc/file.ext', r[0]
 		assert_equal '\\\\?\\UNC\\101.202.303.404:1234\\some-share-or-other', r[1]
+		assert_equal :form_5, r[1].form
 		assert_equal '\\abc/', r[2]
 		assert_equal 'file.ext', r[3]
 		assert_equal 'file', r[4]
@@ -806,6 +816,7 @@ class Test_LibPath_Internal_Windows_Form_split_path < Test::Unit::TestCase
 		assert_equal 8, r.size
 		assert_equal '\\\\.\\{some-device-name#abcd}\\abc\\file.ext', r[0]
 		assert_equal '\\\\.\\{some-device-name#abcd}', r[1]
+		assert_equal :form_6, r[1].form
 		assert_equal '\\abc\\', r[2]
 		assert_equal 'file.ext', r[3]
 		assert_equal 'file', r[4]
@@ -821,6 +832,7 @@ class Test_LibPath_Internal_Windows_Form_split_path < Test::Unit::TestCase
 		assert_equal 8, r.size
 		assert_equal '\\\\.\\{some-device-name#abcd}\\abc/file.ext', r[0]
 		assert_equal '\\\\.\\{some-device-name#abcd}', r[1]
+		assert_equal :form_6, r[1].form
 		assert_equal '\\abc/', r[2]
 		assert_equal 'file.ext', r[3]
 		assert_equal 'file', r[4]
