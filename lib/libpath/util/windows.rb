@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Util::Windows module
 #
 # Created:      10th January 2019
-# Updated:      27th January 2018
+# Updated:      30th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -362,6 +362,55 @@ module LibPath_Util_Windows_Methods
 		last[-1] = '\\' if '/' == last[-1]
 
 		ar.join + last.to_s
+	end
+
+	# Returns a "compare path" for the given absolute path
+	#
+	# A compare path is one that would refer definitely to a given entry,
+	# regardless of such operating system-specific issues such as
+	# case-insensitivity
+	#
+	# NOTE: the function does not make +path+ absolute. That is up to the
+	# caller if required
+	#
+	# === Signature
+	#
+	# * *Parameters:*
+	#  - +path+:: (String) The path whose definitive equivalent is to be
+	#     obtained
+	#  - +options+:: (Hash) options
+	#
+	# * *Options:*
+	#  - +:splits+:: ([ String ]) An array of string-like objects. If the
+	#     object at index 1 exists and supports the +form+ attribute and
+	#     that returns one of { +:form_2+, +:form_3+, +:form_4+, +:form_5+,
+	#     +:form_6+ } then it is assumed to be the volume, and the objects
+	#     at indexes 2 and 3 are assumed to be the directory and the
+	#     basename, respectively. In this case, the compare path is
+	#     constructed from a UNC-respecting form
+	def make_compare_path path, **options
+
+		if splits = options[:splits]
+
+			if volume = splits[1]
+
+				if volume.respond_to?(:form)
+
+					case volume.form
+					when :form_2, :form_3, :form_4, :form_5, :form_6
+
+						directory	=	splits[2] || ''
+						basename	=	splits[3] || ''
+
+						return "#{volume}#{directory.upcase}#{basename.upcase}"
+					else
+
+					end
+				end
+			end
+		end
+
+		path.upcase
 	end
 
 	def make_path_absolute path, **options

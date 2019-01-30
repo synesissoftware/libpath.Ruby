@@ -213,7 +213,7 @@ class Test_LibPath_Path_ParsedPath < Test::Unit::TestCase
 
 			assert_equal 'G:\\abc\\', pp.given_path
 			assert_equal 'G:\\abc\\', pp.absolute_path
-			assert_equal 'G:\\abc\\', pp.compare_path
+			assert_equal 'G:\\ABC\\', pp.compare_path
 			assert_equal '\\abc\\', pp.directory
 			assert_equal 'G:', pp.volume
 			assert_equal 'G:\\abc\\', pp.directory_path
@@ -260,7 +260,7 @@ class Test_LibPath_Path_ParsedPath < Test::Unit::TestCase
 
 			assert_equal 'G:\\\\abc\\\\', pp.given_path
 			assert_equal 'G:\\abc\\', pp.absolute_path
-			assert_equal 'G:\\abc\\', pp.compare_path
+			assert_equal 'G:\\ABC\\', pp.compare_path
 			assert_equal '\\abc\\', pp.directory
 			assert_equal 'G:', pp.volume
 			assert_equal 'G:\\abc\\', pp.directory_path
@@ -313,7 +313,7 @@ class Test_LibPath_Path_ParsedPath < Test::Unit::TestCase
 
 			assert_equal 'G:\\abc\\.', pp.given_path
 			assert_equal 'G:\\abc\\', pp.absolute_path
-			assert_equal 'G:\\abc\\', pp.compare_path
+			assert_equal 'G:\\ABC\\', pp.compare_path
 			assert_equal 'G:', pp.volume
 			assert_equal '\\abc\\', pp.directory
 			assert_equal 'G:\\abc\\', pp.directory_path
@@ -358,7 +358,7 @@ class Test_LibPath_Path_ParsedPath < Test::Unit::TestCase
 
 			assert_equal 'G:\\file.ext', pp.given_path
 			assert_equal 'G:\\file.ext', pp.absolute_path
-			assert_equal 'G:\\file.ext', pp.compare_path
+			assert_equal 'G:\\FILE.EXT', pp.compare_path
 			assert_equal 'G:', pp.volume
 			assert_equal '\\', pp.directory
 			assert_equal 'G:\\', pp.directory_path
@@ -403,7 +403,7 @@ class Test_LibPath_Path_ParsedPath < Test::Unit::TestCase
 
 			assert_equal 'G:\\file', pp.given_path
 			assert_equal 'G:\\file', pp.absolute_path
-			assert_equal 'G:\\file', pp.compare_path
+			assert_equal 'G:\\FILE', pp.compare_path
 			assert_equal 'G:', pp.volume
 			assert_equal '\\', pp.directory
 			assert_equal 'G:\\', pp.directory_path
@@ -448,7 +448,7 @@ class Test_LibPath_Path_ParsedPath < Test::Unit::TestCase
 
 			assert_equal 'H:\\.ext', pp.given_path
 			assert_equal 'H:\\.ext', pp.absolute_path
-			assert_equal 'H:\\.ext', pp.compare_path
+			assert_equal 'H:\\.EXT', pp.compare_path
 			assert_equal 'H:', pp.volume
 			assert_equal '\\', pp.directory
 			assert_equal 'H:\\', pp.directory_path
@@ -493,7 +493,7 @@ class Test_LibPath_Path_ParsedPath < Test::Unit::TestCase
 
 			assert_equal 'C:/dir-1/dir-2/dir-3/dir-4/./dir-5/dir-6/../file.ext', pp.given_path
 			assert_equal 'C:/dir-1/dir-2/dir-3/dir-4/dir-5/file.ext', pp.absolute_path
-			assert_equal 'C:/dir-1/dir-2/dir-3/dir-4/dir-5/file.ext', pp.compare_path
+			assert_equal 'C:/DIR-1/DIR-2/DIR-3/DIR-4/DIR-5/FILE.EXT', pp.compare_path
 			assert_equal 'C:', pp.volume
 			assert_equal '/dir-1/dir-2/dir-3/dir-4/dir-5/', pp.directory
 			assert_equal 'C:/dir-1/dir-2/dir-3/dir-4/dir-5/', pp.directory_path
@@ -538,7 +538,7 @@ class Test_LibPath_Path_ParsedPath < Test::Unit::TestCase
 
 			assert_equal 'C:/1/2/3/4/./5/6/../file.ext', pp.given_path
 			assert_equal 'C:/1/2/3/4/5/file.ext', pp.absolute_path
-			assert_equal 'C:/1/2/3/4/5/file.ext', pp.compare_path
+			assert_equal 'C:/1/2/3/4/5/FILE.EXT', pp.compare_path
 			assert_equal 'C:', pp.volume
 			assert_equal '/1/2/3/4/5/', pp.directory
 			assert_equal 'C:/1/2/3/4/5/', pp.directory_path
@@ -585,7 +585,7 @@ class Test_LibPath_Path_ParsedPath < Test::Unit::TestCase
 
 			assert_equal 'file.ext', pp.given_path
 			assert_equal '/some-directory\\file.ext', pp.absolute_path
-			assert_equal '/some-directory\\file.ext', pp.compare_path
+			assert_equal '/SOME-DIRECTORY\\FILE.EXT', pp.compare_path
 			assert_nil pp.volume
 			assert_equal '/some-directory\\', pp.directory
 			assert_equal '/some-directory\\', pp.directory_path
@@ -635,7 +635,7 @@ class Test_LibPath_Path_ParsedPath < Test::Unit::TestCase
 
 			assert_equal 'file.ext', pp.given_path
 			assert_equal '/some-directory\\file.ext', pp.absolute_path
-			assert_equal '/some-directory\\file.ext', pp.compare_path
+			assert_equal '/SOME-DIRECTORY\\FILE.EXT', pp.compare_path
 			assert_nil pp.volume
 			assert_equal '/some-directory\\', pp.directory
 			assert_equal '/some-directory\\', pp.directory_path
@@ -685,7 +685,7 @@ class Test_LibPath_Path_ParsedPath < Test::Unit::TestCase
 
 			assert_equal 'sub-dir/file.ext', pp.given_path
 			assert_equal '/some-directory\\sub-dir/file.ext', pp.absolute_path
-			assert_equal '/some-directory\\sub-dir/file.ext', pp.compare_path
+			assert_equal '/SOME-DIRECTORY\\SUB-DIR/FILE.EXT', pp.compare_path
 			assert_nil pp.volume
 			assert_equal '/some-directory\\sub-dir/', pp.directory
 			assert_equal '/some-directory\\sub-dir/', pp.directory_path
@@ -736,7 +736,7 @@ class Test_LibPath_Path_ParsedPath < Test::Unit::TestCase
 
 			assert_equal 'sub-dir/file.ext', pp.given_path
 			assert_equal '/some-directory\\sub-dir/file.ext', pp.absolute_path
-			assert_equal '/some-directory\\sub-dir/file.ext', pp.compare_path
+			assert_equal '/SOME-DIRECTORY\\SUB-DIR/FILE.EXT', pp.compare_path
 			assert_nil pp.volume
 			assert_equal '/some-directory\\sub-dir/', pp.directory
 			assert_equal '/some-directory\\sub-dir/', pp.directory_path

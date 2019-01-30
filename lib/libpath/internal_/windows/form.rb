@@ -174,10 +174,11 @@ module Form
 		f6_dir_parts	=	[]
 		f7_all_parts	=	[]
 
-		f1_volume, rem, _	=	self.get_windows_volume s
+		f1_volume, rem, frm	=	self.get_windows_volume s
 
 		self.elide_redundant_path_name_separators! rem
 
+		f1_volume.define_singleton_method(:form) { frm } if f1_volume
 
 		unless rem.empty?
 

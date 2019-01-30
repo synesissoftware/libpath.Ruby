@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Path::Windows module
 #
 # Created:      21st January 2019
-# Updated:      27th January 2018
+# Updated:      30th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -79,11 +79,13 @@ module Windows
 
 			abs_path			=	_Util.make_path_absolute(path, make_canonical: true, **options.select { |k| _C::INIT_MPA_COMMON_OPTIONS.include?(k) })
 
-			f0_given, f1_vol, f2_dir, f3_basename, f4_stem, f5_ext, f6_dir_parts, f7_abs_parts = _Internal_Form.split_path(abs_path)
+			splits				=	_Internal_Form.split_path(abs_path)
+
+			f0_given, f1_vol, f2_dir, f3_basename, f4_stem, f5_ext, f6_dir_parts, f7_abs_parts = *splits
 
 			@given_path			=	path
 			@absolute_path		=	abs_path
-			@compare_path		=	abs_path
+			@compare_path		=	_Util.make_compare_path abs_path, splits: splits
 			@volume				=	f1_vol
 			@directory			=	f2_dir
 			@directory_path		=	"#{f1_vol}#{f2_dir}"
