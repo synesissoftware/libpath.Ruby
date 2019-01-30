@@ -73,6 +73,9 @@ class Test_LibPath_Util_Windows_derive_relative_path < Test::Unit::TestCase
 		assert_equal '..\\..\\', M.derive_relative_path('abc/def/ghi/jkl/', 'abc/def')
 
 		assert_equal '..\\..\\', M.derive_relative_path('C:\\dir-1\\dir-2\\', 'C:\\')
+
+		assert_equal '..\\..\\', M.derive_relative_path('\\dir1\\dir2\\dir3\\dir4', '\\dir1\\dir2')
+		assert_equal '..\\..\\', M.derive_relative_path('/dir1/dir2/dir3/dir4', '/dir1/dir2')
 	end
 
 	def test_ones_below

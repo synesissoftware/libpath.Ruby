@@ -499,16 +499,18 @@ module LibPath_Util_Windows_Methods
 
 		new_parts	=	f6_dir_parts.dup
 		new_parts.reject! { |p| '.\\' == p || './' == p }
-		ix_2dots	=	_Array.index2(new_parts, '../', '..\\', 1)
+		ix_nodots	=	new_parts.index { |p| '../' != p && '..\\' != p } || new_parts.size
+		ix_2dots	=	_Array.index2(new_parts, '../', '..\\', ix_nodots)
 
-		return f0_path unless new_parts.size != f6_dir_parts.size || ix_2dots
+		return "#{f1_volume}#{new_parts.join}#{basename}" unless new_parts.size != f6_dir_parts.size || ix_2dots
 
 		while (ix_2dots || 0) > 0
 
 			new_parts.delete_at(ix_2dots - 0)
 			new_parts.delete_at(ix_2dots - 1) if ix_2dots != 1 || !is_rooted
 
-			ix_2dots = _Array.index2(new_parts, '../', '..\\', 1)
+			ix_nodots	=	new_parts.index { |p| '../' != p && '..\\' != p } or break
+			ix_2dots	=	_Array.index2(new_parts, '../', '..\\', ix_nodots)
 		end
 
 		if new_parts.empty? && (basename || '').empty?

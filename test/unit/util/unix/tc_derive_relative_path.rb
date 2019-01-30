@@ -68,17 +68,19 @@ class Test_LibPath_Util_Unix_derive_relative_path < Test::Unit::TestCase
 
 		assert_equal '../', M.derive_relative_path('.', '..')
 
-		assert_equal '..', M.derive_relative_path('abc/def', 'abc')
+		assert_equal '../', M.derive_relative_path('abc/def', 'abc')
 
-		assert_equal '..', M.derive_relative_path('abc/def/ghi', 'abc/def')
+		assert_equal '../', M.derive_relative_path('abc/def/ghi', 'abc/def')
 		assert_equal '../', M.derive_relative_path('abc/def/ghi', 'abc/def/')
 
-		assert_equal '..', M.derive_relative_path('abc/def/./ghi', 'abc/def')
-		assert_equal '..', M.derive_relative_path('abc/def/ghi/jkl/..', 'abc/def')
-		assert_equal '..', M.derive_relative_path('abc/def/ghi/jkl/../', 'abc/def')
+		assert_equal '../', M.derive_relative_path('abc/def/./ghi', 'abc/def')
+		assert_equal '../', M.derive_relative_path('abc/def/ghi/jkl/..', 'abc/def')
+		assert_equal '../', M.derive_relative_path('abc/def/ghi/jkl/../', 'abc/def')
 		assert_equal '../', M.derive_relative_path('abc/def/ghi/jkl/..', 'abc/def/')
 
-		assert_equal '../..', M.derive_relative_path('abc/def/ghi/jkl/', 'abc/def')
+		assert_equal '../../', M.derive_relative_path('abc/def/ghi/jkl/', 'abc/def')
+
+		assert_equal '../../', M.derive_relative_path('/dir1/dir2/dir3/dir4', '/dir1/dir2')
 	end
 
 	def test_ones_below

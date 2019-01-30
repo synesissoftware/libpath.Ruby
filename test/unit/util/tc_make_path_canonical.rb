@@ -35,19 +35,18 @@ class Test_LibPath_Util_make_path_canonical_via_extend < Test::Unit::TestCase
 		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
 
 			assert_equal '.\\', F.make_path_canonical('.')
+
+			assert_equal '.\\', F.make_path_canonical('.\\')
+			assert_equal '.\\', F.make_path_canonical('.\\', make_slashes_canonical: true)
+
+			assert_equal './', F.make_path_canonical('./')
+			assert_equal '.\\', F.make_path_canonical('.\\', make_slashes_canonical: true)
 		else
 
 			assert_equal './', F.make_path_canonical('.')
-		end
 
-		assert_equal './', F.make_path_canonical('./')
-
-		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
-
-			assert_equal '.\\', F.make_path_canonical('.//')
-		else
-
-			assert_equal './', F.make_path_canonical('.//')
+			assert_equal './', F.make_path_canonical('./')
+			assert_equal './', F.make_path_canonical('./', make_slashes_canonical: true)
 		end
 	end
 
@@ -56,17 +55,34 @@ class Test_LibPath_Util_make_path_canonical_via_extend < Test::Unit::TestCase
 		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
 
 			assert_equal '..\\', F.make_path_canonical('..')
+			assert_equal '..\\', F.make_path_canonical('..//')
+			assert_equal '../', F.make_path_canonical('../')
 		else
 
 			assert_equal '../', F.make_path_canonical('..')
+			assert_equal '../', F.make_path_canonical('../')
+
+			assert_equal '/dir.14/', F.make_path_canonical('/dir.14/dir.2/..')
+			assert_equal 'dir.14/', F.make_path_canonical('dir.14/dir.2/..')
+
+			assert_equal '/', F.make_path_canonical('/dir.14/dir.2/../..')
+			assert_equal '/', F.make_path_canonical('/dir.14/dir.2/../../..')
+			assert_equal './', F.make_path_canonical('dir.14/dir.2/../..')
 		end
 
-		assert_equal '../', F.make_path_canonical('../')
+	end
+
+	def test_redundant_slashes
 
 		if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
 
+			assert_equal '.\\', F.make_path_canonical('.//')
+			assert_equal '.\\', F.make_path_canonical('.\\\\')
+
 			assert_equal '..\\', F.make_path_canonical('..//')
 		else
+
+			assert_equal './', F.make_path_canonical('.//')
 
 			assert_equal '../', F.make_path_canonical('..//')
 		end
@@ -116,7 +132,7 @@ class Test_LibPath_Util_make_path_canonical_via_extend < Test::Unit::TestCase
 		end
 	end
 
-	def test_one_dots_directories
+	def test_one_dots_directory
 
 		assert_equal 'abc', F.make_path_canonical('./abc')
 
@@ -138,9 +154,13 @@ class Test_LibPath_Util_make_path_canonical_via_extend < Test::Unit::TestCase
 
 			assert_equal 'abc', F.make_path_canonical('.\\.\\.\\.\\.\\.\\.\\.\\.\\abc')
 
+			assert_equal 'abc\\', F.make_path_canonical('abc/./', make_slashes_canonical: true)
+
 			assert_equal 'abc\\', F.make_path_canonical('abc\\.\\')
 
 			assert_equal 'abc\\', F.make_path_canonical('.\\abc\\.\\')
+
+			assert_equal 'abc\\', F.make_path_canonical('./abc/./', make_slashes_canonical: true)
 		end
 	end
 

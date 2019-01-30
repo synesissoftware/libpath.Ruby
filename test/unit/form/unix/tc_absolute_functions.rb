@@ -26,7 +26,7 @@ class Test_existence_of_namespace_LibPath_Form_Unix < Test::Unit::TestCase
 	end
 end
 
-class Test_path_classify_path_Unix < Test::Unit::TestCase
+class Test_classify_path_Unix < Test::Unit::TestCase
 
 	include ::LibPath::Form::Unix
 

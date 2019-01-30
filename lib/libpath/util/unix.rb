@@ -180,7 +180,7 @@ module LibPath_Util_Unix_Methods
 
 		return '.' + tr_sl.to_s if 0 == (o_parts.size + p_parts.size)
 
-		return o_parts.map { |rp| '..' }.join('/') + tr_sl.to_s if p_parts.empty?
+		return o_parts.map { |rp| '..' }.join('/') + (tr_sl || (o_parts.size != 0 ? '/' : nil)).to_s if p_parts.empty?
 
 
 		ar		=	[ '..' ] * o_parts.size + p_parts
@@ -266,7 +266,7 @@ module LibPath_Util_Unix_Methods
 	#
 	# * *Parameters:*
 	#   - +path+:: (String) The path to be evaluated. May not be +nil+
-	def make_path_canonical path
+	def make_path_canonical path, **options
 
 		Diagnostics.check_string_parameter(path, "path") if $DEBUG
 
@@ -309,16 +309,18 @@ module LibPath_Util_Unix_Methods
 
 		new_parts	=	f6_dir_parts.dup
 		new_parts.reject! { |p| './' == p }
-		ix_2dots	=	_Array.index(new_parts, '../', 1)
+		ix_nodots	=	new_parts.index { |p| '../' != p } || new_parts.size
+		ix_2dots	=	_Array.index(new_parts, '../', ix_nodots)
 
-		return f0_path unless new_parts.size != f6_dir_parts.size || ix_2dots
+		return "#{new_parts.join}#{basename}" unless new_parts.size != f6_dir_parts.size || ix_2dots
 
 		while (ix_2dots || 0) > 0
 
 			new_parts.delete_at(ix_2dots - 0)
 			new_parts.delete_at(ix_2dots - 1) if ix_2dots != 1 || !is_rooted
 
-			ix_2dots = _Array.index(new_parts, '../', 1)
+			ix_nodots	=	new_parts.index { |p| '../' != p } or break
+			ix_2dots	=	_Array.index(new_parts, '../', ix_nodots)
 		end
 
 		if new_parts.empty? && (basename || '').empty?

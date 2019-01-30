@@ -26,7 +26,7 @@ class Test_existence_of_namespace_LibPath_Form_Windows < Test::Unit::TestCase
 	end
 end
 
-class Test_path_classify_path_Windows < Test::Unit::TestCase
+class Test_classify_path_Windows < Test::Unit::TestCase
 
 	include ::LibPath::Form::Windows
 

@@ -75,6 +75,53 @@ class Test_LibPath_Util_Windows_make_path_canonical < Test::Unit::TestCase
 		assert_equal 'C:..\\', F.make_path_canonical('C:..')
 	end
 
+	def test_unresolveable
+
+		assert_equal 'C:..\\', F.make_path_canonical('C:..')
+		assert_equal 'C:..\\', F.make_path_canonical('C:..\\')
+
+		assert_equal '..\\', F.make_path_canonical('..')
+		assert_equal '../', F.make_path_canonical('../')
+
+		assert_equal '../dir-1', F.make_path_canonical('../dir-1')
+		assert_equal '../dir-1/', F.make_path_canonical('../dir-1/')
+
+		assert_equal '../..\\', F.make_path_canonical('../..')
+		assert_equal '../../', F.make_path_canonical('../../')
+
+		assert_equal '../../dir-1', F.make_path_canonical('../../dir-1')
+		assert_equal '../../dir-1/', F.make_path_canonical('../../dir-1/')
+	end
+
+	def test_partially_resolveable
+
+		assert_equal '../', F.make_path_canonical('../dir-1/..')
+		assert_equal '../', F.make_path_canonical('../dir-1/../')
+
+		assert_equal '../abc', F.make_path_canonical('../dir-1/../abc')
+		assert_equal '../abc/', F.make_path_canonical('../dir-1/../abc/')
+
+		assert_equal '../../', F.make_path_canonical('../../dir-1/..')
+		assert_equal '../../', F.make_path_canonical('../../dir-1/../')
+
+		assert_equal '../../abc', F.make_path_canonical('../../dir-1/../abc')
+		assert_equal '../../abc/', F.make_path_canonical('../../dir-1/../abc/')
+
+		assert_equal '\\dir.14\\', F.make_path_canonical('\\dir.14\\dir.2\\..')
+		assert_equal 'dir.14\\', F.make_path_canonical('dir.14\\dir.2\\..')
+
+		assert_equal '/dir.14/', F.make_path_canonical('/dir.14/dir.2/..')
+		assert_equal 'dir.14/', F.make_path_canonical('dir.14/dir.2/..')
+
+		assert_equal '\\', F.make_path_canonical('\\dir.14\\dir.2\\..\\..')
+		assert_equal '\\', F.make_path_canonical('\\dir.14\\dir.2\\..\\..\\..')
+		assert_equal '.\\', F.make_path_canonical('dir.14\\dir.2\\..\\..')
+
+		assert_equal '/', F.make_path_canonical('/dir.14/dir.2/../..')
+		assert_equal '/', F.make_path_canonical('/dir.14/dir.2/../../..')
+		assert_equal '.\\', F.make_path_canonical('dir.14/dir.2/../..')
+	end
+
 	def test_basenames
 
 		assert_equal 'a', F.make_path_canonical('a')

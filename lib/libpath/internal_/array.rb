@@ -45,7 +45,7 @@ module Array
 
 			if i_2
 
-				i_1 < i_2 ? i_2 : i_1
+				i_1 < i_2 ? i_1 : i_2
 			else
 
 				i_1
@@ -66,7 +66,7 @@ module Array
 
 			if i_2
 
-				i_1 < i_2 ? i_1 : i_2
+				i_1 < i_2 ? i_2 : i_1
 			else
 
 				i_1

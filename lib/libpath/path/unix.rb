@@ -96,8 +96,8 @@ module Unix
 
 				drp_options							=	options.select { |k| _C::INIT_DRP_COMMON_OPTIONS.include?(k) }
 
-				search_directory					=	_Internal_Form.append_trailing_slash search_directory
 				search_directory					=	_Util.make_path_absolute(search_directory, make_canonical: true, **options.select { |k| _C::INIT_MPA_COMMON_OPTIONS.include?(k) })
+				search_directory					=	_Internal_Form.append_trailing_slash search_directory
 
 				@search_directory					=	search_directory
 				@search_relative_path				=	_Util.derive_relative_path(search_directory, abs_path, **drp_options)
