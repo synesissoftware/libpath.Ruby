@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#! /usr/bin/env ruby
 
 #############################################################################
 # File:         test/performance/benchmark_rindex2.rb
