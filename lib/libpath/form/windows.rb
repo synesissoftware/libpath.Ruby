@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Form::Windows module
 #
 # Created:      8th January 2019
-# Updated:      25th January 2018
+# Updated:      29th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -74,7 +74,7 @@ module LibPath_Form_Windows_Methods
 
 		return :homed if path_is_homed? path
 
-		vol, rem, frm = Internal_::Windows::Form.get_windows_volume(path)
+		vol, rem, _ = Internal_::Windows::Form.get_windows_volume(path)
 
 		rooted	=	Internal_::Windows::Form.char_is_path_name_separator? rem[0]
 

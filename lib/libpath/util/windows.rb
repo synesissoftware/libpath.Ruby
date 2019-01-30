@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Util::Windows module
 #
 # Created:      10th January 2019
-# Updated:      27th January 2018
+# Updated:      30th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -96,7 +96,7 @@ module LibPath_Util_Windows_Methods
 
 		args.each_with_index do |arg, index|
 
-			vol, rem, frm = _Internal_Windows_Form.get_windows_volume arg
+			vol, rem, _ = _Internal_Windows_Form.get_windows_volume arg
 
 			rem = nil unless rem && _Internal_Windows_Form.char_is_path_name_separator?(rem[0])
 
@@ -233,7 +233,7 @@ module LibPath_Util_Windows_Methods
 	#  +:home+:: (String)
 	#  +:locator+:: (boolean)
 	#  +:make_canonical+:: (boolean)
-	#  +:pw`+:: (String)
+	#  +:pwd+:: (String)
 	def derive_relative_path origin, path, **options
 
 		return path if origin.nil? || origin.empty?
@@ -253,8 +253,8 @@ module LibPath_Util_Windows_Methods
 		return derive_relative_path(origin, absolute_path(path), **options) if _Form_Windows.path_is_homed?(path)
 
 
-		o_vol, o_rem, o_frm = _Internal_Windows_Form.get_windows_volume origin
-		p_vol, p_rem, p_frm = _Internal_Windows_Form.get_windows_volume path
+		o_vol, o_rem, _ = _Internal_Windows_Form.get_windows_volume origin
+		p_vol, p_rem, _ = _Internal_Windows_Form.get_windows_volume path
 
 		if o_vol && p_vol
 
@@ -304,8 +304,8 @@ module LibPath_Util_Windows_Methods
 		end
 
 
-		_, _, o2_dir, o3_basename, _, _, o6_parts, _	=	_Internal_Windows_Form.split_path(origin)
-		_, _, p2_dir, p3_basename, _, _, p6_parts, _	=	_Internal_Windows_Form.split_path(path)
+		_, _, _, o3_basename, _, _, o6_parts, _	=	_Internal_Windows_Form.split_path(origin)
+		_, _, _, p3_basename, _, _, p6_parts, _	=	_Internal_Windows_Form.split_path(path)
 
 		o_parts	=	o6_parts
 		o_parts	<<	o3_basename if o3_basename && '.' != o3_basename

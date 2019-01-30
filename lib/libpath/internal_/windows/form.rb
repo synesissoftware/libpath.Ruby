@@ -53,14 +53,14 @@ module Form
 	# time
 	def self.elide_redundant_path_name_separators s
 
-		s.gsub /[\\\/]{2,}/, '\\'
+		s.gsub(/[\\\/]{2,}/, '\\')
 	end
 
 	# [INTERNAL] This function is undocumented, and subject to change at any
 	# time
 	def self.elide_redundant_path_name_separators! s
 
-		s.gsub! /[\\\/]{2,}/, '\\'
+		s.gsub!(/[\\\/]{2,}/, '\\')
 
 		s
 	end

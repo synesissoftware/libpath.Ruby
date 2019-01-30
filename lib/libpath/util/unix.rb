@@ -100,7 +100,7 @@ module LibPath_Util_Unix_Methods
 
 			els	=	args[rix..-1]
 
-			File.join *els
+			File.join(*els)
 		end
 	end
 
@@ -110,7 +110,7 @@ module LibPath_Util_Unix_Methods
 	# * *Options:*
 	#  +:home+:: (String)
 	#  +:locator+:: (boolean)
-	#  +:pw`+:: (String)
+	#  +:pwd+:: (String)
 	def derive_relative_path origin, path, **options
 
 		return path if origin.nil? || origin.empty?
@@ -143,8 +143,8 @@ module LibPath_Util_Unix_Methods
 		path	=	_Internal_Unix_Form.trim_trailing_slash(path) if tr_sl && path.size > 1
 
 
-		_, _, o2_dir, o3_basename, _, _, o6_parts, _	=	_Internal_Unix_Form.split_path(origin)
-		_, _, p2_dir, p3_basename, _, _, p6_parts, _	=	_Internal_Unix_Form.split_path(path)
+		_, _, _, o3_basename, _, _, o6_parts, _	=	_Internal_Unix_Form.split_path(origin)
+		_, _, _, p3_basename, _, _, p6_parts, _	=	_Internal_Unix_Form.split_path(path)
 
 		o_parts	=	o6_parts
 		o_parts	<<	o3_basename if o3_basename && '.' != o3_basename
