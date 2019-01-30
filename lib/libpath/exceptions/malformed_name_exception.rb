@@ -1,10 +1,10 @@
 
 # ######################################################################## #
-# File:         libpath/version.rb
+# File:         libpath/exceptions/malformed_name_exception.rb
 #
-# Purpose:      Version for libpath.Ruby library
+# Purpose:      MalformedNameException class
 #
-# Created:      8th January 2019
+# Created:      30th January 2019
 # Updated:      30th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
@@ -48,26 +48,31 @@
 =begin
 =end
 
+require 'libpath/exceptions/libpath_base_exception'
+
 module LibPath
+module Exceptions
 
-	# Current version of the libpath.Ruby library
-	VERSION				=	'0.2.0'
+class MalformedNameException < LibPathBaseException
 
-	private
-	VERSION_PARTS_		=	VERSION.split(/[.]/).collect { |n| n.to_i } # :nodoc:
-	public
-	# Major version of the libpath.Ruby library
-	VERSION_MAJOR		=	VERSION_PARTS_[0] # :nodoc:
-	# Minor version of the libpath.Ruby library
-	VERSION_MINOR		=	VERSION_PARTS_[1] # :nodoc:
-	# Patch version of the libpath.Ruby library
-	VERSION_PATCH		=	VERSION_PARTS_[2] # :nodoc:
-	# Revision version of the libpath.Ruby library
-	VERSION_REVISION	=	VERSION_PATCH # :nodoc:
-	# Sub-patch version of the libpath.Ruby library
-	VERSION_SUBPATCH	=	VERSION_PARTS_[3] # :nodoc:
+	def initialize name, message = nil
 
+		unless message
+
+			message = "malformed name '#{name}'"
+		end
+
+		super message
+
+		@name	=	name
+	end
+
+	attr_reader :name
+end
+
+end # module Exceptions
 end # module LibPath
 
 # ############################## end of file ############################# #
+
 

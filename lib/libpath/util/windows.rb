@@ -62,6 +62,15 @@ module Windows
 # any class or module including/extending module LibPath::Util::Windows
 module LibPath_Util_Windows_Methods
 
+	# Combines a number of path parts into a single path, ignoring any parts
+	# that are preceded by an absolute part
+	#
+	# Because Windows paths' absolute nature comprises two elements - the
+	# volume(/drive) and the root directory - it is possible to combine
+	# elements where either the volume or the root directory is missing.
+	#
+	# NOTE: The behaviour of this method is undefined if any of the parts
+	# are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
 	def combine_paths *args, **options
 
 		_Form_Windows			=	Form::Windows
@@ -226,6 +235,11 @@ module LibPath_Util_Windows_Methods
 		(first + dirs + last).join('')
 	end
 
+	# Obtains the form of the given +path+ relative to the given +origin+
+	#
+	# NOTE: The behaviour of this method is undefined if any of the parts
+	# are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
+	#
 	#
 	# === Signature
 	#
@@ -373,6 +387,9 @@ module LibPath_Util_Windows_Methods
 	# NOTE: the function does not make +path+ absolute. That is up to the
 	# caller if required
 	#
+	# NOTE: The behaviour of this method is undefined if any of the parts
+	# are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
+	#
 	# === Signature
 	#
 	# * *Parameters:*
@@ -413,6 +430,9 @@ module LibPath_Util_Windows_Methods
 		path.upcase
 	end
 
+	# NOTE: The behaviour of this method is undefined if any of the parts
+	# are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
+	#
 	def make_path_absolute path, **options
 
 		_Form_Windows			=	Form::Windows
@@ -486,6 +506,9 @@ module LibPath_Util_Windows_Methods
 	# - single-dot parts - './' or '.\\' - are all removed
 	# - double-dot parts - '../' or '..\\' - are removed where they follow a
 	#    non-dots directory part, or where they follow the root
+	#
+	# NOTE: The behaviour of this method is undefined if any of the parts
+	# are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
 	#
 	# === Signature
 	#

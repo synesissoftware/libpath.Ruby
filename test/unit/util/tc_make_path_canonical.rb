@@ -57,6 +57,17 @@ class Test_LibPath_Util_make_path_canonical_via_extend < Test::Unit::TestCase
 			assert_equal '..\\', F.make_path_canonical('..')
 			assert_equal '..\\', F.make_path_canonical('..//')
 			assert_equal '../', F.make_path_canonical('../')
+
+			assert_equal '/dir.14/', F.make_path_canonical('/dir.14/dir.2/..')
+			assert_equal 'dir.14/', F.make_path_canonical('dir.14/dir.2/..')
+
+			assert_equal '/', F.make_path_canonical('/dir.14/dir.2/../..')
+			assert_equal '/', F.make_path_canonical('/dir.14/dir.2/../../..')
+			assert_equal '.\\', F.make_path_canonical('dir.14/dir.2/../..')
+
+			assert_equal '\\', F.make_path_canonical('\\dir.14\\dir.2\\..\\..')
+			assert_equal '\\', F.make_path_canonical('\\dir.14\\dir.2\\..\\..\\..')
+			assert_equal '.\\', F.make_path_canonical('dir.14\\dir.2\\..\\..')
 		else
 
 			assert_equal '../', F.make_path_canonical('..')

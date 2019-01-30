@@ -50,10 +50,6 @@ class Test_Internal_Array_index2 < Test::Unit::TestCase
 
 	def test_simple_find
 
-$stderr.puts
-$stderr.puts '*' * 100
-$stderr.puts
-
 		assert_equal 0, A.index2([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ], 0, 1)
 		assert_equal 1, A.index2([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ], 2, 1)
 

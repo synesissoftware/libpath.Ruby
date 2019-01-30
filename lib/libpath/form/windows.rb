@@ -48,7 +48,7 @@
 =begin
 =end
 
-
+require 'libpath/constants/windows'
 require 'libpath/diagnostics'
 require 'libpath/internal_/windows/drive'
 require 'libpath/internal_/windows/form'
@@ -98,6 +98,55 @@ module LibPath_Form_Windows_Methods
 			end
 		end
 
+	end
+
+	# Evaluates whether the given name is malformed, according to the given
+	# options.
+	#
+	# If no options are specified, the only invalid character(s) are: +'\0'+
+	#
+	# === Signature
+	#
+	# * *Options:*
+	#  - +:reject_path_name_separators+:: (boolean) Reject the path
+	#     separator character(s): +'\\'+ and +'/'+
+	#  - +:reject_path_separators+:: (boolean) Reject the path separator
+	#     character(s): +';'+
+	#  - +:reject_shell_characters+:: (boolean) Reject the shell
+	#     character(s): +'*'+, +'?'+, +'|'+
+	def name_is_malformed? name, **options
+
+		_Constants	=	::LibPath::Constants::Windows
+
+		if name
+
+			if options[:reject_shell_characters]
+
+				return true if name =~ _Constants::InvalidCharacters::Shell::RE
+			end
+
+			if options[:reject_path_separators]
+
+				return true if name =~ _Constants::InvalidCharacters::PathSeparators::RE
+			end
+
+			if options[:reject_path_name_separators]
+
+				return true if name =~ _Constants::InvalidCharacters::PathNameSeparators::RE
+			end
+
+			return true if name =~ _Constants::InvalidCharacters::Innate::RE
+
+			if '\\' == name[0] && '\\' == name[1]
+
+				return true if name !~ /^\\\\[^\\]+\\[^\\]+/
+			end
+
+			false
+		else
+
+			true
+		end
 	end
 
 	# Evaluates whether the given path is absolute, which means it is either

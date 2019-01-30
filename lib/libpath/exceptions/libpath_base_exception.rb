@@ -1,10 +1,10 @@
 
 # ######################################################################## #
-# File:         libpath/version.rb
+# File:         libpath/exceptions/libpath_base_exception.rb
 #
-# Purpose:      Version for libpath.Ruby library
+# Purpose:      LibPathBaseException class
 #
-# Created:      8th January 2019
+# Created:      30th January 2019
 # Updated:      30th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
@@ -49,25 +49,29 @@
 =end
 
 module LibPath
+module Exceptions
 
-	# Current version of the libpath.Ruby library
-	VERSION				=	'0.2.0'
+# Root exception for all LibPath exceptions
+#
+# NOTE: this class is abstract
+class LibPathBaseException < StandardError
 
-	private
-	VERSION_PARTS_		=	VERSION.split(/[.]/).collect { |n| n.to_i } # :nodoc:
-	public
-	# Major version of the libpath.Ruby library
-	VERSION_MAJOR		=	VERSION_PARTS_[0] # :nodoc:
-	# Minor version of the libpath.Ruby library
-	VERSION_MINOR		=	VERSION_PARTS_[1] # :nodoc:
-	# Patch version of the libpath.Ruby library
-	VERSION_PATCH		=	VERSION_PARTS_[2] # :nodoc:
-	# Revision version of the libpath.Ruby library
-	VERSION_REVISION	=	VERSION_PATCH # :nodoc:
-	# Sub-patch version of the libpath.Ruby library
-	VERSION_SUBPATCH	=	VERSION_PARTS_[3] # :nodoc:
+=begin
 
+	# TODO include Xqsr3's WithCause
+=end
+
+	def self.new *args
+
+		raise NoMethodError, "private method `new' called for #{self}:Class" if self == LibPathBaseException
+
+		super
+	end
+end
+
+end # module Exceptions
 end # module LibPath
 
 # ############################## end of file ############################# #
+
 

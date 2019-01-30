@@ -842,5 +842,40 @@ class Test_LibPath_Internal_Windows_Form_split_path < Test::Unit::TestCase
 		assert_kind_of ::Array, r[7]
 		assert_equal [ '\\\\.\\{some-device-name#abcd}\\', 'abc/' ], r[7]
 	end
+
+	def test_paths_with_invalid_UNC
+
+		r	=	F.split_path '\\\\?\\server'
+
+		assert_kind_of ::Array, r
+		assert_equal 8, r.size
+		assert_equal '\\\\?\\server', r[0]
+		assert_equal '\\\\?\\server', r[1]
+		assert_equal :malformed, r[1].form
+		assert_nil r[2]
+		assert_nil r[3]
+		assert_nil r[4]
+		assert_nil r[5]
+		assert_kind_of ::Array, r[6]
+		assert_empty r[6]
+		assert_kind_of ::Array, r[7]
+		assert_empty r[7]
+
+		r	=	F.split_path '\\\\?\\server\\'
+
+		assert_kind_of ::Array, r
+		assert_equal 8, r.size
+		assert_equal '\\\\?\\server\\', r[0]
+		assert_equal '\\\\?\\server\\', r[1]
+		assert_equal :malformed, r[1].form
+		assert_nil r[2]
+		assert_nil r[3]
+		assert_nil r[4]
+		assert_nil r[5]
+		assert_kind_of ::Array, r[6]
+		assert_empty r[6]
+		assert_kind_of ::Array, r[7]
+		assert_empty r[7]
+	end
 end
 

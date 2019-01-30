@@ -1,11 +1,10 @@
-
 # ######################################################################## #
-# File:         libpath/version.rb
+# File:         libpath/constants/windows.rb
 #
-# Purpose:      Version for libpath.Ruby library
+# Purpose:      LibPath::Constants::Windows module
 #
-# Created:      8th January 2019
-# Updated:      30th January 2018
+# Created:      29th January 2019
+# Updated:      29th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -49,25 +48,85 @@
 =end
 
 module LibPath
+module Constants
+module Windows
 
-	# Current version of the libpath.Ruby library
-	VERSION				=	'0.2.0'
+# Module defining instance functions that will be included and extended into
+# any class or module including/extending module LibPath::Constants::Windows
+module LibPath_Constants_Windows_Details
 
-	private
-	VERSION_PARTS_		=	VERSION.split(/[.]/).collect { |n| n.to_i } # :nodoc:
-	public
-	# Major version of the libpath.Ruby library
-	VERSION_MAJOR		=	VERSION_PARTS_[0] # :nodoc:
-	# Minor version of the libpath.Ruby library
-	VERSION_MINOR		=	VERSION_PARTS_[1] # :nodoc:
-	# Patch version of the libpath.Ruby library
-	VERSION_PATCH		=	VERSION_PARTS_[2] # :nodoc:
-	# Revision version of the libpath.Ruby library
-	VERSION_REVISION	=	VERSION_PATCH # :nodoc:
-	# Sub-patch version of the libpath.Ruby library
-	VERSION_SUBPATCH	=	VERSION_PARTS_[3] # :nodoc:
+	module InvalidCharacters
 
+		module Innate
+
+			LIST	=	[
+
+				"\0",
+			]
+			RE		=	/[#{LIST.map { |m| Regexp.escape m }.join}]/
+		end # module Innate
+
+		module PathNameSeparators
+
+			LIST	=	[
+
+				"\\",
+				'/',
+			]
+			RE		=	/[#{LIST.map { |m| Regexp.escape m }.join}]/
+		end # module PathNameSeparators
+
+		module PathSeparators
+
+			LIST	=	[
+
+				';',
+			]
+			RE		=	/[#{LIST.map { |m| Regexp.escape m }.join}]/
+		end # module PathSeparators
+
+		module Shell
+
+			LIST	=	[
+
+				'*',
+				'<',
+				'>',
+				'?',
+				'|',
+			]
+			RE		=	/[#{LIST.map { |m| Regexp.escape m }.join}]/
+		end # module Shell
+	end # module InvalidCharacters
+end # module LibPath_Constants_Windows_Details
+
+def self.extended receiver
+
+	receiver.class_eval do
+
+		extend LibPath_Constants_Windows_Details
+	end
+
+	$stderr.puts "#{receiver} extended by #{LibPath_Constants_Windows_Details}" if $DEBUG
+end
+
+def self.included receiver
+
+	receiver.class_eval do
+
+		include LibPath_Constants_Windows_Details
+	end
+
+	$stderr.puts "#{receiver} included #{LibPath_Constants_Windows_Details}" if $DEBUG
+end
+
+extend LibPath_Constants_Windows_Details
+include LibPath_Constants_Windows_Details
+
+end # module Windows
+end # module Constants
 end # module LibPath
 
 # ############################## end of file ############################# #
+
 

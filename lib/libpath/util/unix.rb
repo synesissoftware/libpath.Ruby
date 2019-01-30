@@ -62,6 +62,11 @@ module Unix
 # any class or module including/extending module LibPath::Util::Unix
 module LibPath_Util_Unix_Methods
 
+	# Combines a number of path parts into a single path, ignoring any parts
+	# that are preceded by an absolute part
+	#
+	# NOTE: The behaviour of this method is undefined if any of the parts
+	# are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
 	def combine_paths *args, **options
 
 		_Form_Unix			=	Form::Unix
@@ -104,6 +109,10 @@ module LibPath_Util_Unix_Methods
 		end
 	end
 
+	# Obtains the form of the given +path+ relative to the given +origin+
+	#
+	# NOTE: The behaviour of this method is undefined if any of the parts
+	# are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
 	#
 	# === Signature
 	#
@@ -199,6 +208,9 @@ module LibPath_Util_Unix_Methods
 	# NOTE: the function does not make +path+ absolute. That is up to the
 	# caller if required
 	#
+	# NOTE: The behaviour of this method is undefined if any of the parts
+	# are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
+	#
 	# === Signature
 	#
 	# * *Parameters:*
@@ -214,6 +226,9 @@ module LibPath_Util_Unix_Methods
 		path
 	end
 
+	#
+	# NOTE: The behaviour of this method is undefined if any of the parts
+	# are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
 	#
 	# === Signature
 	#
@@ -284,6 +299,9 @@ module LibPath_Util_Unix_Methods
 	# - single-dot parts - './' - are all removed
 	# - double-dot parts - '../' - are removed where they follow a non-dots
 	#    directory part, or where they follow the root
+	#
+	# NOTE: The behaviour of this method is undefined if any of the parts
+	# are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
 	#
 	# === Signature
 	#

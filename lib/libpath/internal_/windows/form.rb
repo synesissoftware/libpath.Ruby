@@ -118,6 +118,8 @@ module Form
 								return [ $&, $', :form_4 ]
 							end
 						end
+
+						return [ s, '', :malformed ]
 					end
 				when '.'
 
@@ -179,6 +181,11 @@ module Form
 		self.elide_redundant_path_name_separators! rem
 
 		f1_volume.define_singleton_method(:form) { frm } if f1_volume
+
+		if :malformed == frm
+
+			return [ s, f1_volume, nil, nil, nil, nil, [], [] ]
+		end
 
 		unless rem.empty?
 

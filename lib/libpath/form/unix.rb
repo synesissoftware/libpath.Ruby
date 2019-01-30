@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Form::Unix module
 #
 # Created:      8th January 2019
-# Updated:      25th January 2018
+# Updated:      29th January 2018
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -48,7 +48,7 @@
 =begin
 =end
 
-
+require 'libpath/constants/unix'
 require 'libpath/diagnostics'
 
 module LibPath
@@ -77,6 +77,47 @@ module LibPath_Form_Unix_Methods
 		return :absolute if path_is_absolute? path
 
 		:relative
+	end
+
+	# Evaluates whether the given name is malformed
+	#
+	# === Signature
+	#
+	# * *Options:*
+	#  - +:reject_path_name_separators+:: (boolean) Reject the path
+	#     separator character(s): +'/'+
+	#  - +:reject_path_separators+:: (boolean) Reject the path separator
+	#     character(s): +':'+
+	#  - +:reject_shell_characters+:: (boolean) Reject the shell
+	#     character(s): +'*'+, +'?'+, +'|'+
+	def name_is_malformed? name, **options
+
+		_Constants	=	::LibPath::Constants::Unix
+
+		if name
+
+			if options[:reject_path_name_separators]
+
+				return true if name =~ _Constants::InvalidCharacters::PathNameSeparators::RE
+			end
+
+			if options[:reject_path_separators]
+
+				return true if name =~ _Constants::InvalidCharacters::PathSeparators::RE
+			end
+
+			if options[:reject_shell_characters]
+
+				return true if name =~ _Constants::InvalidCharacters::Shell::RE
+			end
+
+			return true if name =~ _Constants::InvalidCharacters::Innate::RE
+
+			false
+		else
+
+			true
+		end
 	end
 
 	# Evaluates whether the given path is absolute, which means it is either

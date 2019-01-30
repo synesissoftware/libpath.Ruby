@@ -126,6 +126,91 @@ class Test_classify_path_Windows < Test::Unit::TestCase
 	end
 end
 
+class Test_name_is_malformed_Windows < Test::Unit::TestCase
+
+	include ::LibPath::Form::Windows
+
+	def test_with_nil
+
+		assert name_is_malformed?(nil)
+	end
+
+	def test_empty
+
+		assert_false name_is_malformed?('')
+	end
+
+	def test_absolute_paths_from_root
+
+		assert_false name_is_malformed?('/')
+		assert_false name_is_malformed?('//')
+		assert_false name_is_malformed?('/abc')
+	end
+
+	def test_absolute_paths_from_home
+
+		assert_false name_is_malformed?('~')
+		assert_false name_is_malformed?('~/')
+		assert_false name_is_malformed?('~/abc')
+	end
+
+	def test_relative_paths
+
+		assert_false name_is_malformed?('abc')
+		assert_false name_is_malformed?('abc/')
+		assert_false name_is_malformed?('a/')
+
+		assert_false name_is_malformed?('~abc')
+	end
+
+	def test_innate_invalid_characters
+
+		assert name_is_malformed?("\0")
+		assert name_is_malformed?("a\0")
+		assert name_is_malformed?("\0a")
+
+		assert name_is_malformed?("\0", reject_shell_characters: true)
+		assert name_is_malformed?("a\0", reject_shell_characters: true)
+		assert name_is_malformed?("\0a", reject_shell_characters: true)
+	end
+
+	def test_shell_invalid_characters
+
+		assert_false name_is_malformed?('*')
+		assert_false name_is_malformed?('?')
+		assert_false name_is_malformed?('|')
+
+		assert name_is_malformed?('*', reject_shell_characters: true)
+		assert name_is_malformed?('?', reject_shell_characters: true)
+		assert name_is_malformed?('|', reject_shell_characters: true)
+	end
+
+	def test_path_name_separators
+
+		assert_false name_is_malformed?('/')
+		assert_false name_is_malformed?('\\')
+
+		assert name_is_malformed?('/', reject_path_name_separators: true)
+		assert name_is_malformed?('\\', reject_path_name_separators: true)
+	end
+
+	def test_path_separators
+
+		assert_false name_is_malformed?(';')
+
+		assert name_is_malformed?(';', reject_path_separators: true)
+	end
+
+	def test_partial_UNC
+
+		assert_false name_is_malformed?('\\')
+		assert name_is_malformed?('\\\\')
+		assert name_is_malformed?('\\\\server')
+		assert name_is_malformed?('\\\\server\\')
+		assert_false name_is_malformed?('\\\\server\\share')
+	end
+end
+
 class Test_path_is_absolute_Windows < Test::Unit::TestCase
 
 	include ::LibPath::Form::Windows
