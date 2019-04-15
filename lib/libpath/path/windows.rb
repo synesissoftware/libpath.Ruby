@@ -160,6 +160,12 @@ module Windows # :nodoc:
 		attr_reader :search_relative_directory_path
 		# ([String]) The #directory_parts relative to #search_directory; +nil+ if no search directory specified
 		attr_reader :search_relative_directory_parts
+
+		# (String) String form of path
+		def to_s
+
+			absolute_path
+		end
 	end
 
 end # module Windows
