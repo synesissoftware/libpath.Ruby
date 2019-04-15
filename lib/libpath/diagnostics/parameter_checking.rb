@@ -1,8 +1,9 @@
 
-module LibPath
-module Diagnostics
+module LibPath # :nodoc:
+module Diagnostics # :nodoc:
 
-	def self.check_string_parameter param_value, param_name, **options
+	# @!visibility private
+	def self.check_string_parameter param_value, param_name, **options # :nodoc:
 
 		case param_value
 		when nil
@@ -25,7 +26,8 @@ module Diagnostics
 		end
 	end
 
-	def self.check_options h, *args, **options
+	# @!visibility private
+	def self.check_options h, *args, **options # :nodoc:
 
 		if known = options[:known] then
 

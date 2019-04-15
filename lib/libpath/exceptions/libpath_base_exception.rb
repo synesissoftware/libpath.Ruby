@@ -5,7 +5,7 @@
 # Purpose:      LibPathBaseException class
 #
 # Created:      30th January 2019
-# Updated:      30th January 2018
+# Updated:      16th April 2019
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -48,8 +48,8 @@
 =begin
 =end
 
-module LibPath
-module Exceptions
+module LibPath # :nodoc:
+module Exceptions # :nodoc:
 
 # Root exception for all LibPath exceptions
 #

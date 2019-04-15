@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Path::Windows module
 #
 # Created:      21st January 2019
-# Updated:      30th January 2018
+# Updated:      16th April 2019
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -52,19 +52,36 @@ require 'libpath/diagnostics'
 require 'libpath/internal_/windows/form'
 require 'libpath/util/windows'
 
-module LibPath
-module Path
-module Windows
+module LibPath # :nodoc:
+module Path # :nodoc:
+module Windows # :nodoc:
 
+	# Class representing a parsed path (for Windows)
 	class ParsedPath
 
-		module ParsedPath_Constants
+		# @!visibility private
+		module ParsedPath_Constants # :nodoc: all
 
 			INIT_VALID_OPTIONS			=	%i{ home locator pwd }
 			INIT_MPA_COMMON_OPTIONS		=	%i{ home locator pwd }
 			INIT_DRP_COMMON_OPTIONS		=	%i{ home locator pwd }
 		end
 
+		# Initialises an instance from the given +path+, optional
+		# +search_directory+ and options
+		#
+		# === Signature
+		#
+		# * *Parameters:*
+		#   - +path+ (String) The path. May not be +nil+
+		#   - +search_directory+ (String) The search_directory, from which the relative attributes are calculated for the path. May be +nil+
+		#   - +options+ (Hash) Options
+		#
+		# * *Options:*
+		#   - +????+
+		#
+		# * *Exceptions:*
+		#   - +ArgumentError+ Raised if +path+ is +nil+
 		def initialize path, search_directory = nil, **options
 
 			raise ::ArgumentError, "path may not be nil or empty" if path.nil? || path.empty?
@@ -110,23 +127,38 @@ module Windows
 			end
 		end
 
+		# (String) The path given to initialise the instance
 		attr_reader :given_path
+		# (String) The full-path of the instance
 		attr_reader :absolute_path
+		# (String) A normalised form of #path that can be used in comparisons
 		attr_reader :compare_path
+		# (String) The Windows volume, which may be a drive, or a UNC specification
 		attr_reader :volume
+		# (String) The entry's directory (excluding the #drive if on Windows)
 		attr_reader :directory
+		# (String) The full path of the entry's directory (taking into account the
+		# #drive if on Windows)
 		attr_reader :directory_path
 		alias_method :dirname, :directory_path
+		# ([String]) An array of directory parts, where each part ends in the path name separator
 		attr_reader :directory_parts
+		# (String) The entry's file name (combination of #stem + #extension)
 		attr_reader :file_full_name
 		alias_method :basename, :file_full_name
+		# (String) The entry's file stem
 		attr_reader :file_name_only
 		alias_method :stem, :file_name_only
+		# (String) The entry's file extension
 		attr_reader :file_extension
 		alias_method :extension, :file_extension
+		# (String) The search directory if specified; +nil+ otherwise
 		attr_reader :search_directory
+		# (String) The #path relative to #search_directory; +nil+ if no search directory specified
 		attr_reader :search_relative_path
+		# (String) The #directory_path relative to #search_directory; +nil+ if no search directory specified
 		attr_reader :search_relative_directory_path
+		# ([String]) The #directory_parts relative to #search_directory; +nil+ if no search directory specified
 		attr_reader :search_relative_directory_parts
 	end
 

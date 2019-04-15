@@ -9,8 +9,8 @@ else
 	require 'libpath/util/unix'
 end
 
-module LibPath
-module Util
+module LibPath # :nodoc:
+module Util # :nodoc:
 
 	if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
 
@@ -22,12 +22,14 @@ module Util
 		include ::LibPath::Util::Unix
 	end
 
-	def self.extended receiver
+	# @!visibility private
+	def self.extended receiver # :nodoc:
 
 		$stderr.puts "#{receiver} extended by #{self}" if $DEBUG
 	end
 
-	def self.included receiver
+	# @!visibility private
+	def self.included receiver # :nodoc:
 
 		$stderr.puts "#{receiver} included #{self}" if $DEBUG
 	end

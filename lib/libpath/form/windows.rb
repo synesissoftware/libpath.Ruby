@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Form::Windows module
 #
 # Created:      8th January 2019
-# Updated:      29th January 2018
+# Updated:      16th April 2019
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -53,10 +53,12 @@ require 'libpath/diagnostics'
 require 'libpath/internal_/windows/drive'
 require 'libpath/internal_/windows/form'
 
-module LibPath
-module Form
-module Windows
+module LibPath # :nodoc:
+module Form # :nodoc:
+module Windows # :nodoc:
 
+# Module defining instance functions that will be included and extended into
+# any class or module including/extending module LibPath::Form::Windows
 module LibPath_Form_Windows_Methods
 
 	# Classifies a path
@@ -295,6 +297,12 @@ module LibPath_Form_Windows_Methods
 		end
 	end
 
+	# Evalutes whether the given path is UNC
+	#
+	# === Signature
+	#
+	# * *Parameters:*
+	#   - +path+:: (String) The path to be evaluated. May not be +nil+
 	def path_is_UNC? path
 
 		Diagnostics.check_string_parameter(path, "path") if $DEBUG
@@ -316,7 +324,8 @@ module LibPath_Form_Windows_Methods
 
 end # module LibPath_Form_Windows_Methods
 
-def self.extended receiver
+# @!visibility private
+def self.extended receiver # :nodoc:
 
 	receiver.class_eval do
 
@@ -326,7 +335,8 @@ def self.extended receiver
 	$stderr.puts "#{receiver} extended by #{LibPath_Form_Windows_Methods}" if $DEBUG
 end
 
-def self.included receiver
+# @!visibility private
+def self.included receiver # :nodoc:
 
 	receiver.class_eval do
 

@@ -1,10 +1,15 @@
 
-module LibPath
-module Internal_
+# :stopdoc:
 
-module Array
+module LibPath # :nodoc:
+# @!visibility private
+module Internal_ # :nodoc: all
 
-	def self.index(ar, v, after = nil)
+# @!visibility private
+module Array # :nodoc:
+
+	# @!visibility private
+	def self.index(ar, v, after = nil) # :nodoc:
 
 		if after
 
@@ -36,7 +41,8 @@ module Array
 		end
 	end
 
-	def self.index2(ar, v1, v2, after = nil)
+	# @!visibility private
+	def self.index2(ar, v1, v2, after = nil) # :nodoc:
 
 		i_1	=	self.index(ar, v1, after)
 		i_2	=	self.index(ar, v2, after)
@@ -57,7 +63,8 @@ module Array
 	end
 
 
-	def self.rindex2(ar, v1, v2)
+	# @!visibility private
+	def self.rindex2(ar, v1, v2) # :nodoc:
 
 		i_1	=	ar.rindex(v1)
 		i_2	=	ar.rindex(v2)
@@ -81,5 +88,9 @@ end
 
 end
 end
+
+# :startdoc:
+
+# ############################## end of file ############################# #
 
 

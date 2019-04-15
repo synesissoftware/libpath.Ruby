@@ -1,20 +1,25 @@
 
-module LibPath
-module Internal_
-module Unix
+module LibPath # :nodoc:
+# @!visibility private
+module Internal_ # :nodoc: all
+module Unix # :nodoc:
 
-module Form
+module Form # :nodoc:
 
 	# [INTERNAL] This function is undocumented, and subject to change at any
 	# time
-	def self.char_is_path_name_separator? c
+	#
+	# @!visibility private
+	def self.char_is_path_name_separator? c # :nodoc:
 
 		'/' == c
 	end
 
 	# [INTERNAL] This function is undocumented, and subject to change at any
 	# time
-	def self.append_trailing_slash s
+	#
+	# @!visibility private
+	def self.append_trailing_slash s # :nodoc:
 
 		return s if '/' == s[-1]
 
@@ -23,21 +28,27 @@ module Form
 
 	# [INTERNAL] This function is undocumented, and subject to change at any
 	# time
-	def self.get_trailing_slash s
+	#
+	# @!visibility private
+	def self.get_trailing_slash s # :nodoc:
 
 		'/' == s[-1] ? '/' : nil
 	end
 
 	# [INTERNAL] This function is undocumented, and subject to change at any
 	# time
-	def self.has_trailing_slash? s
+	#
+	# @!visibility private
+	def self.has_trailing_slash? s # :nodoc:
 
 		'/' == s[-1]
 	end
 
 	# [INTERNAL] This function is undocumented, and subject to change at any
 	# time
-	def self.trim_trailing_slash s
+	#
+	# @!visibility private
+	def self.trim_trailing_slash s # :nodoc:
 
 		return s unless '/' == s[-1]
 
@@ -46,14 +57,18 @@ module Form
 
 	# [INTERNAL] This function is undocumented, and subject to change at any
 	# time
-	def self.elide_redundant_path_name_separators s
+	#
+	# @!visibility private
+	def self.elide_redundant_path_name_separators s # :nodoc:
 
 		s.gsub(/\/\/+/, '/')
 	end
 
 	# [INTERNAL] This function is undocumented, and subject to change at any
 	# time
-	def self.elide_redundant_path_name_separators! s
+	#
+	# @!visibility private
+	def self.elide_redundant_path_name_separators! s # :nodoc:
 
 		s.gsub!(/\/\/+/, '/')
 
@@ -74,7 +89,9 @@ module Form
 	# 5. Extension
 	# 6. Directory parts
 	# 7. Directory path parts
-	def self.split_path s, **options
+	#
+	# @!visibility private
+	def self.split_path s, **options # :nodoc:
 
 		f2_directory	=	nil
 		f3_basename		=	nil

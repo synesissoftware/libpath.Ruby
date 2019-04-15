@@ -1,10 +1,11 @@
 
-module LibPath
-module Internal_
-module Windows
-module Drive
+module LibPath # :nodoc:
+# @!visibility private
+module Internal_ # :nodoc: all
+module Windows # :nodoc:
+module Drive # :nodoc:
 
-module Constants
+module Constants # :nodoc:
 
 	DRIVE_LETTERS = [
 
@@ -67,7 +68,8 @@ module Constants
 	]
 end # module Constants
 
-	def self.character_is_drive_letter? ch
+	# @!visibility private
+	def self.character_is_drive_letter? ch # :nodoc:
 
 		::LibPath::Internal_::Windows::Drive::Constants::DRIVE_LETTERS.include? ch
 	end

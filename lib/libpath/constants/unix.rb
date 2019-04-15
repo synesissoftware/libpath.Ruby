@@ -4,7 +4,7 @@
 # Purpose:      LibPath::Constants::Unix module
 #
 # Created:      29th January 2019
-# Updated:      29th January 2018
+# Updated:      16th April 2019
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -47,45 +47,57 @@
 =begin
 =end
 
-module LibPath
-module Constants
-module Unix
+module LibPath # :nodoc:
+module Constants # :nodoc:
+module Unix # :nodoc:
 
 # Module defining instance functions that will be included and extended into
 # any class or module including/extending module LibPath::Constants::Unix
 module LibPath_Constants_Unix_Methods
 
+	# Defines invalid characters
 	module InvalidCharacters
 
+		# Innately invalid characters
 		module Innate
 
+			# The list of characters
 			LIST	=	[
 
 				"\0",
 			]
+			# The regular expression
 			RE		=	/[#{LIST.map { |m| Regexp.escape m }.join}]/
 		end # module Innate
 
+		# Valid path name separator characters
 		module PathNameSeparators
 
+			# The list of characters
 			LIST	=	[
 
 				'/',
 			]
+			# The regular expression
 			RE		=	/[#{LIST.map { |m| Regexp.escape m }.join}]/
 		end # module PathNameSeparators
 
+		# Valid path separator characters
 		module PathSeparators
 
+			# The list of characters
 			LIST	=	[
 
 				':',
 			]
+			# The regular expression
 			RE		=	/[#{LIST.map { |m| Regexp.escape m }.join}]/
 		end # module PathSeparators
 
+		# Invalid shell characters
 		module Shell
 
+			# The list of characters
 			LIST	=	[
 
 				'*',
@@ -94,12 +106,14 @@ module LibPath_Constants_Unix_Methods
 				'?',
 				'|',
 			]
+			# The regular expression
 			RE		=	/[#{LIST.map { |m| Regexp.escape m }.join}]/
 		end # module Shell
 	end # module InvalidCharacters
 end # module LibPath_Constants_Unix_Methods
 
-def self.extended receiver
+# @!visibility private
+def self.extended receiver # :nodoc:
 
 	receiver.class_eval do
 
@@ -109,7 +123,8 @@ def self.extended receiver
 	$stderr.puts "#{receiver} extended by #{LibPath_Constants_Unix_Methods}" if $DEBUG
 end
 
-def self.included receiver
+# @!visibility private
+def self.included receiver # :nodoc:
 
 	receiver.class_eval do
 

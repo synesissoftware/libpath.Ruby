@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Form::Unix module
 #
 # Created:      8th January 2019
-# Updated:      29th January 2018
+# Updated:      16th April 2019
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -51,9 +51,9 @@
 require 'libpath/constants/unix'
 require 'libpath/diagnostics'
 
-module LibPath
-module Form
-module Unix
+module LibPath # :nodoc:
+module Form # :nodoc:
+module Unix # :nodoc:
 
 # Module defining instance functions that will be included and extended into
 # any class or module including/extending module LibPath::Form::Unix
@@ -181,7 +181,8 @@ module LibPath_Form_Unix_Methods
 
 end # module LibPath_Form_Unix_Methods
 
-def self.extended receiver
+# @!visibility private
+def self.extended receiver # :nodoc:
 
 	receiver.class_eval do
 
@@ -191,7 +192,8 @@ def self.extended receiver
 	$stderr.puts "#{receiver} extended by #{LibPath_Form_Unix_Methods}" if $DEBUG
 end
 
-def self.included receiver
+# @!visibility private
+def self.included receiver # :nodoc:
 
 	receiver.class_eval do
 

@@ -5,7 +5,7 @@
 # Purpose:      LibPath::Util::Unix module
 #
 # Created:      14th January 2019
-# Updated:      30th January 2018
+# Updated:      16th April 2019
 #
 # Home:         http://github.com/synesissoftware/libpath.Ruby
 #
@@ -54,9 +54,9 @@ require 'libpath/form/unix'
 require 'libpath/internal_/array'
 require 'libpath/internal_/unix/form'
 
-module LibPath
-module Util
-module Unix
+module LibPath # :nodoc:
+module Util # :nodoc:
+module Unix # :nodoc:
 
 # Module defining instance functions that will be included and extended into
 # any class or module including/extending module LibPath::Util::Unix
@@ -380,7 +380,8 @@ module LibPath_Util_Unix_Methods
 	end
 end # module LibPath_Util_Unix_Methods
 
-def self.extended receiver
+# @!visibility private
+def self.extended receiver # :nodoc:
 
 	receiver.class_eval do
 
@@ -390,7 +391,8 @@ def self.extended receiver
 	$stderr.puts "#{receiver} extended by #{LibPath_Util_Unix_Methods}" if $DEBUG
 end
 
-def self.included receiver
+# @!visibility private
+def self.included receiver # :nodoc:
 
 	receiver.class_eval do
 

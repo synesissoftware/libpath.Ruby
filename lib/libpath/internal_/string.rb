@@ -1,10 +1,12 @@
 
-module LibPath
-module Internal_
+module LibPath # :nodoc:
+# @!visibility private
+module Internal_ # :nodoc: all
 
-module String
+module String # :nodoc:
 
-	def self.rindex2(s, c1, c2)
+	# @!visibility private
+	def self.rindex2(s, c1, c2) # :nodoc:
 
 		ri_1	=	s.rindex(c1)
 		ri_2	=	s.rindex(c2)

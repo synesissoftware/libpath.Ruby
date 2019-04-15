@@ -2,22 +2,27 @@
 require 'libpath/internal_/string'
 require 'libpath/internal_/windows/drive'
 
-module LibPath
-module Internal_
-module Windows
+module LibPath # :nodoc:
+# @!visibility private
+module Internal_ # :nodoc: all
+module Windows # :nodoc:
 
-module Form
+module Form # :nodoc:
 
 	# [INTERNAL] This function is undocumented, and subject to change at any
 	# time
-	def self.char_is_path_name_separator? c
+	#
+	# @!visibility private
+	def self.char_is_path_name_separator? c # :nodoc:
 
 		'/' == c || '\\' == c
 	end
 
 	# [INTERNAL] This function is undocumented, and subject to change at any
 	# time
-	def self.append_trailing_slash s
+	#
+	# @!visibility private
+	def self.append_trailing_slash s # :nodoc:
 
 		return s if self.char_is_path_name_separator?(s[-1])
 
@@ -26,7 +31,9 @@ module Form
 
 	# [INTERNAL] This function is undocumented, and subject to change at any
 	# time
-	def self.get_trailing_slash s
+	#
+	# @!visibility private
+	def self.get_trailing_slash s # :nodoc:
 
 		last = s[-1]
 
@@ -35,14 +42,18 @@ module Form
 
 	# [INTERNAL] This function is undocumented, and subject to change at any
 	# time
-	def self.has_trailing_slash? s
+	#
+	# @!visibility private
+	def self.has_trailing_slash? s # :nodoc:
 
 		self.char_is_path_name_separator?(s[-1])
 	end
 
 	# [INTERNAL] This function is undocumented, and subject to change at any
 	# time
-	def self.trim_trailing_slash s
+	#
+	# @!visibility private
+	def self.trim_trailing_slash s # :nodoc:
 
 		return s unless self.char_is_path_name_separator?(s[-1])
 
@@ -51,14 +62,18 @@ module Form
 
 	# [INTERNAL] This function is undocumented, and subject to change at any
 	# time
-	def self.elide_redundant_path_name_separators s
+	#
+	# @!visibility private
+	def self.elide_redundant_path_name_separators s # :nodoc:
 
 		s.gsub(/[\\\/]{2,}/, '\\')
 	end
 
 	# [INTERNAL] This function is undocumented, and subject to change at any
 	# time
-	def self.elide_redundant_path_name_separators! s
+	#
+	# @!visibility private
+	def self.elide_redundant_path_name_separators! s # :nodoc:
 
 		s.gsub!(/[\\\/]{2,}/, '\\')
 
@@ -75,7 +90,9 @@ module Form
 	#
 	# === Return
 	# A 3-element array, consisting of [ volume, remainder, form ]
-	def self.get_windows_volume s
+	#
+	# @!visibility private
+	def self.get_windows_volume s # :nodoc:
 
 		# 0. not matched
 		# 1. X:
@@ -166,7 +183,9 @@ module Form
 	# 5. Extension
 	# 6. Directory parts
 	# 7. Directory path parts
-	def self.split_path s
+	#
+	# @!visibility private
+	def self.split_path s # :nodoc:
 
 		f1_volume		=	nil
 		f2_directory	=	nil

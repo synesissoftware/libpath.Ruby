@@ -9,8 +9,8 @@ else
 	require 'libpath/form/unix'
 end
 
-module LibPath
-module Form
+module LibPath # :nodoc:
+module Form # :nodoc:
 
 	if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
 
@@ -22,12 +22,14 @@ module Form
 		include ::LibPath::Form::Unix
 	end
 
-	def self.extended receiver
+	# @!visibility private
+	def self.extended receiver # :nodoc:
 
 		$stderr.puts "#{receiver} extended by #{self}" if $DEBUG
 	end
 
-	def self.included receiver
+	# @!visibility private
+	def self.included receiver # :nodoc:
 
 		$stderr.puts "#{receiver} included #{self}" if $DEBUG
 	end

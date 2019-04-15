@@ -1,12 +1,18 @@
 
-module LibPath
-module Internal_
+# :stopdoc:
 
-module Platform
+module LibPath # :nodoc:
+# @!visibility private
+module Internal_ # :nodoc: all
 
-	module OS_Internal_
+# @!visibility private
+module Platform # :nodoc: all
 
-		def self.win_platform_?
+	# @!visibility private
+	module OS_Internal_ # :nodoc: all
+
+		# @!visibility private
+		def self.win_platform_? # :nodoc:
 
 			return true if 'Windows_NT' == ENV['OS']
 
@@ -27,9 +33,11 @@ module Platform
 
 	end # module OS_Internal_
 
-	module Constants
+	# @!visibility private
+	module Constants # :nodoc: all
 
-		PLATFORM_IS_WINDOWS	=	OS_Internal_.win_platform_?
+		# @!visibility private
+		PLATFORM_IS_WINDOWS	=	OS_Internal_.win_platform_? # :nodoc:
 
 	end # module Constants
 
@@ -37,6 +45,8 @@ end # module Platform
 
 end # module Internal_
 end # module LibPath
+
+# :startdoc:
 
 # ############################## end of file ############################# #
 
