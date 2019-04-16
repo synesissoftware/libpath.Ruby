@@ -2,9 +2,12 @@
 module LibPath # :nodoc:
 # @!visibility private
 module Internal_ # :nodoc: all
+# @!visibility private
 module Windows # :nodoc:
+# @!visibility private
 module Drive # :nodoc:
 
+# @!visibility private
 module Constants # :nodoc:
 
 	DRIVE_LETTERS = [

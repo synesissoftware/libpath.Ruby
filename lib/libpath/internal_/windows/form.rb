@@ -5,8 +5,10 @@ require 'libpath/internal_/windows/drive'
 module LibPath # :nodoc:
 # @!visibility private
 module Internal_ # :nodoc: all
+# @!visibility private
 module Windows # :nodoc:
 
+# @!visibility private
 module Form # :nodoc:
 
 	# [INTERNAL] This function is undocumented, and subject to change at any
@@ -278,4 +280,7 @@ end # module Form
 end # module Windows
 end # module Internal_
 end # module LibPath
+
+# ############################## end of file ############################# #
+
 
