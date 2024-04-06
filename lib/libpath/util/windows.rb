@@ -1,16 +1,17 @@
 
 # ######################################################################## #
-# File:         libpath/util/windows.rb
+# File:     libpath/util/windows.rb
 #
-# Purpose:      LibPath::Util::Windows module
+# Purpose:  LibPath::Util::Windows module
 #
-# Created:      10th January 2019
-# Updated:      16th April 2019
+# Created:  10th January 2019
+# Updated:  6th April 2024
 #
-# Home:         http://github.com/synesissoftware/libpath.Ruby
+# Home:     http://github.com/synesissoftware/libpath.Ruby
 #
-# Author:       Matthew Wilson
+# Author:   Matthew Wilson
 #
+# Copyright (c) 2019-2024, Matthew Wilson and Synesis Information Systems
 # Copyright (c) 2019, Matthew Wilson and Synesis Software
 # All rights reserved.
 #
@@ -44,593 +45,592 @@
 # ######################################################################## #
 
 
-
 =begin
 =end
-
 
 require 'libpath/diagnostics'
 require 'libpath/form/windows'
 require 'libpath/internal_/array'
 require 'libpath/internal_/windows/form'
 
+
 module LibPath # :nodoc:
 module Util # :nodoc:
 module Windows # :nodoc:
 
-# Module defining instance functions that will be included and extended into
-# any class or module including/extending module LibPath::Util::Windows
-module LibPath_Util_Windows_Methods
+  # Module defining instance functions that will be included and extended into
+  # any class or module including/extending module LibPath::Util::Windows
+  module LibPath_Util_Windows_Methods
 
-	# Combines a number of path parts into a single path, ignoring any parts
-	# that are preceded by an absolute part
-	#
-	# Because Windows paths' absolute nature comprises two elements - the
-	# volume(/drive) and the root directory - it is possible to combine
-	# elements where either the volume or the root directory is missing.
-	#
-	# NOTE: The behaviour of this method is undefined if any of the parts
-	# are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
-	def combine_paths *args, **options
+    # Combines a number of path parts into a single path, ignoring any parts
+    # that are preceded by an absolute part
+    #
+    # Because Windows paths' absolute nature comprises two elements - the
+    # volume(/drive) and the root directory - it is possible to combine
+    # elements where either the volume or the root directory is missing.
+    #
+    # NOTE: The behaviour of this method is undefined if any of the parts
+    # are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
+    def combine_paths *args, **options
 
-		_Form_Windows			=	Form::Windows
-		_Internal_Windows_Form	=	Internal_::Windows::Form
+      _Form_Windows           = Form::Windows
+      _Internal_Windows_Form  = Internal_::Windows::Form
 
-		args.each_with_index { |arg, index| Diagnostics.check_string_parameter(arg, "arg#{index}", allow_nil: true) } if $DEBUG
+      args.each_with_index { |arg, index| Diagnostics.check_string_parameter(arg, "arg#{index}", allow_nil: true) } if $DEBUG
 
-		first	=	[]
-		dirs	=	[]
-		last	=	[]
+      first = []
+      dirs  = []
+      last  = []
 
-		if options[:elide_single_dots]
+      if options[:elide_single_dots]
 
-			args	=	args.map do |arg|
+        args = args.map do |arg|
 
-				case arg
-				when '.', './'
+          case arg
+          when '.', './'
 
-					nil
-				else
+            nil
+          else
 
-					arg
-				end
-			end
-		end
+            arg
+          end
+        end
+      end
 
-		args	=	args.reject { |arg| arg.nil? || arg.empty? }
+      args    = args.reject { |arg| arg.nil? || arg.empty? }
 
-		rix_abs	=	nil
-		rix_drv	=	nil
-		rix_dir	=	nil
+      rix_abs = nil
+      rix_drv = nil
+      rix_dir = nil
 
-		args.each_with_index do |arg, index|
+      args.each_with_index do |arg, index|
 
-			vol, rem, _ = _Internal_Windows_Form.get_windows_volume arg
+        vol, rem, _ = _Internal_Windows_Form.get_windows_volume arg
 
-			rem = nil unless rem && _Internal_Windows_Form.char_is_path_name_separator?(rem[0])
+        rem = nil unless rem && _Internal_Windows_Form.char_is_path_name_separator?(rem[0])
 
-			if vol
+        if vol
 
-				if rem
+          if rem
 
-					rix_abs	=	index
-				else
+            rix_abs = index
+          else
 
-					rix_drv	=	index
-				end
-			elsif rem
+            rix_drv = index
+          end
+        elsif rem
 
-				rix_dir	=	index
-			end
-		end
+          rix_dir = index
+        end
+      end
 
-		rix_drv	=	nil if (rix_drv || -1) <= (rix_abs || -1)
-		rix_dir	=	nil if (rix_dir || -1) <= (rix_abs || -1)
+      rix_drv = nil if (rix_drv || -1) <= (rix_abs || -1)
+      rix_dir = nil if (rix_dir || -1) <= (rix_abs || -1)
 
-		if rix_drv && rix_dir && rix_abs
+      if rix_drv && rix_dir && rix_abs
 
-			if rix_abs < rix_drv && rix_abs < rix_dir
+        if rix_abs < rix_drv && rix_abs < rix_dir
 
-				rix_abs	+=	1
-				args	=	args[rix_abs..-1]
-				rix_drv	-=	rix_abs
-				rix_dir	-=	rix_abs
-				rix_abs	=	nil
-			end
-		end
+          rix_abs +=  1
+          args    =   args[rix_abs..-1]
+          rix_drv -=  rix_abs
+          rix_dir -=  rix_abs
+          rix_abs =   nil
+        end
+      end
 
-		if rix_drv.nil? && rix_dir.nil?
+      if rix_drv.nil? && rix_dir.nil?
 
-			if rix_abs
+        if rix_abs
 
-				args	=	args[rix_abs..-1]
-			end
+          args = args[rix_abs..-1]
+        end
 
-			dirs	=	args
-			last	<<	args.pop unless args.empty?
-		else
+        dirs  =   args
+        last  <<  args.pop unless args.empty?
+      else
 
-			if false
+        if false
 
-				;
-			elsif rix_drv
+          ;
+        elsif rix_drv
 
-				if rix_dir
+          if rix_dir
 
-					drv		=	args.delete_at rix_drv
-					rix_dir	-=	1 if rix_drv < rix_dir
-					dir		=	args.delete_at rix_dir
+            drv     =   args.delete_at rix_drv
+            rix_dir -=  1 if rix_drv < rix_dir
+            dir     =   args.delete_at rix_dir
 
-					args	=	args[rix_dir..-1]
+            args = args[rix_dir..-1]
 
-					if dir.size > 1
+            if dir.size > 1
 
-						args.unshift dir[1..-1]
-						dir	=	dir[0]
-					end
+              args.unshift dir[1..-1]
+              dir = dir[0]
+            end
 
-					root	=	_Internal_Windows_Form.append_trailing_slash("#{drv}#{dir}")
+            root  =   _Internal_Windows_Form.append_trailing_slash("#{drv}#{dir}")
 
-					first	<<	root
-					last	<<	args.pop unless args.empty?
-					dirs	=	args
-				elsif rix_abs
+            first <<  root
+            last  <<  args.pop unless args.empty?
+            dirs  =   args
+          elsif rix_abs
 
-					drv		=	args.delete_at rix_drv
-					rix_abs	-=	1 if rix_drv < rix_abs
-					abs		=	args.delete_at rix_abs
+            drv     =   args.delete_at rix_drv
+            rix_abs -=  1 if rix_drv < rix_abs
+            abs     =   args.delete_at rix_abs
 
-					_, _, dir, bas, _, _, _, _	=	_Internal_Windows_Form.split_path abs
+            _, _, dir, bas, _, _, _, _ = _Internal_Windows_Form.split_path abs
 
-					args	=	args[rix_abs..-1]
+            args = args[rix_abs..-1]
 
-					if dir.size > 1
+            if dir.size > 1
 
-						args.unshift dir[1..-1]
-						dir	=	dir[0]
-					end
+              args.unshift dir[1..-1]
+              dir = dir[0]
+            end
 
-					root	=	_Internal_Windows_Form.append_trailing_slash("#{drv}#{dir}#{bas}")
+            root  =   _Internal_Windows_Form.append_trailing_slash("#{drv}#{dir}#{bas}")
 
-					first	<<	root
-					last	<<	args.pop unless args.empty?
-					dirs	=	args
-				else
+            first <<  root
+            last  <<  args.pop unless args.empty?
+            dirs  =   args
+          else
 
-					first	<<	args.delete_at(rix_drv)
-					last	<<	args.pop unless args.empty?
-					dirs	=	args
-				end
-			elsif rix_dir
+            first <<  args.delete_at(rix_drv)
+            last  <<  args.pop unless args.empty?
+            dirs  =   args
+          end
+        elsif rix_dir
 
-				if rix_abs
+          if rix_abs
 
-					abs		=	args.delete_at rix_abs
-					rix_dir	-=	1 if rix_abs < rix_dir
-					dir		=	args.delete_at rix_dir
+            abs     =   args.delete_at rix_abs
+            rix_dir -=  1 if rix_abs < rix_dir
+            dir     =   args.delete_at rix_dir
 
-					_, vol, _, _, _, _, _, _	=	_Internal_Windows_Form.split_path abs
+            _, vol, _, _, _, _, _, _ = _Internal_Windows_Form.split_path abs
 
-					args	=	args[rix_dir..-1]
+            args = args[rix_dir..-1]
 
-					root	=	_Internal_Windows_Form.append_trailing_slash("#{vol}#{dir}")
+            root  =   _Internal_Windows_Form.append_trailing_slash("#{vol}#{dir}")
 
-					first	<<	root
-					last	<<	args.pop unless args.empty?
-					dirs	=	args
-				else
+            first <<  root
+            last  <<  args.pop unless args.empty?
+            dirs  =   args
+          else
 
-					args	=	args[rix_dir..-1]
-					last	<<	args.pop unless args.empty?
-					dirs	=	args
-				end
-			else
+            args  =   args[rix_dir..-1]
+            last  <<  args.pop unless args.empty?
+            dirs  =   args
+          end
+        else
 
-				;
-			end
-		end
+          ;
+        end
+      end
 
-		dirs	=	dirs.map { |el| _Internal_Windows_Form.append_trailing_slash el }
+      dirs = dirs.map { |el| _Internal_Windows_Form.append_trailing_slash el }
 
-		(first + dirs + last).join('')
-	end
+      (first + dirs + last).join('')
+    end
 
-	# Obtains the form of the given +path+ relative to the given +origin+
-	#
-	# NOTE: The behaviour of this method is undefined if any of the parts
-	# are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
-	#
-	#
-	# === Signature
-	#
-	# * *Options:*
-	#  +:home+:: (String)
-	#  +:locator+:: (boolean)
-	#  +:make_canonical+:: (boolean)
-	#  +:pwd+:: (String)
-	def derive_relative_path origin, path, **options
+    # Obtains the form of the given +path+ relative to the given +origin+
+    #
+    # NOTE: The behaviour of this method is undefined if any of the parts
+    # are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
+    #
+    #
+    # === Signature
+    #
+    # * *Options:*
+    #  +:home+:: (String)
+    #  +:locator+:: (boolean)
+    #  +:make_canonical+:: (boolean)
+    #  +:pwd+:: (String)
+    def derive_relative_path origin, path, **options
 
-		return path if origin.nil? || origin.empty?
-		return path if path.nil? || path.empty?
+      return path if origin.nil? || origin.empty?
+      return path if path.nil? || path.empty?
 
-		_Form_Windows			=	Form::Windows
-		_Util_Windows			=	Util::Windows
-		_Internal_Windows_Form	=	Internal_::Windows::Form
+      _Form_Windows           = Form::Windows
+      _Util_Windows           = Util::Windows
+      _Internal_Windows_Form  = Internal_::Windows::Form
 
-		_MPA_COMMON_OPTIONS	=	%i{ home locator pwd }
+      _MPA_COMMON_OPTIONS = %i{ home locator pwd }
 
-		tr_sl					=	_Internal_Windows_Form.get_trailing_slash(path)
+      tr_sl = _Internal_Windows_Form.get_trailing_slash(path)
 
-		# Possibly naive home-correction
+      # Possibly naive home-correction
 
-		return derive_relative_path(absolute_path(origin), path, **options) if _Form_Windows.path_is_homed?(origin)
-		return derive_relative_path(origin, absolute_path(path), **options) if _Form_Windows.path_is_homed?(path)
+      return derive_relative_path(absolute_path(origin), path, **options) if _Form_Windows.path_is_homed?(origin)
+      return derive_relative_path(origin, absolute_path(path), **options) if _Form_Windows.path_is_homed?(path)
 
 
-		o_vol, o_rem, _ = _Internal_Windows_Form.get_windows_volume origin
-		p_vol, p_rem, _ = _Internal_Windows_Form.get_windows_volume path
+      o_vol, o_rem, _ = _Internal_Windows_Form.get_windows_volume origin
+      p_vol, p_rem, _ = _Internal_Windows_Form.get_windows_volume path
 
-		if o_vol && p_vol
+      if o_vol && p_vol
 
-			# always give absolute answer when 'volume's are different
+        # always give absolute answer when 'volume's are different
 
-			if o_vol != p_vol
+        if o_vol != p_vol
 
-				if options[:make_path_canonical]
+          if options[:make_path_canonical]
 
-					path	=	_Util_Windows.make_path_canonical(path, make_slashes_canonical: true)
-				else
+            path = _Util_Windows.make_path_canonical(path, make_slashes_canonical: true)
+          else
 
-					path	=	path.tr('/', '\\')
-				end
+            path = path.tr('/', '\\')
+          end
 
-				return path
-			end
-		end
+          return path
+        end
+      end
 
 
-		o_is_rooted	=	o_rem && _Internal_Windows_Form.char_is_path_name_separator?(o_rem[0])
-		p_is_rooted	=	p_rem && _Internal_Windows_Form.char_is_path_name_separator?(p_rem[0])
+      o_is_rooted = o_rem && _Internal_Windows_Form.char_is_path_name_separator?(o_rem[0])
+      p_is_rooted = p_rem && _Internal_Windows_Form.char_is_path_name_separator?(p_rem[0])
 
-		o_is_abs	=	o_vol && o_is_rooted
-		p_is_abs	=	p_vol && p_is_rooted
+      o_is_abs = o_vol && o_is_rooted
+      p_is_abs = p_vol && p_is_rooted
 
-		mpa_opts	=	options.select { |k| _MPA_COMMON_OPTIONS.include?(k) }
+      mpa_opts = options.select { |k| _MPA_COMMON_OPTIONS.include?(k) }
 
-		if o_is_abs != p_is_abs || o_is_rooted != p_is_rooted
+      if o_is_abs != p_is_abs || o_is_rooted != p_is_rooted
 
-			origin	=	_Util_Windows.make_path_absolute(origin, **mpa_opts) unless o_is_abs
-			path	=	_Util_Windows.make_path_absolute(path, **mpa_opts) unless p_is_abs
+        origin  = _Util_Windows.make_path_absolute(origin, **mpa_opts) unless o_is_abs
+        path    = _Util_Windows.make_path_absolute(path, **mpa_opts) unless p_is_abs
 
-			return derive_relative_path(origin, path, **options)
-		end
+        return derive_relative_path(origin, path, **options)
+      end
 
-		origin	=	_Util_Windows.make_path_canonical(origin, make_slashes_canonical: true)
-		path	=	_Util_Windows.make_path_canonical(path, make_slashes_canonical: true)
+      origin  = _Util_Windows.make_path_canonical(origin, make_slashes_canonical: true)
+      path    = _Util_Windows.make_path_canonical(path, make_slashes_canonical: true)
 
-		return '.' + tr_sl.to_s if origin == path
-		return path if '.\\' == origin
+      return '.' + tr_sl.to_s if origin == path
+      return path if '.\\' == origin
 
-		if o_is_abs != p_is_abs || '.\\' == path
+      if o_is_abs != p_is_abs || '.\\' == path
 
-			origin	=	_Util_Windows.make_path_absolute(origin, make_canonical: true, **options.select { |k| _MPA_COMMON_OPTIONS.include?(k) })
-			path	=	_Util_Windows.make_path_absolute(path, make_canonical: true, **options.select { |k| _MPA_COMMON_OPTIONS.include?(k) })
-		end
+        origin  = _Util_Windows.make_path_absolute(origin, make_canonical: true, **options.select { |k| _MPA_COMMON_OPTIONS.include?(k) })
+        path    = _Util_Windows.make_path_absolute(path, make_canonical: true, **options.select { |k| _MPA_COMMON_OPTIONS.include?(k) })
+      end
 
 
-		_, _, _, o3_basename, _, _, o6_parts, _	=	_Internal_Windows_Form.split_path(origin)
-		_, _, _, p3_basename, _, _, p6_parts, _	=	_Internal_Windows_Form.split_path(path)
+      _, _, _, o3_basename, _, _, o6_parts, _ = _Internal_Windows_Form.split_path(origin)
+      _, _, _, p3_basename, _, _, p6_parts, _ = _Internal_Windows_Form.split_path(path)
 
-		o_parts	=	o6_parts
-		o_parts	<<	o3_basename if o3_basename && '.' != o3_basename
+      o_parts =   o6_parts
+      o_parts <<  o3_basename if o3_basename && '.' != o3_basename
 
-		p_parts	=	p6_parts
-		p_parts	<<	p3_basename if p3_basename && '.' != p3_basename
+      p_parts =   p6_parts
+      p_parts <<  p3_basename if p3_basename && '.' != p3_basename
 
 
-		while true
+      while true
 
-			break if o_parts.empty?
-			break if p_parts.empty?
+        break if o_parts.empty?
+        break if p_parts.empty?
 
-			o_part	=	o_parts[0]
-			p_part	=	p_parts[0]
+        o_part = o_parts[0]
+        p_part = p_parts[0]
 
-			if 1 == o_parts.size || 1 == p_parts.size
+        if 1 == o_parts.size || 1 == p_parts.size
 
-				o_part	=	_Internal_Windows_Form.append_trailing_slash o_part
-				p_part	=	_Internal_Windows_Form.append_trailing_slash p_part
-			end
+          o_part = _Internal_Windows_Form.append_trailing_slash o_part
+          p_part = _Internal_Windows_Form.append_trailing_slash p_part
+        end
 
-			parts_equal = false
+        parts_equal = false
 
-			if o_part.size == p_part.size
+        if o_part.size == p_part.size
 
-				o_part	=	o_part.tr('/', '\\') if o_part.include? '/'
-				p_part	=	p_part.tr('/', '\\') if p_part.include? '/'
+          o_part = o_part.tr('/', '\\') if o_part.include? '/'
+          p_part = p_part.tr('/', '\\') if p_part.include? '/'
 
-				parts_equal = o_part == p_part
-			end
+          parts_equal = o_part == p_part
+        end
 
 
-			if parts_equal
+        if parts_equal
 
-				o_parts.shift
-				p_parts.shift
-			else
+          o_parts.shift
+          p_parts.shift
+        else
 
-				break
-			end
-		end
+          break
+        end
+      end
 
 
-		return '.' + tr_sl.to_s if 0 == (o_parts.size + p_parts.size)
+      return '.' + tr_sl.to_s if 0 == (o_parts.size + p_parts.size)
 
-		return o_parts.map { |rp| '..' }.join('\\') + (tr_sl || (o_parts.size > 0 ? '\\' : nil)).to_s if p_parts.empty?
+      return o_parts.map { |rp| '..' }.join('\\') + (tr_sl || (o_parts.size > 0 ? '\\' : nil)).to_s if p_parts.empty?
 
 
-		ar		=	[ '..' ] * o_parts.size + p_parts
-		last	=	ar.pop
-		ar		=	ar.map { |el| _Internal_Windows_Form.append_trailing_slash(el) }
+      ar    = [ '..' ] * o_parts.size + p_parts
+      last  = ar.pop
+      ar    = ar.map { |el| _Internal_Windows_Form.append_trailing_slash(el) }
 
-		last[-1] = '\\' if '/' == last[-1]
+      last[-1] = '\\' if '/' == last[-1]
 
-		ar.join + last.to_s
-	end
+      ar.join + last.to_s
+    end
 
-	# Returns a "compare path" for the given absolute path
-	#
-	# A compare path is one that would refer definitely to a given entry,
-	# regardless of such operating system-specific issues such as
-	# case-insensitivity
-	#
-	# NOTE: the function does not make +path+ absolute. That is up to the
-	# caller if required
-	#
-	# NOTE: The behaviour of this method is undefined if any of the parts
-	# are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
-	#
-	# === Signature
-	#
-	# * *Parameters:*
-	#  - +path+:: (String) The path whose definitive equivalent is to be
-	#     obtained
-	#  - +options+:: (Hash) options
-	#
-	# * *Options:*
-	#  - +:splits+:: ([ String ]) An array of string-like objects. If the
-	#     object at index 1 exists and supports the +form+ attribute and
-	#     that returns one of { +:form_2+, +:form_3+, +:form_4+, +:form_5+,
-	#     +:form_6+ } then it is assumed to be the volume, and the objects
-	#     at indexes 2 and 3 are assumed to be the directory and the
-	#     basename, respectively. In this case, the compare path is
-	#     constructed from a UNC-respecting form
-	def make_compare_path path, **options
+    # Returns a "compare path" for the given absolute path
+    #
+    # A compare path is one that would refer definitely to a given entry,
+    # regardless of such operating system-specific issues such as
+    # case-insensitivity
+    #
+    # NOTE: the function does not make +path+ absolute. That is up to the
+    # caller if required
+    #
+    # NOTE: The behaviour of this method is undefined if any of the parts
+    # are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
+    #
+    # === Signature
+    #
+    # * *Parameters:*
+    #  - +path+:: (String) The path whose definitive equivalent is to be
+    #     obtained
+    #  - +options+:: (Hash) options
+    #
+    # * *Options:*
+    #  - +:splits+:: ([ String ]) An array of string-like objects. If the
+    #     object at index 1 exists and supports the +form+ attribute and
+    #     that returns one of { +:form_2+, +:form_3+, +:form_4+, +:form_5+,
+    #     +:form_6+ } then it is assumed to be the volume, and the objects
+    #     at indexes 2 and 3 are assumed to be the directory and the
+    #     basename, respectively. In this case, the compare path is
+    #     constructed from a UNC-respecting form
+    def make_compare_path path, **options
 
-		if splits = options[:splits]
+      if splits = options[:splits]
 
-			if volume = splits[1]
+        if volume = splits[1]
 
-				if volume.respond_to?(:form)
+          if volume.respond_to?(:form)
 
-					case volume.form
-					when :form_2, :form_3, :form_4, :form_5, :form_6
+            case volume.form
+            when :form_2, :form_3, :form_4, :form_5, :form_6
 
-						directory	=	splits[2] || ''
-						basename	=	splits[3] || ''
+              directory = splits[2] || ''
+              basename  = splits[3] || ''
 
-						return "#{volume}#{directory.upcase}#{basename.upcase}"
-					else
+              return "#{volume}#{directory.upcase}#{basename.upcase}"
+            else
 
-					end
-				end
-			end
-		end
+            end
+          end
+        end
+      end
 
-		path.upcase
-	end
+      path.upcase
+    end
 
-	# NOTE: The behaviour of this method is undefined if any of the parts
-	# are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
-	#
-	def make_path_absolute path, **options
+    # NOTE: The behaviour of this method is undefined if any of the parts
+    # are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
+    #
+    def make_path_absolute path, **options
 
-		_Form_Windows			=	Form::Windows
-		_Internal_Windows_Form	=	Internal_::Windows::Form
+      _Form_Windows           = Form::Windows
+      _Internal_Windows_Form  = Internal_::Windows::Form
 
-		Diagnostics.check_string_parameter(path, "path") if $DEBUG
-		Diagnostics.check_options(options, known: %i{ home locator make_canonical pwd }) if $DEBUG
+      Diagnostics.check_string_parameter(path, "path") if $DEBUG
+      Diagnostics.check_options(options, known: %i{ home locator make_canonical pwd }) if $DEBUG
 
-		return path if path.nil? || path.empty?
+      return path if path.nil? || path.empty?
 
-		r	=	nil
+      r = nil
 
-		if false
+      if false
 
-			;
-		elsif _Form_Windows.path_is_homed? path
+        ;
+      elsif _Form_Windows.path_is_homed? path
 
-			home	=	nil
-			home	||=	options[:home]
-			home	||=	options[:locator].home if options.has_key?(:locator)
-			home	||=	Dir.home
+        home  =   nil
+        home  ||= options[:home]
+        home  ||= options[:locator].home if options.has_key?(:locator)
+        home  ||= Dir.home
 
-			unless _Internal_Windows_Form.has_trailing_slash? home
+        unless _Internal_Windows_Form.has_trailing_slash? home
 
-				home = home + path[1].to_s
-			end
+          home = home + path[1].to_s
+        end
 
-			r = combine_paths(home, path[2..-1])
-		elsif _Form_Windows.path_is_UNC? path
+        r = combine_paths(home, path[2..-1])
+      elsif _Form_Windows.path_is_UNC? path
 
-			r	=	path
-		elsif _Form_Windows.path_is_absolute? path
+        r = path
+      elsif _Form_Windows.path_is_absolute? path
 
-			r	=	path
-		elsif _Form_Windows.path_is_rooted? path
+        r = path
+      elsif _Form_Windows.path_is_rooted? path
 
-			pwd	=	nil
-			pwd	||=	options[:pwd]
-			pwd	||=	options[:locator].pwd if options.has_key?(:locator)
-			pwd	||=	Dir.pwd
+        pwd =   nil
+        pwd ||= options[:pwd]
+        pwd ||= options[:locator].pwd if options.has_key?(:locator)
+        pwd ||= Dir.pwd
 
-			r = pwd[0..1] + path
-		else
+        r = pwd[0..1] + path
+      else
 
-			pwd	=	nil
-			pwd	||=	options[:pwd]
-			pwd	||=	options[:locator].pwd if options.has_key?(:locator)
-			pwd	||=	Dir.pwd
+        pwd =   nil
+        pwd ||= options[:pwd]
+        pwd ||= options[:locator].pwd if options.has_key?(:locator)
+        pwd ||= Dir.pwd
 
-			r = combine_paths(pwd, path, elide_single_dots: false)
-		end
+        r = combine_paths(pwd, path, elide_single_dots: false)
+      end
 
-		if options[:make_canonical]
+      if options[:make_canonical]
 
-			r	=	make_path_canonical r
-		else
+        r = make_path_canonical r
+      else
 
-			vol, rem, _	=	_Internal_Windows_Form.get_windows_volume r
+        vol, rem, _ = _Internal_Windows_Form.get_windows_volume r
 
-			_Internal_Windows_Form.elide_redundant_path_name_separators! rem
+        _Internal_Windows_Form.elide_redundant_path_name_separators! rem
 
-			r			=	"#{vol}#{rem}"
-		end
+        r = "#{vol}#{rem}"
+      end
 
-		return r
-	end
+      return r
+    end
 
-	# Converts a path into canonical form, which is to say that all possible
-	# dots directory parts are removed:
-	#
-	# - single-dot parts - './' or '.\\' - are all removed
-	# - double-dot parts - '../' or '..\\' - are removed where they follow a
-	#    non-dots directory part, or where they follow the root
-	#
-	# NOTE: The behaviour of this method is undefined if any of the parts
-	# are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
-	#
-	# === Signature
-	#
-	# * *Parameters:*
-	#   - +path+:: (String) The path to be evaluated. May not be +nil+
-	#
-	# * *Options:*
-	#   - +:make_slashes_canonical+:: (boolean) Determines whether to
-	#      additionally convert all forward slashes to backslashes
-	def make_path_canonical path, **options
+    # Converts a path into canonical form, which is to say that all possible
+    # dots directory parts are removed:
+    #
+    # - single-dot parts - './' or '.\\' - are all removed
+    # - double-dot parts - '../' or '..\\' - are removed where they follow a
+    #    non-dots directory part, or where they follow the root
+    #
+    # NOTE: The behaviour of this method is undefined if any of the parts
+    # are malformed. See +::LibPath::Form::Windows::name_is_malformed?+
+    #
+    # === Signature
+    #
+    # * *Parameters:*
+    #   - +path+:: (String) The path to be evaluated. May not be +nil+
+    #
+    # * *Options:*
+    #   - +:make_slashes_canonical+:: (boolean) Determines whether to
+    #      additionally convert all forward slashes to backslashes
+    def make_path_canonical path, **options
 
-		Diagnostics.check_string_parameter(path, "path") if $DEBUG
+      Diagnostics.check_string_parameter(path, "path") if $DEBUG
 
-		if path.include?('/') && options[:make_slashes_canonical]
+      if path.include?('/') && options[:make_slashes_canonical]
 
-			path = path.tr '/', '\\'
-		end
+        path = path.tr '/', '\\'
+      end
 
-		return path unless '.' == path[-1] || path =~ /[.\\\/][\\\/]/
+      return path unless '.' == path[-1] || path =~ /[.\\\/][\\\/]/
 
-		_Form	=	::LibPath::Internal_::Windows::Form
-		_Array	=	::LibPath::Internal_::Array
+      _Form   = ::LibPath::Internal_::Windows::Form
+      _Array  = ::LibPath::Internal_::Array
 
-		path	=	path[0...-1] if '.' == path[-1] && _Form.char_is_path_name_separator?(path[-2])
+      path = path[0...-1] if '.' == path[-1] && _Form.char_is_path_name_separator?(path[-2])
 
 
-		f0_path, f1_volume, f2_directory, f3_basename, _, _, f6_dir_parts, _ = _Form.split_path path
+      f0_path, f1_volume, f2_directory, f3_basename, _, _, f6_dir_parts, _ = _Form.split_path path
 
-		if f6_dir_parts.empty?
+      if f6_dir_parts.empty?
 
-			case f3_basename
-			when '.'
+        case f3_basename
+        when '.'
 
-				return "#{f1_volume}.\\"
-			when '..'
+          return "#{f1_volume}.\\"
+        when '..'
 
-				return "#{f1_volume}..\\"
-			else
+          return "#{f1_volume}..\\"
+        else
 
-				return f0_path
-			end
-		end
+          return f0_path
+        end
+      end
 
-		last_slash = nil
+      last_slash = nil
 
-		case f3_basename
-		when '.', '..'
+      case f3_basename
+      when '.', '..'
 
-			f6_dir_parts	<<	f3_basename + '\\'
-			basename		=	nil
-		when nil
+        f6_dir_parts  <<  f3_basename + '\\'
+        basename      =   nil
+      when nil
 
-			last_slash		=	_Form.get_trailing_slash(f2_directory) || '\\'
-		else
+        last_slash = _Form.get_trailing_slash(f2_directory) || '\\'
+      else
 
-			basename		=	f3_basename
-		end
+        basename = f3_basename
+      end
 
-		is_rooted	=	_Form.char_is_path_name_separator?(f2_directory[0])
+      is_rooted = _Form.char_is_path_name_separator?(f2_directory[0])
 
-		new_parts	=	f6_dir_parts.dup
-		new_parts.reject! { |p| '.\\' == p || './' == p }
-		ix_nodots	=	new_parts.index { |p| '../' != p && '..\\' != p } || new_parts.size
-		ix_2dots	=	_Array.index2(new_parts, '../', '..\\', ix_nodots)
+      new_parts = f6_dir_parts.dup
+      new_parts.reject! { |p| '.\\' == p || './' == p }
+      ix_nodots = new_parts.index { |p| '../' != p && '..\\' != p } || new_parts.size
+      ix_2dots  = _Array.index2(new_parts, '../', '..\\', ix_nodots)
 
-		return "#{f1_volume}#{new_parts.join}#{basename}" unless new_parts.size != f6_dir_parts.size || ix_2dots
+      return "#{f1_volume}#{new_parts.join}#{basename}" unless new_parts.size != f6_dir_parts.size || ix_2dots
 
-		while (ix_2dots || 0) > 0
+      while (ix_2dots || 0) > 0
 
-			new_parts.delete_at(ix_2dots - 0)
-			new_parts.delete_at(ix_2dots - 1) if ix_2dots != 1 || !is_rooted
+        new_parts.delete_at(ix_2dots - 0)
+        new_parts.delete_at(ix_2dots - 1) if ix_2dots != 1 || !is_rooted
 
-			ix_nodots	=	new_parts.index { |p| '../' != p && '..\\' != p } or break
-			ix_2dots	=	_Array.index2(new_parts, '../', '..\\', ix_nodots)
-		end
+        ix_nodots = new_parts.index { |p| '../' != p && '..\\' != p } or break
+        ix_2dots  = _Array.index2(new_parts, '../', '..\\', ix_nodots)
+      end
 
-		if new_parts.empty? && (basename || '').empty?
+      if new_parts.empty? && (basename || '').empty?
 
-			case f3_basename
-			when nil, '.', '..'
+        case f3_basename
+        when nil, '.', '..'
 
-				return '.' + (last_slash || '\\').to_s
-			else
+          return '.' + (last_slash || '\\').to_s
+        else
 
-				return '.'
-			end
-			return '.' + last_slash.to_s
-		end
+          return '.'
+        end
+        return '.' + last_slash.to_s
+      end
 
-		return f1_volume.to_s + new_parts.join('') + basename.to_s
-	end
-end # module LibPath_Util_Windows_Methods
+      return f1_volume.to_s + new_parts.join('') + basename.to_s
+    end
+  end # module LibPath_Util_Windows_Methods
 
-# @!visibility private
-def self.extended receiver # :nodoc:
+  # @!visibility private
+  def self.extended receiver # :nodoc:
 
-	receiver.class_eval do
+    receiver.class_eval do
 
-		extend LibPath_Util_Windows_Methods
-	end
+      extend LibPath_Util_Windows_Methods
+    end
 
-	$stderr.puts "#{receiver} extended by #{LibPath_Util_Windows_Methods}" if $DEBUG
-end
+    $stderr.puts "#{receiver} extended by #{LibPath_Util_Windows_Methods}" if $DEBUG
+  end
 
-# @!visibility private
-def self.included receiver # :nodoc:
+  # @!visibility private
+  def self.included receiver # :nodoc:
 
-	receiver.class_eval do
+    receiver.class_eval do
 
-		include LibPath_Util_Windows_Methods
-	end
+      include LibPath_Util_Windows_Methods
+    end
 
-	$stderr.puts "#{receiver} included #{LibPath_Util_Windows_Methods}" if $DEBUG
-end
+    $stderr.puts "#{receiver} included #{LibPath_Util_Windows_Methods}" if $DEBUG
+  end
 
-extend LibPath_Util_Windows_Methods
-include LibPath_Util_Windows_Methods
+  extend LibPath_Util_Windows_Methods
+  include LibPath_Util_Windows_Methods
 
 end # module Windows
 end # module Util
 end # module LibPath
 
-# ############################## end of file ############################# #
 
+# ############################## end of file ############################# #
 

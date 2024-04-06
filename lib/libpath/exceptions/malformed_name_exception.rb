@@ -1,16 +1,17 @@
 
 # ######################################################################## #
-# File:         libpath/exceptions/malformed_name_exception.rb
+# File:     libpath/exceptions/malformed_name_exception.rb
 #
-# Purpose:      MalformedNameException class
+# Purpose:  MalformedNameException class
 #
-# Created:      30th January 2019
-# Updated:      16th April 2019
+# Created:  30th January 2019
+# Updated:  6th April 2024
 #
-# Home:         http://github.com/synesissoftware/libpath.Ruby
+# Home:     http://github.com/synesissoftware/libpath.Ruby
 #
-# Author:       Matthew Wilson
+# Author:   Matthew Wilson
 #
+# Copyright (c) 2019-2024, Matthew Wilson and Synesis Information Systems
 # Copyright (c) 2019, Matthew Wilson and Synesis Software
 # All rights reserved.
 #
@@ -44,11 +45,11 @@
 # ######################################################################## #
 
 
-
 =begin
 =end
 
 require 'libpath/exceptions/libpath_base_exception'
+
 
 module LibPath # :nodoc:
 module Exceptions # :nodoc:
@@ -56,30 +57,30 @@ module Exceptions # :nodoc:
 # Exception thrown when a malformed name is encountered
 class MalformedNameException < LibPathBaseException
 
-	# Initialises an instance from the given +name+ and optional +message+
-	#
-	# * *Parameters:*
-	#   - +name+ (String) The name that is malformed
-	#   - +message+ (String) {optional} The message. If +nil+ the message "malformed name '#{name}'" is used
-	def initialize name, message = nil
+  # Initialises an instance from the given +name+ and optional +message+
+  #
+  # * *Parameters:*
+  #   - +name+ (String) The name that is malformed
+  #   - +message+ (String) {optional} The message. If +nil+ the message "malformed name '#{name}'" is used
+  def initialize name, message = nil
 
-		unless message
+    unless message
 
-			message = "malformed name '#{name}'"
-		end
+      message = "malformed name '#{name}'"
+    end
 
-		super message
+    super message
 
-		@name	=	name
-	end
+    @name = name
+  end
 
-	# (String) The name that is malformed
-	attr_reader :name
+  # (String) The name that is malformed
+  attr_reader :name
 end
 
 end # module Exceptions
 end # module LibPath
 
-# ############################## end of file ############################# #
 
+# ############################## end of file ############################# #
 

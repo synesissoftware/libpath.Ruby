@@ -1,18 +1,19 @@
-#!/bin/bash
+#! /bin/bash
 
 #############################################################################
-# File:         build_gem.sh
+# File:     build_gem.sh
 #
-# Purpose:      Builds the gem
+# Purpose:  Builds the gem
 #
-# Created:      9th June 2016
-# Updated:      8th January 2019
+# Created:  9th June 2016
+# Updated:  6th April 2024
 #
-# Author:       Matthew Wilson
-#
-# Copyright:    <<TBD>>
+# Author:   Matthew Wilson
 #
 #############################################################################
 
 gem build libpath.gemspec $*
+
+
+# ############################## end of file ############################# #
 

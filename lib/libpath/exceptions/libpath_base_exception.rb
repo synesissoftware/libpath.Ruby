@@ -1,16 +1,17 @@
 
 # ######################################################################## #
-# File:         libpath/exceptions/libpath_base_exception.rb
+# File:     libpath/exceptions/libpath_base_exception.rb
 #
-# Purpose:      LibPathBaseException class
+# Purpose:  LibPathBaseException class
 #
-# Created:      30th January 2019
-# Updated:      16th April 2019
+# Created:  30th January 2019
+# Updated:  6th April 2024
 #
-# Home:         http://github.com/synesissoftware/libpath.Ruby
+# Home:     http://github.com/synesissoftware/libpath.Ruby
 #
-# Author:       Matthew Wilson
+# Author:   Matthew Wilson
 #
+# Copyright (c) 2019-2024, Matthew Wilson and Synesis Information Systems
 # Copyright (c) 2019, Matthew Wilson and Synesis Software
 # All rights reserved.
 #
@@ -44,7 +45,6 @@
 # ######################################################################## #
 
 
-
 =begin
 =end
 
@@ -58,20 +58,20 @@ class LibPathBaseException < StandardError
 
 =begin
 
-	# TODO include Xqsr3's WithCause
+  # TODO include Xqsr3's WithCause
 =end
 
-	def self.new *args
+  def self.new *args
 
-		raise NoMethodError, "private method `new' called for #{self}:Class" if self == LibPathBaseException
+    raise NoMethodError, "private method `new' called for #{self}:Class" if self == LibPathBaseException
 
-		super
-	end
+    super
+  end
 end
 
 end # module Exceptions
 end # module LibPath
 
-# ############################## end of file ############################# #
 
+# ############################## end of file ############################# #
 

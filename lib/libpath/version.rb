@@ -1,16 +1,16 @@
-
 # ######################################################################## #
-# File:         libpath/version.rb
+# File:     libpath/version.rb
 #
-# Purpose:      Version for libpath.Ruby library
+# Purpose:  Version for libpath.Ruby library
 #
-# Created:      8th January 2019
-# Updated:      18th May 2019
+# Created:  8th January 2019
+# Updated:  6th April 2024
 #
-# Home:         http://github.com/synesissoftware/libpath.Ruby
+# Home:     http://github.com/synesissoftware/libpath.Ruby
 #
-# Author:       Matthew Wilson
+# Author:   Matthew Wilson
 #
+# Copyright (c) 2019-2024, Matthew Wilson and Synesis Information Systems
 # Copyright (c) 2019, Matthew Wilson and Synesis Software
 # All rights reserved.
 #
@@ -44,31 +44,30 @@
 # ######################################################################## #
 
 
-
 =begin
 =end
 
 module LibPath # :nodoc:
 
-	# Current version of the libpath.Ruby library
-	VERSION				=	'0.2.2'
+  # Current version of the libpath.Ruby library
+  VERSION           = '0.2.2.1'
 
-	private
-	VERSION_PARTS_		=	VERSION.split(/[.]/).collect { |n| n.to_i } # :nodoc:
-	public
-	# Major version of the libpath.Ruby library
-	VERSION_MAJOR		=	VERSION_PARTS_[0] # :nodoc:
-	# Minor version of the libpath.Ruby library
-	VERSION_MINOR		=	VERSION_PARTS_[1] # :nodoc:
-	# Patch version of the libpath.Ruby library
-	VERSION_PATCH		=	VERSION_PARTS_[2] # :nodoc:
-	# Revision version of the libpath.Ruby library
-	VERSION_REVISION	=	VERSION_PATCH # :nodoc:
-	# Sub-patch version of the libpath.Ruby library
-	VERSION_SUBPATCH	=	VERSION_PARTS_[3] # :nodoc:
+  private
+  VERSION_PARTS_    = VERSION.split(/[.]/).collect { |n| n.to_i } # :nodoc:
+  public
+  # Major version of the libpath.Ruby library
+  VERSION_MAJOR     = VERSION_PARTS_[0] # :nodoc:
+  # Minor version of the libpath.Ruby library
+  VERSION_MINOR     = VERSION_PARTS_[1] # :nodoc:
+  # Patch version of the libpath.Ruby library
+  VERSION_PATCH     = VERSION_PARTS_[2] # :nodoc:
+  # Revision version of the libpath.Ruby library
+  VERSION_REVISION  = VERSION_PATCH # :nodoc:
+  # Sub-patch version of the libpath.Ruby library
+  VERSION_SUBPATCH  = VERSION_PARTS_[3] # :nodoc:
 
 end # module LibPath
 
-# ############################## end of file ############################# #
 
+# ############################## end of file ############################# #
 

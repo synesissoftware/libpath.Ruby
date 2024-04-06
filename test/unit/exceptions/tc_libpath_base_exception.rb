@@ -9,19 +9,21 @@ require 'xqsr3/extensions/test/unit'
 
 class Test_LibPathBaseException < Test::Unit::TestCase
 
-	include ::LibPath::Exceptions
+  include ::LibPath::Exceptions
 
-	def test_exception_exists_and_is_a_class
+  def test_exception_exists_and_is_a_class
 
-		assert defined?(LibPathBaseException)
+    assert defined?(LibPathBaseException)
 
-		assert LibPathBaseException.is_a?(::Class)
-	end
+    assert LibPathBaseException.is_a?(::Class)
+  end
 
-	def test_cannot_be_initialised
+  def test_cannot_be_initialised
 
-		assert_raise_with_message(::NoMethodError, /private.*method.*new.*LibPathBaseException/) { LibPathBaseException.new(nil) }
-	end
+    assert_raise_with_message(::NoMethodError, /private.*method.*new.*LibPathBaseException/) { LibPathBaseException.new(nil) }
+  end
 end
 
+
+# ############################## end of file ############################# #
 
