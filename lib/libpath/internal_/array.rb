@@ -1,93 +1,93 @@
 
 # :stopdoc:
 
-module LibPath # :nodoc:
+
+module LibPath
 # @!visibility private
 module Internal_ # :nodoc: all
 
-# @!visibility private
-module Array # :nodoc:
-
   # @!visibility private
-  def self.index(ar, v, after = nil) # :nodoc:
+  module Array # :nodoc:
 
-    if after
+    # @!visibility private
+    def self.index(ar, v, after = nil) # :nodoc:
 
-      if after < 0
+      if after
 
-        after = ar.size + after
+        if after < 0
 
-        return nil if after < 0
-      else
+          after = ar.size + after
 
-        return nil unless after < ar.size
-      end
+          return nil if after < 0
+        else
 
-      ar.each_with_index do |el, ix|
+          return nil unless after < ar.size
+        end
 
-        if ix >= after
+        ar.each_with_index do |el, ix|
 
-          if v == el
+          if ix >= after
 
-            return ix
+            if v == el
+
+              return ix
+            end
           end
         end
-      end
 
-      nil
-    else
-
-      ar.index(v)
-    end
-  end
-
-  # @!visibility private
-  def self.index2(ar, v1, v2, after = nil) # :nodoc:
-
-    i_1 = self.index(ar, v1, after)
-    i_2 = self.index(ar, v2, after)
-
-    if i_1
-
-      if i_2
-
-        i_1 < i_2 ? i_1 : i_2
+        nil
       else
 
-        i_1
+        ar.index(v)
       end
-    else
-
-      i_2
     end
-  end
 
+    # @!visibility private
+    def self.index2(ar, v1, v2, after = nil) # :nodoc:
 
-  # @!visibility private
-  def self.rindex2(ar, v1, v2) # :nodoc:
+      i_1 = self.index(ar, v1, after)
+      i_2 = self.index(ar, v2, after)
 
-    i_1 = ar.rindex(v1)
-    i_2 = ar.rindex(v2)
+      if i_1
 
-    if i_1
+        if i_2
 
-      if i_2
+          i_1 < i_2 ? i_1 : i_2
+        else
 
-        i_1 < i_2 ? i_2 : i_1
+          i_1
+        end
       else
 
-        i_1
+        i_2
       end
-    else
-
-      i_2
     end
-  end
 
-end # module Array
 
+    # @!visibility private
+    def self.rindex2(ar, v1, v2) # :nodoc:
+
+      i_1 = ar.rindex(v1)
+      i_2 = ar.rindex(v2)
+
+      if i_1
+
+        if i_2
+
+          i_1 < i_2 ? i_2 : i_1
+        else
+
+          i_1
+        end
+      else
+
+        i_2
+      end
+    end
+  end # module Array
 end # module Internal_
 end # module LibPath
+
 
 # :startdoc:
 

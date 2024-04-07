@@ -22,18 +22,18 @@ require 'benchmark'
 
 ITERATIONS = 100000
 
-SMALL_STRINGS = [
-
-  'C:\dir0\dir1/dir2',
-  'C:\dir0\dir1/dir2\dir3\dir4/',
-  'C:/dir0/dir1\dir2',
-]
-
 LONG_STRINGS = [
 
   'C:' + '\dir' * 1000,
   'C:' + '/dir' * 1000,
   'C:' + '\dir/dir' * 500,
+]
+
+SMALL_STRINGS = [
+
+  'C:\dir0\dir1/dir2',
+  'C:\dir0\dir1/dir2\dir3\dir4/',
+  'C:/dir0/dir1\dir2',
 ]
 
 

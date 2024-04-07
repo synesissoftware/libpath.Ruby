@@ -9,8 +9,9 @@ else
   require 'libpath/constants/unix'
 end
 
-module LibPath # :nodoc:
-module Constants # :nodoc:
+
+module LibPath
+module Constants
 
   if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
 

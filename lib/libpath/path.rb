@@ -9,7 +9,9 @@ else
   require 'libpath/path/unix'
 end
 
-module LibPath # :nodoc:
+
+module LibPath
+# @!visibility private
 module Path # :nodoc:
 
   if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then

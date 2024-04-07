@@ -5,7 +5,7 @@
 # Purpose:  MalformedNameException class
 #
 # Created:  30th January 2019
-# Updated:  6th April 2024
+# Updated:  7th April 2024
 #
 # Home:     http://github.com/synesissoftware/libpath.Ruby
 #
@@ -51,33 +51,32 @@
 require 'libpath/exceptions/libpath_base_exception'
 
 
-module LibPath # :nodoc:
-module Exceptions # :nodoc:
+module LibPath
+module Exceptions
 
-# Exception thrown when a malformed name is encountered
-class MalformedNameException < LibPathBaseException
+  # Exception thrown when a malformed name is encountered
+  class MalformedNameException < LibPathBaseException
 
-  # Initialises an instance from the given +name+ and optional +message+
-  #
-  # * *Parameters:*
-  #   - +name+ (String) The name that is malformed
-  #   - +message+ (String) {optional} The message. If +nil+ the message "malformed name '#{name}'" is used
-  def initialize name, message = nil
+    # Initialises an instance from the given +name+ and optional +message+
+    #
+    # * *Parameters:*
+    #   - +name+ (String) The name that is malformed
+    #   - +message+ (String) {optional} The message. If +nil+ the message "malformed name '#{name}'" is used
+    def initialize name, message = nil
 
-    unless message
+      unless message
 
-      message = "malformed name '#{name}'"
+        message = "malformed name '#{name}'"
+      end
+
+      super message
+
+      @name = name
     end
 
-    super message
-
-    @name = name
+    # (String) The name that is malformed
+    attr_reader :name
   end
-
-  # (String) The name that is malformed
-  attr_reader :name
-end
-
 end # module Exceptions
 end # module LibPath
 

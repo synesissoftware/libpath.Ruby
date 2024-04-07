@@ -4,7 +4,7 @@
 # Purpose:  LibPath::Constants::Unix module
 #
 # Created:  29th January 2019
-# Updated:  6th April 2024
+# Updated:  7th April 2024
 #
 # Home:     http://github.com/synesissoftware/libpath.Ruby
 #
@@ -47,95 +47,95 @@
 =begin
 =end
 
-module LibPath # :nodoc:
-module Constants # :nodoc:
-module Unix # :nodoc:
+module LibPath
+module Constants
+module Unix
 
-# Module defining instance functions that will be included and extended into
-# any class or module including/extending module LibPath::Constants::Unix
-module LibPath_Constants_Unix_Methods
+  # Module defining instance functions that will be included and extended into
+  # any class or module including/extending module LibPath::Constants::Unix
+  module LibPath_Constants_Unix_Methods
 
-  # Defines invalid characters
-  module InvalidCharacters
+    # Defines invalid characters
+    module InvalidCharacters
 
-    # Innately invalid characters
-    module Innate
+      # Innately invalid characters
+      module Innate
 
-      # The list of characters
-      LIST = [
+        # The list of characters
+        LIST = [
 
-        "\0",
-      ]
-      # The regular expression
-      RE = /[#{LIST.map { |m| Regexp.escape m }.join}]/
-    end # module Innate
+          "\0",
+        ]
+        # The regular expression
+        RE = /[#{LIST.map { |m| Regexp.escape m }.join}]/
+      end # module Innate
 
-    # Valid path name separator characters
-    module PathNameSeparators
+      # Valid path name separator characters
+      module PathNameSeparators
 
-      # The list of characters
-      LIST = [
+        # The list of characters
+        LIST = [
 
-        '/',
-      ]
-      # The regular expression
-      RE = /[#{LIST.map { |m| Regexp.escape m }.join}]/
-    end # module PathNameSeparators
+          '/',
+        ]
+        # The regular expression
+        RE = /[#{LIST.map { |m| Regexp.escape m }.join}]/
+      end # module PathNameSeparators
 
-    # Valid path separator characters
-    module PathSeparators
+      # Valid path separator characters
+      module PathSeparators
 
-      # The list of characters
-      LIST = [
+        # The list of characters
+        LIST = [
 
-        ':',
-      ]
-      # The regular expression
-      RE = /[#{LIST.map { |m| Regexp.escape m }.join}]/
-    end # module PathSeparators
+          ':',
+        ]
+        # The regular expression
+        RE = /[#{LIST.map { |m| Regexp.escape m }.join}]/
+      end # module PathSeparators
 
-    # Invalid shell characters
-    module Shell
+      # Invalid shell characters
+      module Shell
 
-      # The list of characters
-      LIST = [
+        # The list of characters
+        LIST = [
 
-        '*',
-        '<',
-        '>',
-        '?',
-        '|',
-      ]
-      # The regular expression
-      RE = /[#{LIST.map { |m| Regexp.escape m }.join}]/
-    end # module Shell
-  end # module InvalidCharacters
-end # module LibPath_Constants_Unix_Methods
+          '*',
+          '<',
+          '>',
+          '?',
+          '|',
+        ]
+        # The regular expression
+        RE = /[#{LIST.map { |m| Regexp.escape m }.join}]/
+      end # module Shell
+    end # module InvalidCharacters
+  end # module LibPath_Constants_Unix_Methods
 
-# @!visibility private
-def self.extended receiver # :nodoc:
+  # @!visibility private
+  def self.extended receiver # :nodoc:
 
-  receiver.class_eval do
+    receiver.class_eval do
 
-    extend LibPath_Constants_Unix_Methods
+      extend LibPath_Constants_Unix_Methods
+    end
+
+    $stderr.puts "#{receiver} extended by #{LibPath_Constants_Unix_Methods}" if $DEBUG
   end
 
-  $stderr.puts "#{receiver} extended by #{LibPath_Constants_Unix_Methods}" if $DEBUG
-end
+  # @!visibility private
+  def self.included receiver # :nodoc:
 
-# @!visibility private
-def self.included receiver # :nodoc:
+    receiver.class_eval do
 
-  receiver.class_eval do
+      include LibPath_Constants_Unix_Methods
+    end
 
-    include LibPath_Constants_Unix_Methods
+    $stderr.puts "#{receiver} included #{LibPath_Constants_Unix_Methods}" if $DEBUG
   end
 
-  $stderr.puts "#{receiver} included #{LibPath_Constants_Unix_Methods}" if $DEBUG
-end
-
-extend LibPath_Constants_Unix_Methods
-include LibPath_Constants_Unix_Methods
+  extend LibPath_Constants_Unix_Methods
+  include LibPath_Constants_Unix_Methods
 
 end # module Unix
 end # module Constants

@@ -9,8 +9,8 @@ else
   require 'libpath/form/unix'
 end
 
-module LibPath # :nodoc:
-module Form # :nodoc:
+module LibPath
+module Form
 
   if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
 
@@ -33,7 +33,6 @@ module Form # :nodoc:
 
     $stderr.puts "#{receiver} included #{self}" if $DEBUG
   end
-
 end # module Form
 end # module LibPath
 

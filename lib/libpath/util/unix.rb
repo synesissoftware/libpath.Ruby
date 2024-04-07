@@ -5,7 +5,7 @@
 # Purpose:  LibPath::Util::Unix module
 #
 # Created:  14th January 2019
-# Updated:  6th April 2024
+# Updated:  7th April 2024
 #
 # Home:     http://github.com/synesissoftware/libpath.Ruby
 #
@@ -54,9 +54,9 @@ require 'libpath/internal_/array'
 require 'libpath/internal_/unix/form'
 
 
-module LibPath # :nodoc:
-module Util # :nodoc:
-module Unix # :nodoc:
+module LibPath
+module Util
+module Unix
 
   # Module defining instance functions that will be included and extended into
   # any class or module including/extending module LibPath::Util::Unix

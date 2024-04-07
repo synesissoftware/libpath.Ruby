@@ -1,5 +1,6 @@
 
-module LibPath # :nodoc:
+module LibPath
+# @!visibility private
 module Diagnostics # :nodoc:
 
   # @!visibility private

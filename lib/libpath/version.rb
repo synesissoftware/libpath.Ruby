@@ -4,7 +4,7 @@
 # Purpose:  Version for libpath.Ruby library
 #
 # Created:  8th January 2019
-# Updated:  6th April 2024
+# Updated:  7th April 2024
 #
 # Home:     http://github.com/synesissoftware/libpath.Ruby
 #
@@ -47,25 +47,25 @@
 =begin
 =end
 
-module LibPath # :nodoc:
+module LibPath
 
   # Current version of the libpath.Ruby library
-  VERSION           = '0.2.2.1'
+  VERSION           = '0.2.2.2'
 
   private
+  # @!visibility private
   VERSION_PARTS_    = VERSION.split(/[.]/).collect { |n| n.to_i } # :nodoc:
   public
   # Major version of the libpath.Ruby library
-  VERSION_MAJOR     = VERSION_PARTS_[0] # :nodoc:
+  VERSION_MAJOR     = VERSION_PARTS_[0]
   # Minor version of the libpath.Ruby library
-  VERSION_MINOR     = VERSION_PARTS_[1] # :nodoc:
+  VERSION_MINOR     = VERSION_PARTS_[1]
   # Patch version of the libpath.Ruby library
-  VERSION_PATCH     = VERSION_PARTS_[2] # :nodoc:
+  VERSION_PATCH     = VERSION_PARTS_[2]
   # Revision version of the libpath.Ruby library
-  VERSION_REVISION  = VERSION_PATCH # :nodoc:
+  VERSION_REVISION  = VERSION_PATCH
   # Sub-patch version of the libpath.Ruby library
-  VERSION_SUBPATCH  = VERSION_PARTS_[3] # :nodoc:
-
+  VERSION_SUBPATCH  = VERSION_PARTS_[3]
 end # module LibPath
 
 

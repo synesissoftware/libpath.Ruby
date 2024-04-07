@@ -9,8 +9,9 @@ else
   require 'libpath/util/unix'
 end
 
-module LibPath # :nodoc:
-module Util # :nodoc:
+
+module LibPath
+module Util
 
   if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
 

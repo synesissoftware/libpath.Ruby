@@ -5,7 +5,7 @@
 # Purpose: LibPath::Form::Unix module
 #
 # Created: 8th January 2019
-# Updated: 6th April 2024
+# Updated: 7th April 2024
 #
 # Home:    http://github.com/synesissoftware/libpath.Ruby
 #
@@ -52,160 +52,159 @@ require 'libpath/constants/unix'
 require 'libpath/diagnostics'
 
 
-module LibPath # :nodoc:
-module Form # :nodoc:
-module Unix # :nodoc:
+module LibPath
+module Form
+module Unix
 
-# Module defining instance functions that will be included and extended into
-# any class or module including/extending module LibPath::Form::Unix
-module LibPath_Form_Unix_Methods
+  # Module defining instance functions that will be included and extended into
+  # any class or module including/extending module LibPath::Form::Unix
+  module LibPath_Form_Unix_Methods
 
-  # Classifies a path
-  #
-  # === Return
-  #
-  # One of +:absolute+, +:homed+, +:relative+, for
-  # any paths that match precisely those classifications, or +nil+ if the
-  # path is empty
-  def classify_path path
+    # Classifies a path
+    #
+    # === Return
+    #
+    # One of +:absolute+, +:homed+, +:relative+, for
+    # any paths that match precisely those classifications, or +nil+ if the
+    # path is empty
+    def classify_path path
 
-    Diagnostics.check_string_parameter(path, "path") if $DEBUG
+      Diagnostics.check_string_parameter(path, "path") if $DEBUG
 
-    return nil if path.nil? || path.empty?
+      return nil if path.nil? || path.empty?
 
-    return :homed if path_is_homed? path
+      return :homed if path_is_homed? path
 
-    return :absolute if path_is_absolute? path
+      return :absolute if path_is_absolute? path
 
-    :relative
-  end
+      :relative
+    end
 
-  # Evaluates whether the given name is malformed
-  #
-  # === Signature
-  #
-  # * *Options:*
-  #  - +:reject_path_name_separators+:: (boolean) Reject the path
-  #     separator character(s): +'/'+
-  #  - +:reject_path_separators+:: (boolean) Reject the path separator
-  #     character(s): +':'+
-  #  - +:reject_shell_characters+:: (boolean) Reject the shell
-  #     character(s): +'*'+, +'?'+, +'|'+
-  def name_is_malformed? name, **options
+    # Evaluates whether the given name is malformed
+    #
+    # === Signature
+    #
+    # * *Options:*
+    #  - +:reject_path_name_separators+:: (boolean) Reject the path
+    #     separator character(s): +'/'+
+    #  - +:reject_path_separators+:: (boolean) Reject the path separator
+    #     character(s): +':'+
+    #  - +:reject_shell_characters+:: (boolean) Reject the shell
+    #     character(s): +'*'+, +'?'+, +'|'+
+    def name_is_malformed? name, **options
 
-    _Constants = ::LibPath::Constants::Unix
+      _Constants = ::LibPath::Constants::Unix
 
-    if name
+      if name
 
-      if options[:reject_path_name_separators]
+        if options[:reject_path_name_separators]
 
-        return true if name =~ _Constants::InvalidCharacters::PathNameSeparators::RE
+          return true if name =~ _Constants::InvalidCharacters::PathNameSeparators::RE
+        end
+
+        if options[:reject_path_separators]
+
+          return true if name =~ _Constants::InvalidCharacters::PathSeparators::RE
+        end
+
+        if options[:reject_shell_characters]
+
+          return true if name =~ _Constants::InvalidCharacters::Shell::RE
+        end
+
+        return true if name =~ _Constants::InvalidCharacters::Innate::RE
+
+        false
+      else
+
+        true
       end
+    end
 
-      if options[:reject_path_separators]
+    # Evaluates whether the given path is absolute, which means it is either
+    # rooted (begins with '/') or is homed (is '~' or begins with '~/')
+    #
+    # === Signature
+    #
+    # * *Parameters:*
+    #   - +path+:: (String) The path to be evaluated. May not be +nil+
+    def path_is_absolute? path
 
-        return true if name =~ _Constants::InvalidCharacters::PathSeparators::RE
+      Diagnostics.check_string_parameter(path, "path") if $DEBUG
+
+      case path[0]
+      when '/'
+
+        true
+      when '~'
+
+        1 == path.size || '/' == path[1]
+      else
+
+        false
       end
+    end
 
-      if options[:reject_shell_characters]
+    # Evaluates whether the given path is homed, which means it is '~' or
+    # begins with '~/'
+    #
+    # === Signature
+    #
+    # * *Parameters:*
+    #   - +path+:: (String) The path to be evaluated. May not be +nil+
+    def path_is_homed? path
 
-        return true if name =~ _Constants::InvalidCharacters::Shell::RE
+      Diagnostics.check_string_parameter(path, "path") if $DEBUG
+
+      return false unless '~' == path[0]
+
+      if path.size > 1
+
+        return '/' == path[1]
       end
-
-      return true if name =~ _Constants::InvalidCharacters::Innate::RE
-
-      false
-    else
 
       true
     end
-  end
 
-  # Evaluates whether the given path is absolute, which means it is either
-  # rooted (begins with '/') or is homed (is '~' or begins with '~/')
-  #
-  # === Signature
-  #
-  # * *Parameters:*
-  #   - +path+:: (String) The path to be evaluated. May not be +nil+
-  def path_is_absolute? path
+    # Evalutes whether the given path is rooted, which means it begins with
+    # '/'
+    #
+    # === Signature
+    #
+    # * *Parameters:*
+    #   - +path+:: (String) The path to be evaluated. May not be +nil+
+    def path_is_rooted? path
 
-    Diagnostics.check_string_parameter(path, "path") if $DEBUG
+      Diagnostics.check_string_parameter(path, "path") if $DEBUG
 
-    case path[0]
-    when '/'
-
-      true
-    when '~'
-
-      1 == path.size || '/' == path[1]
-    else
-
-      false
+      '/' == path[0]
     end
-  end
+  end # module LibPath_Form_Unix_Methods
 
-  # Evaluates whether the given path is homed, which means it is '~' or
-  # begins with '~/'
-  #
-  # === Signature
-  #
-  # * *Parameters:*
-  #   - +path+:: (String) The path to be evaluated. May not be +nil+
-  def path_is_homed? path
+  # @!visibility private
+  def self.extended receiver # :nodoc:
 
-    Diagnostics.check_string_parameter(path, "path") if $DEBUG
+    receiver.class_eval do
 
-    return false unless '~' == path[0]
-
-    if path.size > 1
-
-      return '/' == path[1]
+      extend LibPath_Form_Unix_Methods
     end
 
-    true
+    $stderr.puts "#{receiver} extended by #{LibPath_Form_Unix_Methods}" if $DEBUG
   end
 
-  # Evalutes whether the given path is rooted, which means it begins with
-  # '/'
-  #
-  # === Signature
-  #
-  # * *Parameters:*
-  #   - +path+:: (String) The path to be evaluated. May not be +nil+
-  def path_is_rooted? path
+  # @!visibility private
+  def self.included receiver # :nodoc:
 
-    Diagnostics.check_string_parameter(path, "path") if $DEBUG
+    receiver.class_eval do
 
-    '/' == path[0]
+      include LibPath_Form_Unix_Methods
+    end
+
+    $stderr.puts "#{receiver} included #{LibPath_Form_Unix_Methods}" if $DEBUG
   end
 
-end # module LibPath_Form_Unix_Methods
-
-# @!visibility private
-def self.extended receiver # :nodoc:
-
-  receiver.class_eval do
-
-    extend LibPath_Form_Unix_Methods
-  end
-
-  $stderr.puts "#{receiver} extended by #{LibPath_Form_Unix_Methods}" if $DEBUG
-end
-
-# @!visibility private
-def self.included receiver # :nodoc:
-
-  receiver.class_eval do
-
-    include LibPath_Form_Unix_Methods
-  end
-
-  $stderr.puts "#{receiver} included #{LibPath_Form_Unix_Methods}" if $DEBUG
-end
-
-extend LibPath_Form_Unix_Methods
-include LibPath_Form_Unix_Methods
+  extend LibPath_Form_Unix_Methods
+  include LibPath_Form_Unix_Methods
 
 end # module Unix
 end # module Form

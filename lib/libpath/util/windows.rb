@@ -5,7 +5,7 @@
 # Purpose:  LibPath::Util::Windows module
 #
 # Created:  10th January 2019
-# Updated:  6th April 2024
+# Updated:  7th April 2024
 #
 # Home:     http://github.com/synesissoftware/libpath.Ruby
 #
@@ -54,9 +54,9 @@ require 'libpath/internal_/array'
 require 'libpath/internal_/windows/form'
 
 
-module LibPath # :nodoc:
-module Util # :nodoc:
-module Windows # :nodoc:
+module LibPath
+module Util
+module Windows
 
   # Module defining instance functions that will be included and extended into
   # any class or module including/extending module LibPath::Util::Windows

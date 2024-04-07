@@ -28,7 +28,7 @@
 Install via **gem** as in:
 
 ```
-  gem install libpath-ruby
+gem install libpath-ruby
 ```
 
 or add it to your `Gemfile`.
