@@ -5,7 +5,7 @@
 # Purpose: LibPath::Form::Unix module
 #
 # Created: 8th January 2019
-# Updated: 7th April 2024
+# Updated: 13th April 2024
 #
 # Home:    http://github.com/synesissoftware/libpath.Ruby
 #
@@ -45,12 +45,12 @@
 # ######################################################################## #
 
 
-=begin
-=end
-
 require 'libpath/constants/unix'
 require 'libpath/diagnostics'
 
+
+=begin
+=end
 
 module LibPath
 module Form

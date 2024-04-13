@@ -5,7 +5,7 @@
 # Purpose:  LibPath::Path::Unix module
 #
 # Created:  21st January 2019
-# Updated:  7th April 2024
+# Updated:  13th April 2024
 #
 # Home:     http://github.com/synesissoftware/libpath.Ruby
 #
@@ -45,13 +45,13 @@
 # ######################################################################## #
 
 
-=begin
-=end
-
 require 'libpath/diagnostics'
 require 'libpath/internal_/unix/form'
 require 'libpath/util/unix'
 
+
+=begin
+=end
 
 module LibPath
 module Path

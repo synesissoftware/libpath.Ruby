@@ -629,7 +629,6 @@ class Test_LibPath_Path_ParsedPath < Test::Unit::TestCase
     if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then
 
       pwd = '/some-directory'
-      srd = '/dir-1/dir-2/'
 
       pp = ParsedPath.new('file.ext', pwd: pwd)
 
@@ -646,7 +645,6 @@ class Test_LibPath_Path_ParsedPath < Test::Unit::TestCase
     else
 
       pwd = '/some-directory'
-      srd = '/dir-1/dir-2/'
 
       pp = ParsedPath.new('file.ext', pwd: pwd)
 

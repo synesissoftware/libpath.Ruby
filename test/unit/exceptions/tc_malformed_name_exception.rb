@@ -23,8 +23,8 @@ class Test_MalformedNameException < Test::Unit::TestCase
 
     assert_not_nil mnx
     assert_not_nil mnx.name
-    assert_match /abc.*def/, mnx.name
-    assert_match /malformed name 'abc.*def'/, mnx.message
+    assert_match(/abc.*def/, mnx.name)
+    assert_match(/malformed name 'abc.*def'/, mnx.message)
   end
 end
 

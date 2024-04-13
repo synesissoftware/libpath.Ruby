@@ -5,7 +5,7 @@
 # Purpose:  LibPath::Path::Windows module
 #
 # Created:  21st January 2019
-# Updated:  7th April 2024
+# Updated:  13th April 2024
 #
 # Home:     http://github.com/synesissoftware/libpath.Ruby
 #
@@ -45,13 +45,13 @@
 # ######################################################################## #
 
 
-=begin
-=end
-
 require 'libpath/diagnostics'
 require 'libpath/internal_/windows/form'
 require 'libpath/util/windows'
 
+
+=begin
+=end
 
 module LibPath
 module Path
@@ -100,7 +100,7 @@ module Path
 
         splits    = _Internal_Form.split_path(abs_path)
 
-        _, f1_vol, f2_dir, f3_basename, f4_stem, f5_ext, f6_dir_parts, f7_abs_parts = *splits
+        _, f1_vol, f2_dir, f3_basename, f4_stem, f5_ext, f6_dir_parts, _f7_abs_parts = *splits
 
         @given_path       = path
         @absolute_path    = abs_path

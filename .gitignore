@@ -1,8 +1,8 @@
 
 # directories (by name)
 
-/.bzr/
 /.bundle/
+/.bzr/
 /.config/
 /.git/
 /.svn/
@@ -20,7 +20,14 @@
 /tmp/
 /vendor/bundle/
 
+
 # directories (by pattern)
+
+InstalledFiles
+coverage
+pkg
+rdoc
+
 
 # files (by name)
 
@@ -31,13 +38,11 @@
 .ruby-version
 .rvmrc
 .yardoc
+
 _yardoc
+
 Gemfile.lock
 
-InstalledFiles
-coverage
-pkg
-rdoc
 
 # files (by pattern)
 
