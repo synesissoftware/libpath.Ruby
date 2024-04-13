@@ -100,7 +100,7 @@ module Path
 
         splits    = _Internal_Form.split_path(abs_path)
 
-        _, f1_vol, f2_dir, f3_basename, f4_stem, f5_ext, f6_dir_parts, f7_abs_parts = *splits
+        _, f1_vol, f2_dir, f3_basename, f4_stem, f5_ext, f6_dir_parts, _f7_abs_parts = *splits
 
         @given_path       = path
         @absolute_path    = abs_path
