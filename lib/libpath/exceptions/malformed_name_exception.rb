@@ -5,7 +5,7 @@
 # Purpose:  MalformedNameException class
 #
 # Created:  30th January 2019
-# Updated:  7th April 2024
+# Updated:  13th April 2024
 #
 # Home:     http://github.com/synesissoftware/libpath.Ruby
 #
@@ -45,11 +45,11 @@
 # ######################################################################## #
 
 
-=begin
-=end
-
 require 'libpath/exceptions/libpath_base_exception'
 
+
+=begin
+=end
 
 module LibPath
 module Exceptions
