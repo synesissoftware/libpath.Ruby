@@ -3,6 +3,7 @@
 **libpath**, for Ruby
 
 [![Gem Version](https://badge.fury.io/rb/libpath-ruby.svg)](https://badge.fury.io/rb/libpath-ruby)
+[![Ruby](https://github.com/synesissoftware/libpath.Ruby/actions/workflows/ruby.yml/badge.svg)](https://github.com/synesissoftware/libpath.Ruby/actions/workflows/ruby.yml)
 
 
 ## Table of Contents <!-- omit in toc -->
