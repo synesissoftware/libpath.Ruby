@@ -13,8 +13,7 @@
 
 ## Packaging improvements
 
-* \<none>
-
+* [ ] Rename gemspec so the filename stem matches `spec.name` (`libpath.gemspec` → **libpath-ruby.gemspec**);
 
 
 <!-- ########################### end of file ########################### -->
