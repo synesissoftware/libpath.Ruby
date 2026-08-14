@@ -4,6 +4,7 @@
 ## 0.2.3 - 15th August 2026
 
 * added `# frozen_string_literal: true` to all **lib/** sources;
+* completed **EXAMPLES.md** (EOF marker; table alignment);
 
 
 ## 0.2.2.3 - 13th April 2024
