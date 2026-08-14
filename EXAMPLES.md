@@ -1,4 +1,4 @@
-# libpath.Ruby Examples
+# libpath.Ruby - Examples <!-- omit in toc -->
 
 |Name|Source & Description|Summary|
 |---|---|---|

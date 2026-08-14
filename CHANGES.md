@@ -1,4 +1,4 @@
-# **libpath.Ruby** Changes
+# libpath.Ruby - Changes <!-- omit in toc -->
 
 
 ## 0.2.2.1 - 6th April 2024
