@@ -1,4 +1,4 @@
-# libpath.Ruby Example - **path_from_arg0**
+# libpath.Ruby - Example - **path_from_arg0**
 
 ## Summary
 
