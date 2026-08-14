@@ -1,11 +1,11 @@
-
+# frozen_string_literal: true
 # ######################################################################## #
 # File:     libpath/path/unix.rb
 #
 # Purpose:  LibPath::Path::Unix module
 #
 # Created:  21st January 2019
-# Updated:  13th April 2024
+# Updated:  15th August 2026
 #
 # Home:     http://github.com/synesissoftware/libpath.Ruby
 #

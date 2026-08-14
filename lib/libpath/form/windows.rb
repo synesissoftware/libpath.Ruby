@@ -1,11 +1,11 @@
-
+# frozen_string_literal: true
 # ######################################################################## #
 # File:     libpath/form/windows.rb
 #
 # Purpose:  LibPath::Form::Windows module
 #
 # Created:  8th January 2019
-# Updated:  13th April 2024
+# Updated:  15th August 2026
 #
 # Home:     http://github.com/synesissoftware/libpath.Ruby
 #

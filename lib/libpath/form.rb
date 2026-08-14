@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 require 'libpath/internal_/platform'
 
 if ::LibPath::Internal_::Platform::Constants::PLATFORM_IS_WINDOWS then

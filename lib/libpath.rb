@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 require 'libpath/libpath'
 
 require 'libpath/form'
