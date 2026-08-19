@@ -5,9 +5,9 @@
 # Purpose:  Version for libpath.Ruby library
 #
 # Created:  8th January 2019
-# Updated:  15th August 2026
+# Updated:  19th August 2026
 #
-# Home:     http://github.com/synesissoftware/libpath.Ruby
+# Home:     https://github.com/synesissoftware/libpath.Ruby
 #
 # Author:   Matthew Wilson
 #
@@ -51,7 +51,7 @@
 module LibPath
 
   # Current version of the libpath.Ruby library
-  VERSION           = '0.2.3'
+  VERSION           = '0.2.4'
 
   private
   # @!visibility private

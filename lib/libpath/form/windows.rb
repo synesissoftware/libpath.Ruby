@@ -7,7 +7,7 @@
 # Created:  8th January 2019
 # Updated:  15th August 2026
 #
-# Home:     http://github.com/synesissoftware/libpath.Ruby
+# Home:     https://github.com/synesissoftware/libpath.Ruby
 #
 # Author:   Matthew Wilson
 #

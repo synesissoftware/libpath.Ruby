@@ -24,5 +24,4 @@ gem install libpath-ruby
 See [README.md](./README.md) for usage.
 
 
-
 <!-- ########################### end of file ########################### -->
