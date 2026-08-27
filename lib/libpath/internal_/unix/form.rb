@@ -75,6 +75,7 @@ module Unix # :nodoc:
     # @!visibility private
     def self.elide_redundant_path_name_separators! s # :nodoc:
 
+      s = s.dup if s.frozen?
       s.gsub!(/\/\/+/, '/')
 
       s
