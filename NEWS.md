@@ -2,6 +2,7 @@
 
 | Date              | News Item                                                                                    |
 | ----------------- | -------------------------------------------------------------------------------------------- |
+| 27th August 2026  | [**libpath.Ruby** 0.2.4](https://github.com/synesissoftware/libpath.Ruby/releases/tag/0.2.4) |
 | 15th August 2026  | [**libpath.Ruby** 0.2.3](https://github.com/synesissoftware/libpath.Ruby/releases/tag/0.2.3) |
 | 13th April 2024   | [**libpath.Ruby** 0.2.2.3](https://github.com/synesissoftware/libpath.Ruby/releases/tag/0.2.2.3) |
 | 7th April 2024    | **libpath.Ruby** 0.2.2.2 released                                                            |

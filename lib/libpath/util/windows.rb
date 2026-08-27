@@ -7,7 +7,7 @@
 # Created:  10th January 2019
 # Updated:  15th August 2026
 #
-# Home:     http://github.com/synesissoftware/libpath.Ruby
+# Home:     https://github.com/synesissoftware/libpath.Ruby
 #
 # Author:   Matthew Wilson
 #
@@ -492,7 +492,7 @@ module Windows
 
         vol, rem, _ = _Internal_Windows_Form.get_windows_volume r
 
-        _Internal_Windows_Form.elide_redundant_path_name_separators! rem
+        rem = _Internal_Windows_Form.elide_redundant_path_name_separators rem
 
         r = "#{vol}#{rem}"
       end

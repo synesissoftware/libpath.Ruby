@@ -73,11 +73,9 @@ module Unix # :nodoc:
     # time
     #
     # @!visibility private
-    def self.elide_redundant_path_name_separators! s # :nodoc:
+    def self.elide_redundant_path_name_separators s # :nodoc:
 
-      s.gsub!(/\/\/+/, '/')
-
-      s
+      s.gsub(/\/\/+/, '/')
     end
 
 
