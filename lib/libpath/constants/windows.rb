@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 # ######################################################################## #
 # File:     libpath/constants/windows.rb
 #
 # Purpose:  LibPath::Constants::Windows module
 #
 # Created:  29th January 2019
-# Updated:  7th April 2024
+# Updated:  15th August 2026
 #
 # Home:     http://github.com/synesissoftware/libpath.Ruby
 #

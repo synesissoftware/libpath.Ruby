@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 # Top-level module for the *libpath.Ruby* library
 module LibPath
 

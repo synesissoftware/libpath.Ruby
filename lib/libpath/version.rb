@@ -1,16 +1,17 @@
+# frozen_string_literal: true
 # ######################################################################## #
 # File:     libpath/version.rb
 #
 # Purpose:  Version for libpath.Ruby library
 #
 # Created:  8th January 2019
-# Updated:  13th April 2024
+# Updated:  15th August 2026
 #
 # Home:     http://github.com/synesissoftware/libpath.Ruby
 #
 # Author:   Matthew Wilson
 #
-# Copyright (c) 2019-2024, Matthew Wilson and Synesis Information Systems
+# Copyright (c) 2019-2026, Matthew Wilson and Synesis Information Systems
 # Copyright (c) 2019, Matthew Wilson and Synesis Software
 # All rights reserved.
 #
@@ -50,7 +51,7 @@
 module LibPath
 
   # Current version of the libpath.Ruby library
-  VERSION           = '0.2.2.3'
+  VERSION           = '0.2.3'
 
   private
   # @!visibility private
