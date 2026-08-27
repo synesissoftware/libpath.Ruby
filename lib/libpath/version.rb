@@ -5,7 +5,7 @@
 # Purpose:  Version for libpath.Ruby library
 #
 # Created:  8th January 2019
-# Updated:  19th August 2026
+# Updated:  27th August 2026
 #
 # Home:     https://github.com/synesissoftware/libpath.Ruby
 #

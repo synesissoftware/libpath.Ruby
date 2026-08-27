@@ -492,7 +492,7 @@ module Windows
 
         vol, rem, _ = _Internal_Windows_Form.get_windows_volume r
 
-        rem = _Internal_Windows_Form.elide_redundant_path_name_separators! rem
+        rem = _Internal_Windows_Form.elide_redundant_path_name_separators rem
 
         r = "#{vol}#{rem}"
       end

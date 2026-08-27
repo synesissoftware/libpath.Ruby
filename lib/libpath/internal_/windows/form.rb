@@ -79,12 +79,9 @@ module Windows # :nodoc:
     # time
     #
     # @!visibility private
-    def self.elide_redundant_path_name_separators! s # :nodoc:
+    def self.elide_redundant_path_name_separators s # :nodoc:
 
-      s = s.dup if s.frozen?
-      s.gsub!(/[\\\/]{2,}/, '\\')
-
-      s
+      s.gsub(/[\\\/]{2,}/, '\\')
     end
 
     # [INTERNAL] This function is undocumented, and subject to change at any
@@ -209,7 +206,7 @@ module Windows # :nodoc:
 
       f1_volume, rem, frm = self.get_windows_volume s
 
-      rem = self.elide_redundant_path_name_separators! rem
+      rem = self.elide_redundant_path_name_separators rem
 
       f1_volume.define_singleton_method(:form) { frm } if f1_volume
 

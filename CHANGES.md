@@ -1,7 +1,7 @@
 # libpath.Ruby - Changes <!-- omit in toc -->
 
 
-## 0.2.4 - 19th August 2026
+## 0.2.4 - 27th August 2026
 
 * renamed **libpath.gemspec** to **libpath-ruby.gemspec** so the filename stem matches `spec.name`;
 * **libpath-ruby.gemspec**: `required_ruby_version` is the range `>= 2.0`; **Gemfile.lock** and **.ruby-version** excluded from `spec.files`; `spec.summary` matches the README tagline; packaged **AUTHORS**, **CHANGES**, **CONTRIBUTING**, **EXAMPLES**, **FAQ**, **INSTALL**, **NEWS**, **SECURITY**, **TODO**;
@@ -9,6 +9,7 @@
 * CI uses `bundler-cache: false` and explicit `bundle install`; **Warnings** job on Ruby **3.4**; `gem build libpath-ruby.gemspec`;
 * updated **run_all_unit_tests.sh** (from https://github.com/synesissoftware/misc-dev-scripts) to skip **tput** when **$TERM** is unset or stdout is not a TTY;
 * library source **Home:** URLs now use `https`;
+* workarounds for avoiding potentially modifying frozen strings;
 * **README.md**: tagline before badges; canonical badge row; **Dependencies** (Efferent / Afferent); related projects; License → `./LICENSE`;
 * **EXAMPLES.md** example links are repo-relative (`./examples/…`);
 * `elide_redundant_path_name_separators!` is freeze-safe (Ruby 3.4 `FrozenError` on a frozen remainder, e.g. malformed UNC);
