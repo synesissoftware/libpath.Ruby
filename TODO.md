@@ -1,11 +1,6 @@
 # libpath.Ruby - TODO <!-- omit in toc -->
 
 
-## Functional improvements
-
-* [ ] quiet Ruby 3.4+ `literal string will be frozen in the future` warnings from `gsub!` in **lib/libpath/internal_/windows/form.rb** (tests already pass under `-W`);
-
-
 ## Performance improvements
 
 * \<none>
