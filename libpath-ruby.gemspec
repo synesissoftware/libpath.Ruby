@@ -4,7 +4,7 @@
 # Purpose:  Gemspec for libpath.Ruby library
 #
 # Created:  8th January 2019
-# Updated:  19th August 2026
+# Updated:  28th August 2026
 #
 # ######################################################################## #
 
@@ -12,6 +12,9 @@
 $:.unshift File.join(File.dirname(__FILE__), 'lib')
 
 require 'libpath/version'
+
+
+PROJECT_URL = 'https://github.com/synesissoftware/libpath.Ruby'
 
 
 Gem::Specification.new do |spec|
@@ -31,16 +34,16 @@ END_DESC
   spec.email        = [
     'matthew@synesis.com.au',
   ]
-  spec.homepage     = 'https://github.com/synesissoftware/libpath.Ruby'
+  spec.homepage     = PROJECT_URL
   spec.license      = 'BSD-3-Clause'
 
   spec.required_ruby_version = [ '>= 2.0' ]
 
   spec.metadata = {
-    'bug_tracker_uri' => 'https://github.com/synesissoftware/libpath.Ruby/issues',
-    'changelog_uri' => 'https://github.com/synesissoftware/libpath.Ruby/blob/master/CHANGES.md',
-    'homepage_uri' => 'https://github.com/synesissoftware/libpath.Ruby',
-    'source_code_uri' => 'https://github.com/synesissoftware/libpath.Ruby',
+    'bug_tracker_uri' => "#{PROJECT_URL}/issues",
+    'changelog_uri' => "#{PROJECT_URL}/blob/master/CHANGES.md",
+    'homepage_uri' => PROJECT_URL,
+    'source_code_uri' => PROJECT_URL,
   }
 
   spec.files = Dir[
